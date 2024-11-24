@@ -3,19 +3,24 @@ package com.manula413.movie_manager.Controller;
 import com.manula413.movie_manager.database.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 
 public class loginController {
@@ -30,6 +35,24 @@ public class loginController {
     private TextField usernameTextFeild;
     @FXML
     private PasswordField passwordPasswordFeild;
+    @FXML
+    private Hyperlink signUpHyperLink;
+
+
+    public void signUpHyperLinkAction(ActionEvent e) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/signUp.fxml"));
+            BorderPane signUpPage = fxmlLoader.load();  // Change AnchorPane to BorderPane
+
+            Stage stage = (Stage) signUpHyperLink.getScene().getWindow();
+            Scene scene = new Scene(signUpPage);
+            stage.setScene(scene);
+
+            stage.initStyle(StageStyle.UNDECORATED);
+        } catch (IOException ex) {
+            logger.error("Error loading Sign-Up page.", ex);
+        }
+    }
 
 
     public void loginButtonAction(ActionEvent e) {
@@ -52,7 +75,7 @@ public class loginController {
 
         DatabaseConnection connectNow = new DatabaseConnection();
         try (Connection connectDB = connectNow.getConnection()) {
-            ;
+
 
             String verifyLogin = "SELECT count(1) FROM moviedb.user WHERE userName = ? AND password = ?";
 
@@ -86,5 +109,8 @@ public class loginController {
 
 
     }
+
+
+
 
 }
