@@ -1,4 +1,4 @@
-package com.manula413.movie_manager.Controller;
+package com.manula413.movie_manager.controller;
 
 import com.manula413.movie_manager.database.DatabaseConnection;
 
@@ -9,7 +9,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
-import javafx.event.ActionEvent;
 
 import java.io.IOException;
 
@@ -22,10 +21,13 @@ import java.sql.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.mindrot.jbcrypt.BCrypt;
 
-public class signupController {
 
-    private static final Logger logger = LoggerFactory.getLogger(loginController.class);
+
+public class SignupController {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
 
 
     @FXML
@@ -46,14 +48,14 @@ public class signupController {
     private Label signUpMessageLabel;
 
 
-    public void cancelButtonAction(ActionEvent e) {
+    public void cancelButtonAction() {
 
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
 
-    public void loginHyperlinkAction(ActionEvent e) {
+    public void loginHyperlinkAction() {
         // Create a ProgressIndicator
         ProgressIndicator loadingIndicator = new ProgressIndicator();
         loadingIndicator.setMaxSize(50, 50);
@@ -84,6 +86,12 @@ public class signupController {
 
             } catch (InterruptedException | IOException ex) {
                 logger.error("Error loading Sign-Up page.", ex);
+
+                // Handle InterruptedException properly by preserving the interrupt status
+                if (ex instanceof InterruptedException) {
+                    Thread.currentThread().interrupt();  // Restore the interrupt status
+                }
+
                 javafx.application.Platform.runLater(() -> {
                     // Handle the error (e.g., show an alert)
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load the login page.");
@@ -95,7 +103,8 @@ public class signupController {
         }).start();
     }
 
-    public void submitButtonAction(ActionEvent e) {
+
+    public void submitButtonAction() {
 
         String username = usernameTextField.getText();
         String displayName = displaynNmeTextField.getText();
@@ -112,7 +121,7 @@ public class signupController {
             return;
         }
 
-        if (!username.matches("[a-zA-Z0-9_]+")) {
+        if (!username.matches("\\w+")) {
             signUpMessageLabel.setText("Username can only contain letters, numbers, and underscores.");
             return;
         }
@@ -127,7 +136,6 @@ public class signupController {
     }
 
     public void validateSignUp(String username, String displayName, String password) {
-
         DatabaseConnection connectNow = new DatabaseConnection();
 
         String checkUserQuery = "SELECT COUNT(*) FROM user WHERE userName = ?";
@@ -137,32 +145,46 @@ public class signupController {
              PreparedStatement checkUserStmt = connectDB.prepareStatement(checkUserQuery);
              PreparedStatement insertUserStmt = connectDB.prepareStatement(insertUserQuery)) {
 
+            // Check if the username already exists
             checkUserStmt.setString(1, username);
             ResultSet resultSet = checkUserStmt.executeQuery();
 
             if (resultSet.next() && resultSet.getInt(1) > 0) {
-                logger.info("Username already exists.");
+                logger.info("Username '{}' already exists.", username);
                 signUpMessageLabel.setText("Username already exists! Please choose another.");
                 return;
             }
 
+            // Hash the password
+            String hashedPassword = hashPassword(password);
+
+            // Insert the new user
             insertUserStmt.setString(1, username);
             insertUserStmt.setString(2, displayName);
-            insertUserStmt.setString(3, password);
+            insertUserStmt.setString(3, hashedPassword);
             int rowInserted = insertUserStmt.executeUpdate();
 
             if (rowInserted > 0) {
-                logger.info("New user inserted successfully.");
+                logger.info("User '{}' signed up successfully.", username);
                 signUpMessageLabel.setText("Sign-up Successful!");
                 signUpMessageLabel.setStyle("-fx-text-fill: green;");
             } else {
-                logger.warn("Failed to insert new user.");
+                logger.warn("Failed to insert user '{}'.", username);
                 signUpMessageLabel.setText("Sign-up failed. Please try again.");
             }
 
         } catch (SQLException e) {
-            logger.error("Database Connection error", e);
+            logger.error("Database error occurred during sign-up for username '{}'.", username, e);
+            signUpMessageLabel.setText("Sign-up failed due to a server issue. Please try again later.");
         }
     }
+
+    public static String hashPassword(String plainPassword) {
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+    }
+
+
+
+
 
 }

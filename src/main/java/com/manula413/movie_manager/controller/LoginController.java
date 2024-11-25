@@ -1,31 +1,31 @@
-package com.manula413.movie_manager.Controller;
+package com.manula413.movie_manager.controller;
 
 import com.manula413.movie_manager.database.DatabaseConnection;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.awt.event.MouseEvent;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import javafx.stage.StageStyle;
+
+import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 
-public class loginController {
+public class LoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(loginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML
     private Button cancelButton;
@@ -39,7 +39,7 @@ public class loginController {
     private Hyperlink signUpHyperLink;
 
 
-    public void signUpHyperLinkAction(ActionEvent e) {
+    public void signUpHyperLinkAction() {
         // Create a ProgressIndicator
         ProgressIndicator loadingIndicator = new ProgressIndicator();
         loadingIndicator.setMaxSize(50, 50);
@@ -53,7 +53,7 @@ public class loginController {
         stage.setScene(loadingScene);
 
         // Load the new scene in a background thread
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             try {
                 // Simulate a delay (e.g., 2 seconds)
                 Thread.sleep(200);
@@ -68,32 +68,43 @@ public class loginController {
                     stage.setScene(scene);
                 });
 
-            } catch (InterruptedException | IOException ex) {
+            } catch (InterruptedException ex) {
+                // Re-interrupt the thread to preserve the interrupted status
+                Thread.currentThread().interrupt();
+                logger.error("Thread was interrupted while loading Sign-Up page.", ex);
+                javafx.application.Platform.runLater(() -> {
+                    // Handle the error (e.g., show an alert)
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "The operation was interrupted.");
+                    alert.showAndWait();
+                });
+            } catch (IOException ex) {
                 logger.error("Error loading Sign-Up page.", ex);
                 javafx.application.Platform.runLater(() -> {
                     // Handle the error (e.g., show an alert)
                     Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load the signUpPage page.");
                     alert.showAndWait();
-                    // Reset the scene to the original scene (with the loading indicator still visible)
                     stage.setScene(stage.getScene());
                 });
             }
-        }).start();
+        });
+
+        // Mark thread as a daemon thread to avoid blocking application shutdown
+        thread.setDaemon(true);
+        thread.start();
     }
 
 
-    public void loginButtonAction(ActionEvent e) {
 
-        if (usernameTextFeild.getText().isBlank() == false && passwordPasswordFeild.getText().isBlank() == false) {
+    public void loginButtonAction() {
 
-
+        if (!usernameTextFeild.getText().isBlank() && !passwordPasswordFeild.getText().isBlank()) {
             validateLogin();
         } else {
             loginMessageLabel.setText("Enter Valid username and password!");
         }
     }
 
-    public void cancelButtonAction(ActionEvent e) {
+    public void cancelButtonAction() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -101,40 +112,38 @@ public class loginController {
     public void validateLogin() {
 
         DatabaseConnection connectNow = new DatabaseConnection();
-        try (Connection connectDB = connectNow.getConnection()) {
+        String fetchPasswordQuery = "SELECT password FROM moviedb.user WHERE userName = ?";
 
+        try (Connection connectDB = connectNow.getConnection(); PreparedStatement preparedStatement = connectDB.prepareStatement(fetchPasswordQuery)) {
 
-            String verifyLogin = "SELECT count(1) FROM moviedb.user WHERE userName = ? AND password = ?";
+            preparedStatement.setString(1, usernameTextFeild.getText());
 
-            try (PreparedStatement preparedStatement = connectDB.prepareStatement(verifyLogin)) {
-                preparedStatement.setString(1, usernameTextFeild.getText());
-                preparedStatement.setString(2, passwordPasswordFeild.getText());
+            try (ResultSet queryResult = preparedStatement.executeQuery()) {
+                if (queryResult.next()) {
+                    String hashedPassword = queryResult.getString("password");
+                    String plainPassword = passwordPasswordFeild.getText();
 
-                try (ResultSet queryResult = preparedStatement.executeQuery()) {
-
-                    while (queryResult.next()) {
-                        if (queryResult.getInt(1) == 1) {
-                            loginMessageLabel.setText("Welcome!");
-                        } else {
-                            loginMessageLabel.setText("Invalid Username or Password!");
-                        }
+                    if (verifyPassword(plainPassword, hashedPassword)) {
+                        loginMessageLabel.setText("Welcome!");
+                        loginMessageLabel.setStyle("-fx-text-fill: green;");
+                    } else {
+                        loginMessageLabel.setText("Invalid Username or Password!");
                     }
-
+                } else {
+                    loginMessageLabel.setText("Invalid Username or Password!");
                 }
-
-            } catch (SQLException e) {
-
-                logger.error("Error while executing the query.", e);
-
             }
 
-        } catch (
-                SQLException e) {
-            logger.error("Database connection error.", e);
-
+        } catch (SQLException e) {
+            logger.error("Database connection or query error.", e);
+            loginMessageLabel.setText("An error occurred. Please try again.");
         }
+    }
 
 
+    // Method to verify a password
+    public static boolean verifyPassword(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 
 

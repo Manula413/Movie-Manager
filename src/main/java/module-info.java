@@ -4,9 +4,12 @@ module com.manula413.movie_manager {
     requires java.sql;
     requires org.slf4j;
     requires java.desktop;
+    requires jbcrypt;
 
 
-    opens com.manula413.movie_manager.Controller to javafx.fxml;
+
+
+    opens com.manula413.movie_manager.controller to javafx.fxml;
 
     exports com.manula413.movie_manager;
 }
