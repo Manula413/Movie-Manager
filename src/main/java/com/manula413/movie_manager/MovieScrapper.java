@@ -42,8 +42,8 @@ public class MovieScrapper {
     public static void main(String[] args) {
         try {
             // Example movie details to fetch
-            String movieName = "we live in time";
-            String movieYear = "2024";
+            String movieName = "batman begins";
+            String movieYear = "2005";
 
             // Call the getMovieDetails method
             System.out.println("Fetching movie details...");

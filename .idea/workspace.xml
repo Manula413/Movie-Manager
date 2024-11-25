@@ -4,12 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="-Hashed Password&#10;-Fixed Issues">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/values/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/addmovie.fxml" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Coding -addmovie.fxl and movieScraper">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/TestApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/movieDetails.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/IMDB_Logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/MV5BODIyMDdhNTgtNDlmOC00MjUxLWE2NDItODA5MTdkNzY3ZTdhXkEyXkFqcGc@._V1_SX300.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/MV5BYmQwNzRiNmItODc4Ny00Mjk4LThmYWQtNjI5OGU4OGUxMmY0XkEyXkFqcGc@._V1_SX300.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/Rotten_Tomatoes.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieScrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieScrapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/values/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/addmovie.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +27,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Python Script" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -65,8 +74,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.MainPanelController.executor": "Run",
     "Application.MovieManagerApplication.executor": "Run",
     "Application.MovieScrapper.executor": "Run",
+    "Application.TestApp.executor": "Run",
     "Application.Unnamed.executor": "Run",
     "Maven.Movie_Manager [clean].executor": "Run",
     "Maven.Movie_Manager [compile].executor": "Run",
@@ -79,7 +90,7 @@
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/manul/Documents/Projects/Movie_Manager/src/main/java/com/manula413/movie_manager/views",
+    "last_opened_file_path": "C:/Users/manul/Documents/Projects/Movie_Manager/src/main/resources",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.44942528",
@@ -91,6 +102,8 @@
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources" />
+      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\images" />
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\java\com\manula413\movie_manager\views" />
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
     </key>
@@ -101,7 +114,20 @@
       <recent name="com.manula413.movie_manager.Controller" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.MovieScrapper">
+  <component name="RunManager" selected="Application.TestApp">
+    <configuration name="MainPanelController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.controller.MainPanelController" />
+      <module name="Movie_Manager" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.manula413.movie_manager.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MovieManagerApplication" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.MovieManagerApplication" />
       <module name="Movie_Manager" />
@@ -122,8 +148,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.TestApp" />
+      <module name="Movie_Manager" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.manula413.movie_manager.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestApp" />
+        <item itemvalue="Application.MainPanelController" />
         <item itemvalue="Application.MovieScrapper" />
       </list>
     </recent_temporary>
@@ -185,7 +226,23 @@
       <option name="project" value="LOCAL" />
       <updated>1732507860370</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="-Hashed Password&#10;-Fixed Issues">
+      <option name="closed" value="true" />
+      <created>1732527172581</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1732527172581</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Coding -addmovie.fxl and movieScraper">
+      <option name="closed" value="true" />
+      <created>1732527358921</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1732527358921</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -205,6 +262,7 @@
     <MESSAGE value="Fix issue switching scenes between login.fxml and signup.fxml" />
     <MESSAGE value="Made changes to loginController and signupController" />
     <MESSAGE value="-Hashed Password&#10;-Fixed Issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Hashed Password&#10;-Fixed Issues" />
+    <MESSAGE value="Coding -addmovie.fxl and movieScraper" />
+    <option name="LAST_COMMIT_MESSAGE" value="Coding -addmovie.fxl and movieScraper" />
   </component>
 </project>
