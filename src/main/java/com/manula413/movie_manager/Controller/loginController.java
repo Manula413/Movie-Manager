@@ -46,9 +46,10 @@ public class loginController {
 
             Stage stage = (Stage) signUpHyperLink.getScene().getWindow();
             Scene scene = new Scene(signUpPage);
+           // stage.initStyle(StageStyle.UNDECORATED);
             stage.setScene(scene);
 
-            stage.initStyle(StageStyle.UNDECORATED);
+
         } catch (IOException ex) {
             logger.error("Error loading Sign-Up page.", ex);
         }
