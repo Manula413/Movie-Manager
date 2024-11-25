@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="-Hashed Password&#10;-Fixed Issues">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/SignupController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/SignupController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/values/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/addmovie.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +66,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.MovieManagerApplication.executor": "Run",
+    "Application.MovieScrapper.executor": "Run",
     "Application.Unnamed.executor": "Run",
     "Maven.Movie_Manager [clean].executor": "Run",
     "Maven.Movie_Manager [compile].executor": "Run",
@@ -74,7 +79,7 @@
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/manul/Desktop/New folder (3)/charm-6.2.3.jar",
+    "last_opened_file_path": "C:/Users/manul/Documents/Projects/Movie_Manager/src/main/java/com/manula413/movie_manager/views",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.44942528",
@@ -85,6 +90,10 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\java\com\manula413\movie_manager\views" />
+      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.manula413.movie_manager" />
     </key>
@@ -92,7 +101,7 @@
       <recent name="com.manula413.movie_manager.Controller" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.MovieScrapper">
     <configuration name="MovieManagerApplication" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.MovieManagerApplication" />
       <module name="Movie_Manager" />
@@ -100,6 +109,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MovieScrapper" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.MovieScrapper" />
+      <module name="Movie_Manager" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.manula413.movie_manager.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MovieScrapper" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -150,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732507793135</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="-Hashed Password&#10;-Fixed Issues">
+      <option name="closed" value="true" />
+      <created>1732507860370</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1732507860370</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
