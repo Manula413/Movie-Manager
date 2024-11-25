@@ -40,26 +40,52 @@ public class loginController {
 
 
     public void signUpHyperLinkAction(ActionEvent e) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/signUp.fxml"));
-            BorderPane signUpPage = fxmlLoader.load();  // Change AnchorPane to BorderPane
+        // Create a ProgressIndicator
+        ProgressIndicator loadingIndicator = new ProgressIndicator();
+        loadingIndicator.setMaxSize(50, 50);
 
-            Stage stage = (Stage) signUpHyperLink.getScene().getWindow();
-            Scene scene = new Scene(signUpPage);
-           // stage.initStyle(StageStyle.UNDECORATED);
-            stage.setScene(scene);
+        // Get the current stage
+        Stage stage = (Stage) signUpHyperLink.getScene().getWindow();
 
+        // Show the loading indicator on a temporary scene
+        BorderPane loadingPane = new BorderPane(loadingIndicator);
+        Scene loadingScene = new Scene(loadingPane, stage.getScene().getWidth(), stage.getScene().getHeight());
+        stage.setScene(loadingScene);
 
-        } catch (IOException ex) {
-            logger.error("Error loading Sign-Up page.", ex);
-        }
+        // Load the new scene in a background thread
+        new Thread(() -> {
+            try {
+                // Simulate a delay (e.g., 2 seconds)
+                Thread.sleep(200);
+
+                // Load the new scene (login.fxml)
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/signUp.fxml"));
+                BorderPane signUpPage = fxmlLoader.load();
+
+                // Switch back to the new scene on the JavaFX Application Thread
+                javafx.application.Platform.runLater(() -> {
+                    Scene scene = new Scene(signUpPage);
+                    stage.setScene(scene);
+                });
+
+            } catch (InterruptedException | IOException ex) {
+                logger.error("Error loading Sign-Up page.", ex);
+                javafx.application.Platform.runLater(() -> {
+                    // Handle the error (e.g., show an alert)
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Failed to load the signUpPage page.");
+                    alert.showAndWait();
+                    // Reset the scene to the original scene (with the loading indicator still visible)
+                    stage.setScene(stage.getScene());
+                });
+            }
+        }).start();
     }
 
 
     public void loginButtonAction(ActionEvent e) {
-        loginMessageLabel.setText("You Tried to Login!");
+
         if (usernameTextFeild.getText().isBlank() == false && passwordPasswordFeild.getText().isBlank() == false) {
-            //loginMessageLabel.setText("Good Login!");
+
 
             validateLogin();
         } else {
@@ -110,8 +136,6 @@ public class loginController {
 
 
     }
-
-
 
 
 }
