@@ -41,8 +41,6 @@ public class SignupController {
     @FXML
     private PasswordField confirmPasswordPasswordField;
     @FXML
-    private Button submitButton;
-    @FXML
     private Hyperlink loginHyperlink;
     @FXML
     private Label signUpMessageLabel;
