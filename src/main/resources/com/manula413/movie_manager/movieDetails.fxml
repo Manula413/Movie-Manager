@@ -14,11 +14,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="movieDetailsAnchorPane" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.MainPanelController">
+<AnchorPane fx:id="movieDetailsAnchorPane" prefHeight="800.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.MovieDetailsController">
    <children>
       <BorderPane prefHeight="807.0" prefWidth="900.0" style="-fx-background-color: #121212;">
          <top>
-            <HBox prefHeight="60.0" prefWidth="900.0" BorderPane.alignment="CENTER" />
+            <HBox prefHeight="60.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="testUserLabel" prefHeight="39.0" prefWidth="209.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children></HBox>
          </top>
          <bottom>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="787.0" BorderPane.alignment="CENTER">
@@ -51,7 +58,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="426.0">
                      <children>
-                        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="60.0" prefWidth="200.0" styleClass="right-bar-button" stylesheets="@../../../style.css" text="Add" textFill="WHITE">
+                        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="160.0" styleClass="right-bar-button" stylesheets="@../../../style.css" text="Add" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="100.0" right="30.0" />
                            </HBox.margin>
@@ -67,7 +74,7 @@
          <center>
             <VBox prefHeight="200.0" prefWidth="100.0" stylesheets="@../../../style.css" BorderPane.alignment="CENTER">
                <BorderPane.margin>
-                  <Insets left="30.0" right="30.0" />
+                  <Insets left="50.0" right="50.0" />
                </BorderPane.margin>
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="51.0" prefWidth="840.0">
@@ -95,7 +102,7 @@
                                        <children>
                                           <Label prefHeight="40.0" prefWidth="100.0" text="Year: " textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -103,7 +110,7 @@
                                           </Label>
                                           <Label fx:id="movieYearLabel" prefHeight="40.0" prefWidth="156.0" text="2005" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -112,7 +119,7 @@
                                        <children>
                                           <Label prefHeight="40.0" prefWidth="100.0" text="Genre:" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -120,7 +127,7 @@
                                           </Label>
                                           <Label fx:id="movieGenreLabel" prefHeight="40.0" prefWidth="156.0" text="Action / Crime" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
@@ -129,7 +136,7 @@
                                        <children>
                                           <Label prefHeight="40.0" prefWidth="100.0" text="IMDB:" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -137,7 +144,7 @@
                                           </Label>
                                           <Label fx:id="ratingIMBDLabel" prefHeight="40.0" prefWidth="51.0" text="7.8" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                           </Label>
                                           <ImageView fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
@@ -154,7 +161,7 @@
                                        <children>
                                           <Label prefHeight="40.0" prefWidth="100.0" text="RT:" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -162,7 +169,7 @@
                                           </Label>
                                           <Label fx:id="ratingRTLabel" prefHeight="40.0" prefWidth="55.0" text="77%" textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                           </Label>
                                           <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -175,11 +182,11 @@
                                           </ImageView>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="294.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="306.0">
                                        <children>
                                           <Label prefHeight="40.0" prefWidth="100.0" text="Plot: " textFill="WHITE">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -189,9 +196,9 @@
                                     </HBox>
                                     <HBox prefHeight="222.0" prefWidth="294.0">
                                        <children>
-                                          <Label fx:id="moviePlotLabel" alignment="TOP_CENTER" prefHeight="219.0" prefWidth="264.0" text="The Dark Knight of Gotham City begins his war on crime with his first major enemy being Jack Napier, a criminal who becomes the clownishly homicidal Joker." textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
+                                          <Label fx:id="moviePlotLabel" alignment="TOP_CENTER" prefHeight="217.0" prefWidth="264.0" text="The Dark Knight of Gotham City begins his war on crime with his first major enemy being Jack Napier, a criminal who becomes the clownishly homicidal Joker." textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
                                              <font>
-                                                <Font size="20.0" />
+                                                <Font size="18.0" />
                                              </font>
                                              <HBox.margin>
                                                 <Insets left="30.0" />
@@ -205,10 +212,13 @@
                                  </VBox.margin>
                               </VBox>
                            </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="785.0" styleClass="shadow" stylesheets="@../../../style.css">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="399.0" styleClass="shadow" stylesheets="@../../../style.css">
                            <children>
-                              <ImageView fitHeight="553.0" fitWidth="393.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="moviePosterImageView" fitHeight="553.0" fitWidth="393.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../../images/MV5BODIyMDdhNTgtNDlmOC00MjUxLWE2NDItODA5MTdkNzY3ZTdhXkEyXkFqcGc@._V1_SX300.jpg" />
                                  </image>

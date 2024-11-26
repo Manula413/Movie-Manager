@@ -13,8 +13,8 @@ public class MovieManagerApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MovieManagerApplication.class.getResource("/com/manula413/movie_manager/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 550, 400);
-        stage.initStyle(StageStyle.UNDECORATED);
-        //  stage.setResizable(true);
+       // stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

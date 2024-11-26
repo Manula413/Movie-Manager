@@ -1,6 +1,7 @@
 package com.manula413.movie_manager.controller;
 
 import com.manula413.movie_manager.database.DatabaseConnection;
+import com.manula413.movie_manager.util.Session;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -124,14 +125,21 @@ public class LoginController {
                     String plainPassword = passwordPasswordFeild.getText();
 
                     if (verifyPassword(plainPassword, hashedPassword)) {
-                        loginMessageLabel.setText("Welcome!");
-                        loginMessageLabel.setStyle("-fx-text-fill: green;");
+
+                        Session.getInstance().setUsername(usernameTextFeild.getText()); // Store username in session
+
+                        Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
+                        MainPanelController mainpanel = new MainPanelController();
+                        mainpanel.loadMainPanelDefault(stage);
+
                     } else {
                         loginMessageLabel.setText("Invalid Username or Password!");
                     }
                 } else {
                     loginMessageLabel.setText("Invalid Username or Password!");
                 }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
         } catch (SQLException e) {

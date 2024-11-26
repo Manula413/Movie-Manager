@@ -15,7 +15,7 @@
    <children>
       <BorderPane layoutY="7.0" prefHeight="810.0" prefWidth="400.0" styleClass="search-box" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="915.0" AnchorPane.topAnchor="0.0">
          <left>
-            <VBox prefHeight="810.0" prefWidth="400.0" styleClass="right-bar" stylesheets="@../../../style.css" BorderPane.alignment="CENTER">
+            <VBox prefHeight="800.0" prefWidth="383.0" styleClass="right-bar" stylesheets="@../../../style.css" BorderPane.alignment="CENTER">
                <children>
                   <HBox alignment="CENTER" prefHeight="146.0" prefWidth="435.0">
                      <children>
@@ -45,7 +45,7 @@
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="searchButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="100.0" styleClass="search-button" stylesheets="@../../../style.css" text="Search" textFill="WHITE">
+                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchMovie" prefHeight="40.0" prefWidth="100.0" styleClass="search-button" stylesheets="@../../../style.css" text="Search" textFill="WHITE">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -58,9 +58,9 @@
                   </HBox>
                   <HBox prefHeight="45.0" prefWidth="435.0" />
                   <HBox prefHeight="46.0" prefWidth="400.0" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="323.0">
                      <children>
-                        <Button fx:id="addMoviesButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Add Movies" textFill="WHITE">
+                        <Button fx:id="addMoviesButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Add Movies" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -76,7 +76,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="watchedListButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Watched List" textFill="WHITE">
+                        <Button fx:id="watchedListButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Watched List" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -89,7 +89,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="watchLaterButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE">
+                        <Button fx:id="watchLaterButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -102,7 +102,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="extraButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Extra" textFill="WHITE">
+                        <Button fx:id="extraButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="300.0" stylesheets="@../../../style.css" text="Extra" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -111,12 +111,24 @@
                               <Font name="Cambria Bold" size="28.0" />
                            </font>
                         </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="39.0" prefWidth="400.0">
+                     <children>
+                        <Label fx:id="usernameLabel" text="User" textFill="WHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
                      </children>
                   </HBox>
                </children>
+               <BorderPane.margin>
+                  <Insets right="20.0" />
+               </BorderPane.margin>
             </VBox>
          </left>
       </BorderPane>
-      <BorderPane fx:id="loadingBorderPane" layoutX="399.0" prefHeight="800.0" prefWidth="900.0" style="-fx-background-color: #121212;" />
+      <BorderPane fx:id="loadingBorderPane" layoutX="382.0" prefHeight="800.0" prefWidth="917.0" style="-fx-background-color: #121212;" />
    </children>
 </AnchorPane>

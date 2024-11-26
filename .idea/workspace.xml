@@ -5,19 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Coding -addmovie.fxl and movieScraper">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/TestApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/movieDetails.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/images/IMDB_Logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/images/MV5BODIyMDdhNTgtNDlmOC00MjUxLWE2NDItODA5MTdkNzY3ZTdhXkEyXkFqcGc@._V1_SX300.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/images/MV5BYmQwNzRiNmItODc4Ny00Mjk4LThmYWQtNjI5OGU4OGUxMmY0XkEyXkFqcGc@._V1_SX300.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/images/Rotten_Tomatoes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MovieDetailsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/model/MovieDetails.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/Session.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieScrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieScrapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/values/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/addmovie.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieManagerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/MovieManagerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/movieDetails.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/movieDetails.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,31 +68,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainPanelController.executor": "Run",
-    "Application.MovieManagerApplication.executor": "Run",
-    "Application.MovieScrapper.executor": "Run",
-    "Application.TestApp.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Maven.Movie_Manager [clean].executor": "Run",
-    "Maven.Movie_Manager [compile].executor": "Run",
-    "Maven.Movie_Manager [install].executor": "Run",
-    "Maven.Movie_Manager [test].executor": "Run",
-    "Maven.Movie_Manager [validate].executor": "Run",
-    "Maven.Movie_Manager [verify].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/manul/Documents/Projects/Movie_Manager/src/main/resources",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.44942528",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainPanelController.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MovieManagerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MovieScrapper.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestApp.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [verify].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/manul/Documents/Projects/Movie_Manager/src/main/resources&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.44942528&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
@@ -114,7 +110,7 @@
       <recent name="com.manula413.movie_manager.Controller" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TestApp">
+  <component name="RunManager" selected="Application.MovieManagerApplication">
     <configuration name="MainPanelController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.manula413.movie_manager.controller.MainPanelController" />
       <module name="Movie_Manager" />
@@ -242,7 +238,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732527358921</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Coding -addmovie.fxl and movieScraper">
+      <option name="closed" value="true" />
+      <created>1732565588165</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1732565588165</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
