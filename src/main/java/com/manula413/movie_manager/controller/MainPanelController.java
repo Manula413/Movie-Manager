@@ -69,10 +69,15 @@ public class MainPanelController {
     private Label moviePlotLabel;
 
     @FXML
+    private Label tvSeriesLabel;
+
+    @FXML
+    private Label seasonsLabel;
+
+    @FXML
     private ImageView moviePosterImageView;
 
     private static final String DEFAULT_POSTER = "path/to/defaultPoster.jpg";
-
 
 
     public void loadMainPanelDefault(Stage stage) throws Exception {
@@ -115,24 +120,25 @@ public class MainPanelController {
                                 movieDetails.getImdbRating(),
                                 movieDetails.getRtRating(),
                                 movieDetails.getPlot(),
-                                movieDetails.getPosterUrl()
+                                movieDetails.getPosterUrl(),
+                                movieDetails.getType(),
+                                movieDetails.getTotalSeasons()
                         );
                         System.out.println("Movie details displayed on UI.");
                     } else {
-                        setMovieDetails("Movie Not Found", "", "", "", "", "No details available", null);
+                        setMovieDetails("Movie Not Found", "", "", "", "", "No details available", null, "", "");
                         System.out.println("No movie details available.");
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 Platform.runLater(() -> {
-                    setMovieDetails("Error", "", "", "", "", "An error occurred while fetching movie details.", null);
+                    setMovieDetails("Error", "", "", "", "", "An error occurred while fetching movie details.", null, "", "");
                     System.err.println("Exception caught during searchMovie: " + e.getMessage());
                 });
             }
         }).start();
     }
-
 
 
     public MovieDetails fetchMovieData(String movieInput) throws Exception {
@@ -177,15 +183,23 @@ public class MainPanelController {
                         : "N/A";
                 String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
                 String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
+                String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
+                String totalSeasons = "N/A";
+
+                // Check if it's a series and get the total number of seasons
+                if ("series".equalsIgnoreCase(type) && json.has("totalSeasons")) {
+                    totalSeasons = json.get("totalSeasons").getAsString();
+                }
 
                 System.out.println("Movie details fetched successfully.");
-                return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl);
+                return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons);
             }
         } catch (IOException e) {
             System.err.println("Error during HTTP request: " + e.getMessage());
             throw e;
         }
     }
+
 
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
@@ -195,7 +209,7 @@ public class MainPanelController {
         return properties.getProperty("api.key");
     }
 
-    public void setMovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl) {
+    public void setMovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl, String type, String totalSeasons) {
         movieNameLabel.setText(title != null ? title : "N/A");
         movieYearLabel.setText(year != null ? year : "N/A");
         movieGenreLabel.setText(genre != null ? genre : "N/A");
@@ -211,7 +225,7 @@ public class MainPanelController {
             // Ensure we only display the numeric value with a '%' symbol, e.g., '66%'
             rtRatingDisplay = rtRatingDisplay.replaceAll("[^0-9]", "") + "%"; // Remove non-numeric characters and append '%'
         }
-        ratingRTLabel.setText( rtRatingDisplay);
+        ratingRTLabel.setText(rtRatingDisplay);
         System.out.println(rtRatingDisplay);
 
         moviePlotLabel.setText(plot != null ? plot : "N/A");
@@ -226,9 +240,18 @@ public class MainPanelController {
             e.printStackTrace();
             moviePosterImageView.setImage(new Image(DEFAULT_POSTER));
         }
+
+        // Check if it's a TV series and set the labels accordingly
+        if ("series".equalsIgnoreCase(type)) {
+            tvSeriesLabel.setText("TV - Series");
+            seasonsLabel.setText(totalSeasons != null && !totalSeasons.equals("N/A") ? "Seasons: " + totalSeasons : "Seasons: N/A");
+        } else {
+            tvSeriesLabel.setText(""); // Clear TV Series label if it's a movie
+            seasonsLabel.setText(""); // Clear Seasons label if it's a movie
+        }
+
+
     }
-
-
 
 
 }
