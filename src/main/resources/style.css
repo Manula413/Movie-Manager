@@ -35,19 +35,47 @@
     -fx-background-radius: 30;
 }
 
-.comboBox{
+.radio-button-bg {
+    -fx-background-color: #3f3f3f;
+    -fx-background-radius: 30;
+}
+
+.comboBox {
     -fx-background-color: #3f3f3f;
     -fx-background-radius: 30;
     -fx-font-family: "Cambria";
     -fx-font-size: 18px;
 }
 
-.radio-button-bg{
--fx-background-color: #3f3f3f ;
- -fx-background-radius: 30;
+.radio-button-bg {
+    -fx-background-color: #3f3f3f;
+    -fx-background-radius: 30;
 }
 
 .combo-box .list-cell {
-    -fx-text-fill: #FFFFFF; /* Text color for dropdown items */
+     -fx-text-fill: #FFFFFF;
+     -fx-background-color: #3f3f3f;
+     -fx-background-radius: 30;
+
+
 }
+
+.combo-box-popup .list-view {
+    -fx-background-color: #3f3f3f;
+     -fx-background-radius: 30;/* Dropdown background color */
+}
+
+.combo-box .list-view {
+    -fx-background-color: #3f3f3f;
+     -fx-background-radius: 30;/* Alternative dropdown background color */
+}
+
+.list-view .list-cell:filled:selected,
+.list-view .list-cell:filled:hover {
+    -fx-background-color: #005f8a; /* Highlight color */
+    -fx-text-fill: #FFFFFF;
+     -fx-background-radius: 30;/* Text color for selected item */
+}
+
+
 

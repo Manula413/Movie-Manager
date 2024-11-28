@@ -4,6 +4,7 @@ import com.manula413.movie_manager.database.DatabaseConnection;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.util.Session;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -20,17 +21,12 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import javafx.scene.control.ComboBox;
 
-import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import static com.mysql.cj.conf.PropertyKey.logger;
 
 public class MainPanelController {
 
@@ -47,10 +43,11 @@ public class MainPanelController {
     private Button addToDatabaseButton;
 
     @FXML
-    private Button watchedListButton;
+    private RadioButton watchLaterRadioButton;
 
     @FXML
-    private Button watchLaterButton;
+    private RadioButton watchedRadioButton;
+
 
     @FXML
     private Label usernameLabel;
@@ -85,12 +82,16 @@ public class MainPanelController {
     @FXML
     private ImageView moviePosterImageView;
 
+    @FXML
+    private ToggleGroup watchListRadioGroup;
+
+    @FXML
+    private ComboBox<String> userRatingComboBox;
+
     private static final String DEFAULT_POSTER = "path/to/defaultPoster.jpg";
     String userId = Session.getInstance().getUserId();
 
     private MovieDetails movieDetails;
-    private boolean watchedListSelected;
-    private boolean watchLaterSelected;
 
 
     public void loadMainPanelDefault(Stage stage) throws Exception {
@@ -104,10 +105,19 @@ public class MainPanelController {
         mainController.setUsernameLabel(username);
 
         Scene scene = new Scene(mainPanel, 1300, 800);
-        stage.setTitle("Movie Info");
+        stage.setTitle("Add Movie");
         stage.setScene(scene);
         stage.show();
     }
+
+    @FXML
+    private void initialize() {
+        // Populate the ComboBox with values
+
+        userRatingComboBox.setItems(FXCollections.observableArrayList("Great","Good","Okay","Mediocre","Poor"));
+        //userRatingComboBox.setValue("3"); // Optional: Set a default value
+    }
+
 
     public void setUsernameLabel(String username) {
         if (usernameLabel != null) {
@@ -155,7 +165,6 @@ public class MainPanelController {
             }
         }).start();
     }
-
 
     public MovieDetails fetchMovieData(String movieInput) throws Exception {
         System.out.println("Starting fetchMovieData with input: " + movieInput);
@@ -215,7 +224,6 @@ public class MainPanelController {
             throw e;
         }
     }
-
 
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
@@ -307,23 +315,22 @@ public class MainPanelController {
                     return;
                 }
 
-                /*
+
                 // Step 3: Determine movie status from radio buttons and insert into user_movies
-                String status = determineMovieStatus(watchedListSelected, watchLaterSelected);
+                String status = determineMovieStatus();
+                System.out.println(status);
                 if (status == null) {
                     System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
                     return;
                 }
 
-                 */
-
                 // Default comment (can be customized or taken from a user input field)
                 String userComment = "Good";
 
                 // Step 4: Insert the user movie entry into the database
-                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, "watched");
+                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, status);
                 if (inserted) {
-                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + "watched");
+                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
                 } else {
                     System.out.println("Failed to add movie " + title + " for user " + userId);
                 }
@@ -341,7 +348,6 @@ public class MainPanelController {
             System.out.println("Movie details are null. Cannot add to database.");
         }
     }
-
 
     private int getOrInsertMovie(Connection connectDB, String movieName, String movieYear, String genre,
                                  String type, String imdbRating, String rtRating, String seasons) throws SQLException {
@@ -380,7 +386,6 @@ public class MainPanelController {
         return -1; // Indicate failure
     }
 
-
     private boolean isMovieInUserList(Connection connectDB, int userId, int movieId) throws SQLException {
         String checkUserMovieQuery = "SELECT COUNT(*) FROM user_movies WHERE userid = ? AND movieid = ?";
         try (PreparedStatement checkUserMovieStmt = connectDB.prepareStatement(checkUserMovieQuery)) {
@@ -391,19 +396,20 @@ public class MainPanelController {
         }
     }
 
-    /*
-    private String determineMovieStatus(boolean watchedListSelected, boolean watchLaterSelected) {
-        this.watchedListSelected = watchedListSelected;
-        this.watchLaterSelected = watchLaterSelected;
-        if (watchedListSelected) {
-            return "watched";
-        } else if (watchLaterSelected) {
-            return "watchLater";
+
+    private String determineMovieStatus() {
+        // Get the selected toggle from the group
+        Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
+
+        if (selectedToggle == watchLaterRadioButton) {
+            return "watchLater"; // Watch Later selected
+        } else if (selectedToggle == watchedRadioButton) {
+            return "watched"; // Watched selected
         }
-        return null; // Invalid status
+
+        return null; // No valid selection
     }
 
-     */
 
     private boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
         String insertUserMovieQuery = "INSERT INTO user_movies (userid, movieid, userComment, watched_Status) VALUES (?, ?, ?, ?)";

@@ -60,10 +60,13 @@
                               <Font size="18.0" />
                            </font>
                         </TextField>
-                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchMovie" prefHeight="40.0" prefWidth="100.0" styleClass="search-button" stylesheets="@../../../style.css" text="Search" textFill="WHITE">
+                        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchMovie" prefHeight="40.0" prefWidth="82.0" styleClass="search-button" stylesheets="@../../../style.css" text="Search" textFill="WHITE">
                            <font>
                               <Font size="15.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
                         </Button>
                      </children>
                      <styleClass>
@@ -171,7 +174,8 @@
                         <ComboBox fx:id="userRatingComboBox" prefHeight="20.0" prefWidth="200.0" promptText="Your Rating" stylesheets="@../../../style.css">
                            <styleClass>
                               <String fx:value="comboBox" />
-                              <String fx:value="ra" />
+                              <String fx:value="combo-box-popup" />
+                              <String fx:value="combo-box" />
                            </styleClass>
                         </ComboBox>
                      </children>

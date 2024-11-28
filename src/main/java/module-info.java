@@ -1,7 +1,9 @@
 module com.manula413.movie_manager {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires java.sql;
+    requires javafx.base;
     requires org.slf4j;
     requires java.desktop;
     requires jbcrypt;
