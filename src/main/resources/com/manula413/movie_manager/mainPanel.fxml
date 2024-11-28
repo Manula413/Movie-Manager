@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -155,8 +156,11 @@
                            <HBox.margin>
                               <Insets left="20.0" right="30.0" />
                            </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="watchListRadioGroup" />
+                           </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="watchLaterRadioButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="120.0" styleClass="radio-button-bg" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE">
+                        <RadioButton fx:id="watchLaterRadioButton" mnemonicParsing="false" prefHeight="20.0" prefWidth="120.0" styleClass="radio-button-bg" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE" toggleGroup="$watchListRadioGroup">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -174,7 +178,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="426.0">
                      <children>
-                        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="160.0" styleClass="right-bar-button" stylesheets="@../../../style.css" text="Add" textFill="WHITE">
+                        <Button fx:id="addToDatabaseButton" mnemonicParsing="false" onAction="#addMovieToDatabase" prefHeight="50.0" prefWidth="160.0" styleClass="right-bar-button" stylesheets="@../../../style.css" text="Add" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="100.0" right="30.0" />
                            </HBox.margin>

@@ -113,9 +113,9 @@ public class LoginController {
     public void validateLogin() {
 
         DatabaseConnection connectNow = new DatabaseConnection();
-        String fetchPasswordQuery = "SELECT password FROM moviedb.user WHERE userName = ?";
+        String fetchUserQuery = "SELECT userId, password FROM moviedb.user WHERE userName = ?";
 
-        try (Connection connectDB = connectNow.getConnection(); PreparedStatement preparedStatement = connectDB.prepareStatement(fetchPasswordQuery)) {
+        try (Connection connectDB = connectNow.getConnection(); PreparedStatement preparedStatement = connectDB.prepareStatement(fetchUserQuery)) {
 
             preparedStatement.setString(1, usernameTextFeild.getText());
 
@@ -126,7 +126,10 @@ public class LoginController {
 
                     if (verifyPassword(plainPassword, hashedPassword)) {
 
-                        Session.getInstance().setUsername(usernameTextFeild.getText()); // Store username in session
+                        // Store both username and userId in session
+                        String userId = queryResult.getString("userId");
+                        Session.getInstance().setUsername(usernameTextFeild.getText());
+                        Session.getInstance().setUserId(userId); // Store userId in session
 
                         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
                         MainPanelController mainpanel = new MainPanelController();
@@ -147,6 +150,7 @@ public class LoginController {
             loginMessageLabel.setText("An error occurred. Please try again.");
         }
     }
+
 
 
     // Method to verify a password

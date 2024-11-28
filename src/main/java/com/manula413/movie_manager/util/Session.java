@@ -3,9 +3,11 @@ package com.manula413.movie_manager.util;
 public class Session {
     private static Session instance;
     private String username;
+    private String userId;
 
     // Private constructor
-    private Session() {}
+    private Session() {
+    }
 
     public static Session getInstance() {
         if (instance == null) {
@@ -22,8 +24,20 @@ public class Session {
         this.username = username;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userID) {
+        this.userId = userID;
+
+    }
+
     public void clearSession() {
         this.username = null;
+        this.userId = null; // Clear userId as well
     }
+
+
 }
 

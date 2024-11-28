@@ -12,6 +12,7 @@ module com.manula413.movie_manager {
     requires org.apache.httpcomponents.httpclient;
     requires org.apache.httpcomponents.client5.httpclient5;
     requires org.apache.httpcomponents.core5.httpcore5;
+    requires mysql.connector.j;
 
 
     opens com.manula413.movie_manager.controller to javafx.fxml;
