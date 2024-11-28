@@ -88,6 +88,10 @@ public class MainPanelController {
     private static final String DEFAULT_POSTER = "path/to/defaultPoster.jpg";
     String userId = Session.getInstance().getUserId();
 
+    private MovieDetails movieDetails;
+    private boolean watchedListSelected;
+    private boolean watchLaterSelected;
+
 
     public void loadMainPanelDefault(Stage stage) throws Exception {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
@@ -264,48 +268,76 @@ public class MainPanelController {
 
     }
 
+    public void addMovieToDatabase() {
+        System.out.println("Worked till here 1");
 
-    public void addMovieToDatabase(int userId, String title, String year, String genre,
-                                   String type, String imdbRating, String rtRating, String userComment,
-                                   String totalSeasons, boolean watchedListSelected, boolean watchLaterSelected) {
-        DatabaseConnection connectNow = new DatabaseConnection();
+        // Check if movieDetails is not null
+        if (movieDetails != null) {
+            // Retrieve movie details
+            String title = movieDetails.getTitle();
+            String year = movieDetails.getYear();
+            String genre = movieDetails.getGenre();
+            String imdbRating = movieDetails.getImdbRating();
+            String rtRating = movieDetails.getRtRating();
+            String type = movieDetails.getType();
+            String totalSeasons = movieDetails.getTotalSeasons();
 
-        try (Connection connectDB = connectNow.getConnection()) {
-            // Normalize movie name
-            title = title.trim().toLowerCase();
+            // Debugging output
+            System.out.println("Worked till here, movie title: " + title);
 
-            // Step 1: Check if the movie exists in the database or add it if missing
-            int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
+            // Database connection setup
+            DatabaseConnection connectNow = new DatabaseConnection();
+            try (Connection connectDB = connectNow.getConnection()) {
+                // Normalize movie name by trimming and converting to lowercase
+                title = title.trim().toLowerCase();
 
-            if (movieId == -1) {
-                System.out.println("Failed to retrieve or insert movie: " + title);
-                return;
+                // Step 1: Check if the movie exists in the database or add it if missing
+                int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
+
+                // If movieId is -1, it means insertion or retrieval failed
+                if (movieId == -1) {
+                    System.out.println("Failed to retrieve or insert movie: " + title);
+                    return;
+                }
+
+                // Step 2: Check if the user already has this movie in their list
+                if (isMovieInUserList(connectDB, Integer.parseInt(userId), movieId)) {
+                    System.out.println("User " + userId + " already has the movie " + title + " in their list.");
+                    return;
+                }
+
+                // Step 3: Determine movie status from radio buttons and insert into user_movies
+                String status = determineMovieStatus(watchedListSelected, watchLaterSelected);
+                if (status == null) {
+                    System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
+                    return;
+                }
+
+                // Default comment (can be customized or taken from a user input field)
+                String userComment = "Good";
+
+                // Step 4: Insert the user movie entry into the database
+                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, status);
+                if (inserted) {
+                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
+                } else {
+                    System.out.println("Failed to add movie " + title + " for user " + userId);
+                }
+
+            } catch (SQLException e) {
+                // Handle SQL exception properly
+                System.out.println("Database error occurred: " + e.getMessage());
+                e.printStackTrace(); // Print stack trace for debugging
+            } catch (Exception e) {
+                // Catch any other exceptions
+                System.out.println("An unexpected error occurred: " + e.getMessage());
+                e.printStackTrace();
             }
-
-            // Step 2: Check if the user already has this movie in their list
-            if (isMovieInUserList(connectDB, userId, movieId)) {
-                System.out.println("User " + userId + " already has the movie " + title + " in their list.");
-                return;
-            }
-
-            // Step 3: Determine movie status from radio buttons and insert into user_movies
-            String status = determineMovieStatus(watchedListSelected, watchLaterSelected);
-            if (status == null) {
-                System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
-                return;
-            }
-
-            boolean inserted = addUserMovie(connectDB, userId, movieId, userComment, status);
-            if (inserted) {
-                System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
-            } else {
-                System.out.println("Failed to add movie " + title + " for user " + userId);
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Database error occurred: " + e.getMessage());
+        } else {
+            System.out.println("Movie details are null. Cannot add to database.");
         }
     }
+
 
     private int getOrInsertMovie(Connection connectDB, String movieName, String movieYear, String genre,
                                  String type, String imdbRating, String rtRating, String seasons) throws SQLException {
@@ -344,6 +376,7 @@ public class MainPanelController {
         return -1; // Indicate failure
     }
 
+
     private boolean isMovieInUserList(Connection connectDB, int userId, int movieId) throws SQLException {
         String checkUserMovieQuery = "SELECT COUNT(*) FROM user_movies WHERE userid = ? AND movieid = ?";
         try (PreparedStatement checkUserMovieStmt = connectDB.prepareStatement(checkUserMovieQuery)) {
@@ -355,6 +388,8 @@ public class MainPanelController {
     }
 
     private String determineMovieStatus(boolean watchedListSelected, boolean watchLaterSelected) {
+        this.watchedListSelected = watchedListSelected;
+        this.watchLaterSelected = watchLaterSelected;
         if (watchedListSelected) {
             return "watched";
         } else if (watchLaterSelected) {
@@ -373,6 +408,8 @@ public class MainPanelController {
             return insertUserMovieStmt.executeUpdate() > 0;
         }
     }
+
+
 
 
 }
