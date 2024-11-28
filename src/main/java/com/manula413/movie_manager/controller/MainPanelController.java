@@ -128,6 +128,7 @@ public class MainPanelController {
                 // Update UI on the JavaFX Application Thread
                 Platform.runLater(() -> {
                     if (movieDetails != null) {
+                        this.movieDetails = movieDetails;
                         setMovieDetails(
                                 movieDetails.getTitle(),
                                 movieDetails.getYear(),
@@ -306,6 +307,7 @@ public class MainPanelController {
                     return;
                 }
 
+                /*
                 // Step 3: Determine movie status from radio buttons and insert into user_movies
                 String status = determineMovieStatus(watchedListSelected, watchLaterSelected);
                 if (status == null) {
@@ -313,13 +315,15 @@ public class MainPanelController {
                     return;
                 }
 
+                 */
+
                 // Default comment (can be customized or taken from a user input field)
                 String userComment = "Good";
 
                 // Step 4: Insert the user movie entry into the database
-                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, status);
+                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, "watched");
                 if (inserted) {
-                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
+                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + "watched");
                 } else {
                     System.out.println("Failed to add movie " + title + " for user " + userId);
                 }
@@ -387,6 +391,7 @@ public class MainPanelController {
         }
     }
 
+    /*
     private String determineMovieStatus(boolean watchedListSelected, boolean watchLaterSelected) {
         this.watchedListSelected = watchedListSelected;
         this.watchLaterSelected = watchLaterSelected;
@@ -397,6 +402,8 @@ public class MainPanelController {
         }
         return null; // Invalid status
     }
+
+     */
 
     private boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
         String insertUserMovieQuery = "INSERT INTO user_movies (userid, movieid, userComment, watched_Status) VALUES (?, ?, ?, ?)";

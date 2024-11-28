@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP - Coding Insert movies to Database. Contain errors">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP - Minor Changes. addMovieToDatabase return movieDetails Null">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
     </list>
@@ -271,7 +271,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732762882466</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="WIP - Minor Changes. addMovieToDatabase return movieDetails Null">
+      <option name="closed" value="true" />
+      <created>1732770940163</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1732770940163</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -296,6 +304,7 @@
     <MESSAGE value="Fixed issues - not displaying movie details" />
     <MESSAGE value="Minor Changes" />
     <MESSAGE value="WIP - Coding Insert movies to Database. Contain errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP - Coding Insert movies to Database. Contain errors" />
+    <MESSAGE value="WIP - Minor Changes. addMovieToDatabase return movieDetails Null" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP - Minor Changes. addMovieToDatabase return movieDetails Null" />
   </component>
 </project>
