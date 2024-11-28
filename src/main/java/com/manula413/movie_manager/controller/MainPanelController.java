@@ -2,21 +2,16 @@ package com.manula413.movie_manager.controller;
 
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.util.Session;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-
-
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
@@ -30,9 +25,6 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class MainPanelController {
-
-
-    // @FXML for MainPanel.fxml
 
     @FXML
     private BorderPane loadingBorderPane;
@@ -53,122 +45,148 @@ public class MainPanelController {
     private Button watchLaterButton;
 
     @FXML
-    private Button extraButton;
-
-    @FXML
     private Label usernameLabel;
-
-
-    // @FXML for MovieDetails.fxml
 
     @FXML
     private AnchorPane movieDetailsAnchorPane;
 
-    private MovieDetailsController movieDetailsController;
+    @FXML
+    private Label movieNameLabel;
 
+    @FXML
+    private Label movieYearLabel;
 
+    @FXML
+    private Label movieGenreLabel;
 
-    public BorderPane getLoadingBorderPane() {
-        return loadingBorderPane;
-    }
+    @FXML
+    private Label ratingIMBDLabel;
+
+    @FXML
+    private Label ratingRTLabel;
+
+    @FXML
+    private Label moviePlotLabel;
+
+    @FXML
+    private ImageView moviePosterImageView;
+
+    private static final String DEFAULT_POSTER = "path/to/defaultPoster.jpg";
+
 
 
     public void loadMainPanelDefault(Stage stage) throws Exception {
-        // Load the main panel FXML
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
-        Parent mainPanel = mainLoader.load();
+        AnchorPane mainPanel = mainLoader.load();
 
         MainPanelController mainController = mainLoader.getController();
-
-        // Set username after the main panel is fully loaded
         String username = Session.getInstance().getUsername();
         mainController.setUsernameLabel(username);
 
-        // Load the movie details FXML and set it inside the main panel
-        FXMLLoader movieLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/movieDetails.fxml"));
-        movieDetailsAnchorPane = movieLoader.load(); // Load movie details FXML
-        mainController.getLoadingBorderPane().setCenter(movieDetailsAnchorPane); // Inject details into the main panel
-
-        // Get MovieDetailsController instance from FXMLLoader
-        MovieDetailsController movieDetailsController = movieLoader.getController();  // Get the controller here
-
-        // Set movie details
-        MovieDetails movieDetails = fetchMovieData("Some Movie Name 2020");  // Replace with actual movie input
-        if (movieDetails != null) {
-            movieDetailsController.setMovieDetails(
-                    movieDetails.getTitle(),
-                    movieDetails.getYear(),
-                    movieDetails.getGenre(),
-                    movieDetails.getImdbRating(),
-                    movieDetails.getRtRating(),
-                    movieDetails.getPlot(),
-                    movieDetails.getPosterUrl()
-            );
-        }
-
-        // Set scene and show stage
-        Scene scene = new Scene(mainPanel, 1300, 830);
-        stage.setTitle("MainPanel with MovieDetails");
+        Scene scene = new Scene(mainPanel, 1300, 800);
+        stage.setTitle("Movie Info");
         stage.setScene(scene);
         stage.show();
     }
 
-
-
-
     public void setUsernameLabel(String username) {
         if (usernameLabel != null) {
             usernameLabel.setText("Welcome, " + username + "!");
-        } else {
-            System.out.println("Username label is null");
         }
     }
-
-
-
-
 
     @FXML
     public void searchMovie() {
         String movieInput = searchTextField.getText().trim();
+        System.out.println("User input: " + movieInput);
 
-        try {
-            // Show loading indicator
-            loadingBorderPane.setVisible(true);
+        // Run fetch in a separate thread
+        new Thread(() -> {
+            try {
+                MovieDetails movieDetails = fetchMovieData(movieInput);
 
-            // Fetch movie data
-            MovieDetails movieDetails = fetchMovieData(movieInput);
-
-            // Hide loading indicator
-            loadingBorderPane.setVisible(false);
-
-            // Ensure movie details are not null before setting them
-            if (movieDetails != null) {
-                movieDetailsController.setMovieDetails(
-                        movieDetails.getTitle(),
-                        movieDetails.getYear(),
-                        movieDetails.getGenre(),
-                        movieDetails.getImdbRating(),
-                        movieDetails.getRtRating(),
-                        movieDetails.getPlot(),
-                        movieDetails.getPosterUrl()
-                );
-            } else {
-                // Handle the case where the movie wasn't found
-                movieDetailsController.setMovieDetails("Movie Not Found", "", "", "", "", "No details available", null);
+                // Update UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    if (movieDetails != null) {
+                        setMovieDetails(
+                                movieDetails.getTitle(),
+                                movieDetails.getYear(),
+                                movieDetails.getGenre(),
+                                movieDetails.getImdbRating(),
+                                movieDetails.getRtRating(),
+                                movieDetails.getPlot(),
+                                movieDetails.getPosterUrl()
+                        );
+                        System.out.println("Movie details displayed on UI.");
+                    } else {
+                        setMovieDetails("Movie Not Found", "", "", "", "", "No details available", null);
+                        System.out.println("No movie details available.");
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Platform.runLater(() -> {
+                    setMovieDetails("Error", "", "", "", "", "An error occurred while fetching movie details.", null);
+                    System.err.println("Exception caught during searchMovie: " + e.getMessage());
+                });
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Handle any error (e.g., network issue, API failure)
-            loadingBorderPane.setVisible(false); // Hide loading indicator
-            // Display an error message to the user
-            movieDetailsController.setMovieDetails("Error", "", "", "", "", "An error occurred", null);
-        }
+        }).start();
     }
 
 
-    // Method to get the API key from the properties file
+
+    public MovieDetails fetchMovieData(String movieInput) throws Exception {
+        System.out.println("Starting fetchMovieData with input: " + movieInput);
+
+        String apiKey = getAPIKey();
+        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
+
+        if (parts.length != 2) {
+            System.out.println("Invalid format. Use 'Movie Name Year'.");
+            return null;
+        }
+
+        String movieName = parts[0].trim();
+        String movieYear = parts[1].trim();
+        System.out.println("Parsed movie name: " + movieName + ", year: " + movieYear);
+
+        String url = "http://www.omdbapi.com/?t=" + movieName.replace(" ", "+") + "&y=" + movieYear + "&apikey=" + apiKey;
+        System.out.println("Constructed URL: " + url);
+
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                System.out.println("HTTP response status: " + response.getCode());
+
+                String responseString = EntityUtils.toString(response.getEntity());
+                System.out.println("Response received: " + responseString);
+
+                JsonObject json = JsonParser.parseString(responseString).getAsJsonObject();
+
+                if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
+                    System.out.println("Movie not found: " + json.get("Error").getAsString());
+                    return null;
+                }
+
+                String title = json.has("Title") ? json.get("Title").getAsString() : "N/A";
+                String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
+                String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
+                String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
+                String rtRating = json.has("Ratings") && json.getAsJsonArray("Ratings").size() > 1
+                        ? json.getAsJsonArray("Ratings").get(1).getAsJsonObject().get("Value").getAsString()
+                        : "N/A";
+                String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
+                String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
+
+                System.out.println("Movie details fetched successfully.");
+                return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl);
+            }
+        } catch (IOException e) {
+            System.err.println("Error during HTTP request: " + e.getMessage());
+            throw e;
+        }
+    }
+
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("src/main/resources/keys.properties")) {
@@ -177,49 +195,39 @@ public class MainPanelController {
         return properties.getProperty("api.key");
     }
 
-    // Method to fetch movie data from the OMDB API
-    public static MovieDetails fetchMovieData(String movieInput) throws Exception {
-        String movieName = "";
-        String movieYear = "";
+    public void setMovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl) {
+        movieNameLabel.setText(title != null ? title : "N/A");
+        movieYearLabel.setText(year != null ? year : "N/A");
+        movieGenreLabel.setText(genre != null ? genre : "N/A");
 
-        // Regular expression to match a four-digit year at the end of the string
-        String regex = "(.*)(\\d{4})$";  // Match everything before the last 4 digits
+        // Display only the numeric value for IMDb rating
+        String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals("N/A")) ? imdbRating : "N/A";
+        ratingIMBDLabel.setText(imdbRatingDisplay);
+        System.out.println(imdbRatingDisplay);
 
-        if (movieInput.matches(regex)) {
-            movieName = movieInput.replaceAll(regex, "$1").trim();  // Everything before the 4 digits
-            movieYear = movieInput.replaceAll(regex, "$2").trim();  // The 4 digits (year)
-        } else {
-            System.out.println("Invalid input format. Please enter in the format: Movie Name Year");
-            return null;
+        // Display only the numeric value for Rotten Tomatoes rating with a percentage symbol
+        String rtRatingDisplay = (rtRating != null && !rtRating.equals("N/A")) ? rtRating : "N/A";
+        if (!rtRatingDisplay.equals("N/A")) {
+            // Ensure we only display the numeric value with a '%' symbol, e.g., '66%'
+            rtRatingDisplay = rtRatingDisplay.replaceAll("[^0-9]", "") + "%"; // Remove non-numeric characters and append '%'
         }
+        ratingRTLabel.setText( rtRatingDisplay);
+        System.out.println(rtRatingDisplay);
 
-        String apiKey = getAPIKey();
-        String url = "http://www.omdbapi.com/?t=" + movieName.replace(" ", "+") + "&y=" + movieYear + "&apikey=" + apiKey;
+        moviePlotLabel.setText(plot != null ? plot : "N/A");
 
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(url);
-            try (CloseableHttpResponse response = client.execute(request)) {
-                String responseString = EntityUtils.toString(response.getEntity());
-
-                // Parse the JSON response using Gson
-                JsonObject json = JsonParser.parseString(responseString).getAsJsonObject();
-
-                String title = json.has("Title") ? json.get("Title").getAsString() : "N/A";
-                String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
-                String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
-                String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
-                String rtRating = json.has("Ratings") && json.getAsJsonArray("Ratings").size() > 1
-                        ? json.getAsJsonArray("Ratings").get(1).getAsJsonObject().get("Value").getAsString() : "N/A";
-                String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
-                String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
-
-                return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl);
+        try {
+            if (posterUrl != null && !posterUrl.equals("N/A")) {
+                moviePosterImageView.setImage(new Image(posterUrl, true));
+            } else {
+                moviePosterImageView.setImage(new Image(DEFAULT_POSTER));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            moviePosterImageView.setImage(new Image(DEFAULT_POSTER));
         }
     }
+
 
 
 
