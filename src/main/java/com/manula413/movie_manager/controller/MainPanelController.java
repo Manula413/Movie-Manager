@@ -22,6 +22,13 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import javafx.scene.control.ComboBox;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -116,6 +123,15 @@ public class MainPanelController {
 
         userRatingComboBox.setItems(FXCollections.observableArrayList("Great","Good","Okay","Mediocre","Poor"));
         //userRatingComboBox.setValue("3"); // Optional: Set a default value
+        watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == watchLaterRadioButton) {
+                userRatingComboBox.setDisable(true); // Disable ComboBox
+                userRatingComboBox.setValue("N/A"); // Set the default value as "N/A"
+            } else {
+                userRatingComboBox.setDisable(false); // Enable ComboBox
+                userRatingComboBox.setValue(null); // Clear any default value
+            }
+        });
     }
 
 
@@ -325,10 +341,10 @@ public class MainPanelController {
                 }
 
                 // Default comment (can be customized or taken from a user input field)
-                String userComment = "Good";
+                String userRating = determineUserRating();
 
                 // Step 4: Insert the user movie entry into the database
-                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userComment, status);
+                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userRating, status);
                 if (inserted) {
                     System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
                 } else {
@@ -409,6 +425,19 @@ public class MainPanelController {
 
         return null; // No valid selection
     }
+
+    private String determineUserRating() {
+        // Get the selected item from the ComboBox
+        String selectedRating = userRatingComboBox.getValue();
+
+        if (selectedRating != null) {
+            return selectedRating; // Return the selected rating
+        }
+
+        return null; // No selection made
+    }
+
+
 
 
     private boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
