@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP - Fixed Minor issues">
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP - Added user Rating to Database">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/images/image-not-found.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/images/MV5BYmQwNzRiNmItODc4Ny00Mjk4LThmYWQtNjI5OGU4OGUxMmY0XkEyXkFqcGc@._V1_SX300.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,8 +93,8 @@
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources" />
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\images" />
+      <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources" />
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\java\com\manula413\movie_manager\views" />
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
     </key>
@@ -296,7 +297,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732834780714</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="WIP - Added user Rating to Database">
+      <option name="closed" value="true" />
+      <created>1732899542507</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1732899542507</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -323,6 +332,7 @@
     <MESSAGE value="WIP - Coding Insert movies to Database. Contain errors" />
     <MESSAGE value="WIP - Minor Changes. addMovieToDatabase return movieDetails Null" />
     <MESSAGE value="WIP - Fixed Minor issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP - Fixed Minor issues" />
+    <MESSAGE value="WIP - Added user Rating to Database" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP - Added user Rating to Database" />
   </component>
 </project>

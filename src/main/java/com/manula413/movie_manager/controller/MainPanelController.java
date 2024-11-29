@@ -32,6 +32,9 @@ import javafx.scene.control.ToggleGroup;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
@@ -188,15 +191,23 @@ public class MainPanelController {
         String apiKey = getAPIKey();
         String[] parts = movieInput.split("\\s(?=\\d{4}$)");
 
+        // Validate input format: movie name and year should be provided
         if (parts.length != 2) {
-            System.out.println("Invalid format. Use 'Movie Name Year'.");
-            return null;
+            System.out.println("Invalid input format. Please use 'Movie Name Year'.");
+            return null;  // Stop further processing if the input is invalid
         }
 
         String movieName = parts[0].trim();
         String movieYear = parts[1].trim();
         System.out.println("Parsed movie name: " + movieName + ", year: " + movieYear);
 
+        // Check if movie name and year are valid (non-empty)
+        if (movieName.isEmpty() || movieYear.isEmpty()) {
+            System.out.println("Invalid input. Movie name and year are required.");
+            return null;  // Stop further processing if either part is empty
+        }
+
+        // Construct the URL to query the OMDB API
         String url = "http://www.omdbapi.com/?t=" + movieName.replace(" ", "+") + "&y=" + movieYear + "&apikey=" + apiKey;
         System.out.println("Constructed URL: " + url);
 
@@ -210,11 +221,13 @@ public class MainPanelController {
 
                 JsonObject json = JsonParser.parseString(responseString).getAsJsonObject();
 
+                // Handle response if the movie is not found
                 if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
                     System.out.println("Movie not found: " + json.get("Error").getAsString());
-                    return null;
+                    return new MovieDetails("N/A", "N/A", "N/A", "N/A", "N/A", "N/A", null, "N/A", "N/A");
                 }
 
+                // Parse the movie details from the JSON response
                 String title = json.has("Title") ? json.get("Title").getAsString() : "N/A";
                 String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
                 String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
@@ -224,6 +237,21 @@ public class MainPanelController {
                         : "N/A";
                 String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
                 String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
+
+                /*
+               String posterUrl = json.has("Poster") && !json.get("Poster").getAsString().isEmpty()
+                        ? json.get("Poster").getAsString()
+                        : getClass().getResource("images/image-not-found.png").toExternalForm();
+
+                /*
+                String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
+
+                if (posterUrl == null || !isValidURL(posterUrl)) {
+                    posterUrl = "images/image-not-found.png";  // Provide a default placeholder image
+                }
+
+                 */
+
                 String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
                 String totalSeasons = "N/A";
 
@@ -240,6 +268,7 @@ public class MainPanelController {
             throw e;
         }
     }
+
 
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
@@ -437,6 +466,15 @@ public class MainPanelController {
         return null; // No selection made
     }
 
+
+    public boolean isValidURL(String urlString) {
+        try {
+            new URL(urlString).toURI();  // Try to convert the string to a URI
+            return true;
+        } catch (URISyntaxException | MalformedURLException e) {
+            return false;  // Invalid URL
+        }
+    }
 
 
 
