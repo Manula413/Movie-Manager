@@ -22,9 +22,6 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import javafx.scene.control.ComboBox;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -90,6 +87,9 @@ public class MainPanelController {
     private Label seasonsLabel;
 
     @FXML
+    private Label searchErrorLabel;
+
+    @FXML
     private ImageView moviePosterImageView;
 
     @FXML
@@ -98,7 +98,6 @@ public class MainPanelController {
     @FXML
     private ComboBox<String> userRatingComboBox;
 
-    private static final String DEFAULT_POSTER = "path/to/defaultPoster.jpg";
     String userId = Session.getInstance().getUserId();
 
     private MovieDetails movieDetails;
@@ -188,12 +187,16 @@ public class MainPanelController {
     public MovieDetails fetchMovieData(String movieInput) throws Exception {
         System.out.println("Starting fetchMovieData with input: " + movieInput);
 
+        // Clear any previous error messages
+        Platform.runLater(() -> searchErrorLabel.setText(""));
+
         String apiKey = getAPIKey();
         String[] parts = movieInput.split("\\s(?=\\d{4}$)");
 
         // Validate input format: movie name and year should be provided
         if (parts.length != 2) {
-            System.out.println("Invalid input format. Please use 'Movie Name Year'.");
+            // Use Platform.runLater to update the searchErrorLabel on the JavaFX application thread
+            Platform.runLater(() -> searchErrorLabel.setText("Please use 'Movie Name Year'."));
             return null;  // Stop further processing if the input is invalid
         }
 
@@ -203,7 +206,8 @@ public class MainPanelController {
 
         // Check if movie name and year are valid (non-empty)
         if (movieName.isEmpty() || movieYear.isEmpty()) {
-            System.out.println("Invalid input. Movie name and year are required.");
+            // Use Platform.runLater to update the searchErrorLabel on the JavaFX application thread
+            Platform.runLater(() -> searchErrorLabel.setText("Movie name and year are required"));
             return null;  // Stop further processing if either part is empty
         }
 
@@ -224,11 +228,13 @@ public class MainPanelController {
                 // Handle response if the movie is not found
                 if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
                     System.out.println("Movie not found: " + json.get("Error").getAsString());
+                    // Display error message for movie not found
+                    Platform.runLater(() -> searchErrorLabel.setText("Movie not found"));
                     return new MovieDetails("N/A", "N/A", "N/A", "N/A", "N/A", "N/A", null, "N/A", "N/A");
                 }
 
                 // Parse the movie details from the JSON response
-                String title = json.has("Title") ? json.get("Title").getAsString() : "N/A";
+                String title = json.has("Title") ? json.get("Title").getAsString() : "Movie Not Found";
                 String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
                 String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
                 String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
@@ -237,20 +243,6 @@ public class MainPanelController {
                         : "N/A";
                 String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
                 String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
-
-                /*
-               String posterUrl = json.has("Poster") && !json.get("Poster").getAsString().isEmpty()
-                        ? json.get("Poster").getAsString()
-                        : getClass().getResource("images/image-not-found.png").toExternalForm();
-
-                /*
-                String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
-
-                if (posterUrl == null || !isValidURL(posterUrl)) {
-                    posterUrl = "images/image-not-found.png";  // Provide a default placeholder image
-                }
-
-                 */
 
                 String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
                 String totalSeasons = "N/A";
@@ -268,6 +260,9 @@ public class MainPanelController {
             throw e;
         }
     }
+
+
+
 
 
     private static String getAPIKey() throws IOException {
@@ -299,15 +294,19 @@ public class MainPanelController {
 
         moviePlotLabel.setText(plot != null ? plot : "N/A");
 
+        URL resource = getClass().getResource("/images/image-not-found.png");
+        System.out.println("getClass().getResource(): " + resource);
+
         try {
             if (posterUrl != null && !posterUrl.equals("N/A")) {
                 moviePosterImageView.setImage(new Image(posterUrl, true));
             } else {
-                moviePosterImageView.setImage(new Image(DEFAULT_POSTER));
+                // Use the correct resource path
+                moviePosterImageView.setImage(new Image(resource.toExternalForm()));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            moviePosterImageView.setImage(new Image(DEFAULT_POSTER));
+            moviePosterImageView.setImage(new Image(resource.toExternalForm()));
         }
 
         // Check if it's a TV series and set the labels accordingly
