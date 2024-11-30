@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import com.google.gson.JsonObject;
@@ -20,11 +19,14 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.FileInputStream;
@@ -35,19 +37,12 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Properties;
 
+@SuppressWarnings("ALL")
 public class MainPanelController {
 
-    @FXML
-    private BorderPane loadingBorderPane;
 
     @FXML
     private TextField searchTextField;
-
-    @FXML
-    private Button searchButton;
-
-    @FXML
-    private Button addToDatabaseButton;
 
     @FXML
     private RadioButton watchLaterRadioButton;
@@ -59,8 +54,6 @@ public class MainPanelController {
     @FXML
     private Label usernameLabel;
 
-    @FXML
-    private AnchorPane movieDetailsAnchorPane;
 
     @FXML
     private Label movieNameLabel;
@@ -105,17 +98,22 @@ public class MainPanelController {
     private ImageView rtLogoImageView;
 
     String userId = Session.getInstance().getUserId();
+    private static final Logger logger = LoggerFactory.getLogger(MainPanelController.class);
+
 
     private MovieDetails movieDetails;
+    private static final String MOVIE_NOT_FOUND = "Movie Not Found";
+    private static final String ENTER_BOTH_FIELDS = "Please enter both the movie name and release year to perform a search";
+    private static final String RATINGS_KEY = "Ratings";
 
 
-    public void loadMainPanelDefault(Stage stage) throws Exception {
+
+    public void loadMainPanelDefault(Stage stage) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
 
         MainPanelController mainController = mainLoader.getController();
         String username = Session.getInstance().getUsername();
-
 
         mainController.setUsernameLabel(username);
 
@@ -124,6 +122,7 @@ public class MainPanelController {
         stage.setScene(scene);
         stage.show();
     }
+
 
     @FXML
     private void initialize() {
@@ -152,44 +151,33 @@ public class MainPanelController {
     @FXML
     public void searchMovie() {
         String movieInput = searchTextField.getText().trim();
-        System.out.println("User input: " + movieInput);
+        logger.info("User input: {}", movieInput);
 
         // Run fetch in a separate thread
         new Thread(() -> {
             try {
-                MovieDetails movieDetails = fetchMovieData(movieInput);
+                // Fetch movie details using the existing fetchMovieData method
+                MovieDetails fetchedMovieDetails = fetchMovieData(movieInput);
 
                 // Update UI on the JavaFX Application Thread
                 Platform.runLater(() -> {
-                    if (movieDetails != null) {
-                        this.movieDetails = movieDetails;
-                        setMovieDetails(
-                                movieDetails.getTitle(),
-                                movieDetails.getYear(),
-                                movieDetails.getGenre(),
-                                movieDetails.getImdbRating(),
-                                movieDetails.getRtRating(),
-                                movieDetails.getPlot(),
-                                movieDetails.getPosterUrl(),
-                                movieDetails.getType(),
-                                movieDetails.getTotalSeasons()
-                        );
-                        System.out.println("Movie details displayed on UI.");
+                    if (fetchedMovieDetails != null) {
+                        this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
+                        setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
+                        logger.info("Movie details displayed on UI.");
                     } else {
-                        setMovieDetails("Movie Not Found", "", "", "", "", "Please enter both the movie name and release year to perform a search",
-                                null, "", "");
-                        System.out.println("No movie details available.");
+                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", ""));
+                        logger.info("No movie details available.");
                     }
                 });
             } catch (Exception e) {
-                e.printStackTrace();
-                Platform.runLater(() -> {
-                    setMovieDetails("Error", "", "", "", "", "An error occurred while fetching movie details.", null, "", "");
-                    System.err.println("Exception caught during searchMovie: " + e.getMessage());
-                });
+                logger.error("Exception caught during searchMovie: ", e);
+                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "")));
             }
         }).start();
     }
+
+
 
     public MovieDetails fetchMovieData(String movieInput) throws Exception {
         System.out.println("Starting fetchMovieData with input: " + movieInput);
@@ -198,76 +186,95 @@ public class MainPanelController {
         Platform.runLater(() -> searchErrorLabel.setText(""));
 
         String apiKey = getAPIKey();
-        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
+        String[] parts = parseMovieInput(movieInput);
 
         // Validate input format: movie name and year should be provided
-        if (parts.length != 2) {
-            // Use Platform.runLater to update the searchErrorLabel on the JavaFX application thread
+        if (parts.length == 0) {
             Platform.runLater(() -> searchErrorLabel.setText("Please use 'Movie Name Year'."));
-            return null;  // Stop further processing if the input is invalid
+            return null;
         }
 
         String movieName = parts[0].trim();
         String movieYear = parts[1].trim();
         System.out.println("Parsed movie name: " + movieName + ", year: " + movieYear);
 
-        // Check if movie name and year are valid (non-empty)
-        if (movieName.isEmpty() || movieYear.isEmpty()) {
-            // Use Platform.runLater to update the searchErrorLabel on the JavaFX application thread
-            Platform.runLater(() -> searchErrorLabel.setText("Movie name and year are required"));
-            return null;  // Stop further processing if either part is empty
-        }
-
         // Construct the URL to query the OMDB API
         String url = "http://www.omdbapi.com/?t=" + movieName.replace(" ", "+") + "&y=" + movieYear + "&apikey=" + apiKey;
         System.out.println("Constructed URL: " + url);
 
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(url);
-            try (CloseableHttpResponse response = client.execute(request)) {
-                System.out.println("HTTP response status: " + response.getCode());
+        try {
+            JsonObject json = fetchMovieJsonResponse(url);
 
-                String responseString = EntityUtils.toString(response.getEntity());
-                System.out.println("Response received: " + responseString);
-
-                JsonObject json = JsonParser.parseString(responseString).getAsJsonObject();
-
-                // Handle response if the movie is not found
-                if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
-                    System.out.println("Movie not found: " + json.get("Error").getAsString());
-                    // Display error message for movie not found
-
-                    return new MovieDetails(null, null, null, null, null, null, null, null, null);
-                }
-
-                // Parse the movie details from the JSON response
-                String title = json.has("Title") ? json.get("Title").getAsString() : "Movie Not Found";
-                String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
-                String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
-                String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
-                String rtRating = json.has("Ratings") && json.getAsJsonArray("Ratings").size() > 1
-                        ? json.getAsJsonArray("Ratings").get(1).getAsJsonObject().get("Value").getAsString()
-                        : "N/A";
-                String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
-                String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
-
-                String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
-                String totalSeasons = "N/A";
-
-                // Check if it's a series and get the total number of seasons
-                if ("series".equalsIgnoreCase(type) && json.has("totalSeasons")) {
-                    totalSeasons = json.get("totalSeasons").getAsString();
-                }
-
-                System.out.println("Movie details fetched successfully.");
-                return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons);
+            // Handle response if the movie is not found
+            if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
+                return handleMovieNotFound(json);
             }
+
+            // Parse the movie details from the JSON response
+            String title = json.has("Title") ? json.get("Title").getAsString() : MOVIE_NOT_FOUND;
+            String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
+            String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
+            String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
+            String rtRating = json.has(RATINGS_KEY) && json.getAsJsonArray(RATINGS_KEY).size() > 1
+                    ? json.getAsJsonArray(RATINGS_KEY).get(1).getAsJsonObject().get("Value").getAsString()
+                    : "N/A";
+            String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
+            String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
+
+            String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
+            String totalSeasons = "N/A";
+
+            // Check if it's a series and get the total number of seasons
+            if ("series".equalsIgnoreCase(type) && json.has("totalSeasons")) {
+                totalSeasons = json.get("totalSeasons").getAsString();
+            }
+
+            System.out.println("Movie details fetched successfully.");
+            return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons);
         } catch (IOException e) {
             System.err.println("Error during HTTP request: " + e.getMessage());
             throw e;
         }
     }
 
+    private String[] parseMovieInput(String movieInput) {
+        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
+        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            return new String[0];  // Return null if invalid input format or empty fields
+        }
+        return parts;
+    }
+
+    private JsonObject fetchMovieJsonResponse(String url) throws IOException, MovieDataParseException {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                String responseString = EntityUtils.toString(response.getEntity());
+                return JsonParser.parseString(responseString).getAsJsonObject();
+            } catch (ParseException e) {
+                // Throw a custom exception instead of a generic RuntimeException
+                throw new MovieDataParseException("Error parsing the movie data response.", e);
+            }
+        }
+    }
+
+
+    private MovieDetails handleMovieNotFound(JsonObject json) {
+        String errorMessage = json.has("Error") ? json.get("Error").getAsString() : "Unknown error";
+        System.out.println("Movie not found: " + errorMessage);
+        return new MovieDetails(null, null, null, null, null, null, null, null, null);
+    }
+
+
+    public class MovieDataParseException extends Exception {
+        public MovieDataParseException(String message) {
+            super(message);
+        }
+
+        public MovieDataParseException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
 
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
@@ -277,43 +284,57 @@ public class MainPanelController {
         return properties.getProperty("api.key");
     }
 
-    public void setMovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl, String type, String totalSeasons) {
-        movieNameLabel.setText(title != null ? title : "Movie Not Found");
-        movieYearLabel.setText(year != null ? year : " ");
-        movieGenreLabel.setText(genre != null ? genre : " ");
+    public void setMovieDetails(MovieDetails movieDetails) {
+        setMovieTitle(movieDetails.getTitle());
+        setMovieYear(movieDetails.getYear());
+        setMovieGenre(movieDetails.getGenre());
+        setImdbRating(movieDetails.getImdbRating());
+        setRtRating(movieDetails.getRtRating());
+        setMoviePlot(movieDetails.getPlot());
+        setMoviePoster(movieDetails.getPosterUrl());
+        setTvSeriesDetails(movieDetails.getType(), movieDetails.getTotalSeasons());
+    }
 
-        // Handle IMDb rating and visibility of IMDb logo
+    private void setMovieTitle(String title) {
+        movieNameLabel.setText(title != null ? title : MOVIE_NOT_FOUND);
+    }
+
+    private void setMovieYear(String year) {
+        movieYearLabel.setText(year != null ? year : " ");
+    }
+
+    private void setMovieGenre(String genre) {
+        movieGenreLabel.setText(genre != null ? genre : " ");
+    }
+
+    private void setImdbRating(String imdbRating) {
         String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals(" ")) ? imdbRating : " ";
         ratingIMBDLabel.setText(imdbRatingDisplay);
-        if (imdbRating == null || imdbRating.trim().isEmpty()) {
-            imdbLogoImageView.setVisible(false);  // Hide IMDb logo if rating is null or empty
-        } else {
-            imdbLogoImageView.setVisible(true);   // Show IMDb logo if rating is present
-        }
+        imdbLogoImageView.setVisible(!" ".equals(imdbRatingDisplay)); // Show only if the rating is not empty
+    }
 
-        // Handle Rotten Tomatoes rating and visibility of RT logo
-        System.out.println("Testing RT Rating: " + rtRating);
 
+    private void setRtRating(String rtRating) {
         String rtRatingDisplay;
         if (rtRating == null || rtRating.trim().isEmpty()) {
             rtRatingDisplay = "";  // Set to empty string if rtRating is null or empty
         } else if ("N/A".equals(rtRating)) {
             rtRatingDisplay = "N/A"; // Keep it as "N/A" if it's exactly "N/A"
         } else {
-            rtRatingDisplay = rtRating.replaceAll("[^0-9]", "") + "%"; // Remove non-numeric characters and append '%'
+            rtRatingDisplay = rtRating.replaceAll("\\D", "") + "%"; // Remove non-numeric characters and append '%'
+
         }
-
         ratingRTLabel.setText(rtRatingDisplay);
-        rtLogoImageView.setVisible(rtRating != null && !rtRating.trim().isEmpty());
+        rtLogoImageView.setVisible(!rtRatingDisplay.trim().isEmpty());
 
+    }
 
-        // Movie plot text
+    private void setMoviePlot(String plot) {
         moviePlotLabel.setText(plot != null ? plot : "No movie found matching the title and year. Please verify the details and try again.");
+    }
 
-        // Poster image
+    private void setMoviePoster(String posterUrl) {
         URL resource = getClass().getResource("/images/image-not-found.png");
-        System.out.println("getClass().getResource(): " + resource);
-
         try {
             if (posterUrl != null && !posterUrl.equals("N/A")) {
                 moviePosterImageView.setImage(new Image(posterUrl, true));
@@ -324,8 +345,9 @@ public class MainPanelController {
             e.printStackTrace();
             moviePosterImageView.setImage(new Image(resource.toExternalForm()));
         }
+    }
 
-        // Check if it's a TV series and set the labels accordingly
+    private void setTvSeriesDetails(String type, String totalSeasons) {
         if ("series".equalsIgnoreCase(type)) {
             tvSeriesLabel.setText("TV - Series");
             seasonsLabel.setText(totalSeasons != null && !totalSeasons.equals("N/A") ? "Seasons: " + totalSeasons : "Seasons: N/A");
@@ -334,6 +356,8 @@ public class MainPanelController {
             seasonsLabel.setText(""); // Clear Seasons label if it's a movie
         }
     }
+
+
 
 
     public void addMovieToDatabase() {
