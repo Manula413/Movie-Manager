@@ -78,4 +78,30 @@
 }
 
 
+.table-view {
+    -fx-background-color: #3f3f3f; /* Background color */
+    -fx-text-fill: #FFFFFF;       /* Font color for text */
+}
+
+.table-view .column-header-background {
+    -fx-background-color:  #3f3f3f; /* Header background */
+}
+
+.table-row-cell {
+    -fx-text-fill: #444444;        /* Font color for rows */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #e8e8e8; /* Alternating row background */
+}
+
+.table-row-cell:even {
+    -fx-background-color: #ffffff;
+}
+
+.table-view .column-header {
+    -fx-background-color: #3f3f3f; /* Header row background color */
+    -fx-text-fill: #ffffff;       /* Header text color */
+}
+
 
