@@ -98,6 +98,12 @@ public class MainPanelController {
     @FXML
     private ComboBox<String> userRatingComboBox;
 
+    @FXML
+    private ImageView imdbLogoImageView;
+
+    @FXML
+    private ImageView rtLogoImageView;
+
     String userId = Session.getInstance().getUserId();
 
     private MovieDetails movieDetails;
@@ -123,7 +129,7 @@ public class MainPanelController {
     private void initialize() {
         // Populate the ComboBox with values
 
-        userRatingComboBox.setItems(FXCollections.observableArrayList("Great","Good","Okay","Mediocre","Poor"));
+        userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
         //userRatingComboBox.setValue("3"); // Optional: Set a default value
         watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == watchLaterRadioButton) {
@@ -170,7 +176,8 @@ public class MainPanelController {
                         );
                         System.out.println("Movie details displayed on UI.");
                     } else {
-                        setMovieDetails("Movie Not Found", "", "", "", "", "No details available", null, "", "");
+                        setMovieDetails("Movie Not Found", "", "", "", "", "Please enter both the movie name and release year to perform a search",
+                                null, "", "");
                         System.out.println("No movie details available.");
                     }
                 });
@@ -229,8 +236,8 @@ public class MainPanelController {
                 if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
                     System.out.println("Movie not found: " + json.get("Error").getAsString());
                     // Display error message for movie not found
-                    Platform.runLater(() -> searchErrorLabel.setText("Movie not found"));
-                    return new MovieDetails("N/A", "N/A", "N/A", "N/A", "N/A", "N/A", null, "N/A", "N/A");
+
+                    return new MovieDetails(null, null, null, null, null, null, null, null, null);
                 }
 
                 // Parse the movie details from the JSON response
@@ -262,9 +269,6 @@ public class MainPanelController {
     }
 
 
-
-
-
     private static String getAPIKey() throws IOException {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("src/main/resources/keys.properties")) {
@@ -274,26 +278,39 @@ public class MainPanelController {
     }
 
     public void setMovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl, String type, String totalSeasons) {
-        movieNameLabel.setText(title != null ? title : "N/A");
-        movieYearLabel.setText(year != null ? year : "N/A");
-        movieGenreLabel.setText(genre != null ? genre : "N/A");
+        movieNameLabel.setText(title != null ? title : "Movie Not Found");
+        movieYearLabel.setText(year != null ? year : " ");
+        movieGenreLabel.setText(genre != null ? genre : " ");
 
-        // Display only the numeric value for IMDb rating
-        String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals("N/A")) ? imdbRating : "N/A";
+        // Handle IMDb rating and visibility of IMDb logo
+        String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals(" ")) ? imdbRating : " ";
         ratingIMBDLabel.setText(imdbRatingDisplay);
-        System.out.println(imdbRatingDisplay);
-
-        // Display only the numeric value for Rotten Tomatoes rating with a percentage symbol
-        String rtRatingDisplay = (rtRating != null && !rtRating.equals("N/A")) ? rtRating : "N/A";
-        if (!rtRatingDisplay.equals("N/A")) {
-            // Ensure we only display the numeric value with a '%' symbol, e.g., '66%'
-            rtRatingDisplay = rtRatingDisplay.replaceAll("[^0-9]", "") + "%"; // Remove non-numeric characters and append '%'
+        if (imdbRating == null || imdbRating.trim().isEmpty()) {
+            imdbLogoImageView.setVisible(false);  // Hide IMDb logo if rating is null or empty
+        } else {
+            imdbLogoImageView.setVisible(true);   // Show IMDb logo if rating is present
         }
+
+        // Handle Rotten Tomatoes rating and visibility of RT logo
+        System.out.println("Testing RT Rating: " + rtRating);
+
+        String rtRatingDisplay;
+        if (rtRating == null || rtRating.trim().isEmpty()) {
+            rtRatingDisplay = "";  // Set to empty string if rtRating is null or empty
+        } else if ("N/A".equals(rtRating)) {
+            rtRatingDisplay = "N/A"; // Keep it as "N/A" if it's exactly "N/A"
+        } else {
+            rtRatingDisplay = rtRating.replaceAll("[^0-9]", "") + "%"; // Remove non-numeric characters and append '%'
+        }
+
         ratingRTLabel.setText(rtRatingDisplay);
-        System.out.println(rtRatingDisplay);
+        rtLogoImageView.setVisible(rtRating != null && !rtRating.trim().isEmpty());
 
-        moviePlotLabel.setText(plot != null ? plot : "N/A");
 
+        // Movie plot text
+        moviePlotLabel.setText(plot != null ? plot : "No movie found matching the title and year. Please verify the details and try again.");
+
+        // Poster image
         URL resource = getClass().getResource("/images/image-not-found.png");
         System.out.println("getClass().getResource(): " + resource);
 
@@ -301,7 +318,6 @@ public class MainPanelController {
             if (posterUrl != null && !posterUrl.equals("N/A")) {
                 moviePosterImageView.setImage(new Image(posterUrl, true));
             } else {
-                // Use the correct resource path
                 moviePosterImageView.setImage(new Image(resource.toExternalForm()));
             }
         } catch (Exception e) {
@@ -317,9 +333,8 @@ public class MainPanelController {
             tvSeriesLabel.setText(""); // Clear TV Series label if it's a movie
             seasonsLabel.setText(""); // Clear Seasons label if it's a movie
         }
-
-
     }
+
 
     public void addMovieToDatabase() {
         System.out.println("Worked till here 1");
@@ -476,7 +491,6 @@ public class MainPanelController {
     }
 
 
-
     private boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
         String insertUserMovieQuery = "INSERT INTO user_movies (userid, movieid, userComment, watched_Status) VALUES (?, ?, ?, ?)";
         try (PreparedStatement insertUserMovieStmt = connectDB.prepareStatement(insertUserMovieQuery)) {
@@ -487,8 +501,6 @@ public class MainPanelController {
             return insertUserMovieStmt.executeUpdate() > 0;
         }
     }
-
-
 
 
 }

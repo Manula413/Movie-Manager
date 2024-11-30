@@ -296,7 +296,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ImageView fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="imdbLogoImageView" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../images/IMDB_Logo.png" />
                                              </image>
@@ -321,7 +321,7 @@
                                                 <Font size="18.0" />
                                              </font>
                                           </Label>
-                                          <ImageView fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rtLogoImageView" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../images/Rotten_Tomatoes.png" />
                                              </image>
