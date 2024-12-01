@@ -84,7 +84,7 @@
                         <Insets left="30.0" right="30.0" />
                      </VBox.margin>
                      <children>
-                        <Button fx:id="addMoviesButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Add Movies" textFill="WHITE">
+                        <Button fx:id="addMoviesNavButton" mnemonicParsing="false" onAction="#addMoviesNavButtonAction" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Add Movies" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -97,7 +97,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="watchedListButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Watched List" textFill="WHITE">
+                        <Button fx:id="watchedListNavButton" mnemonicParsing="false" onAction="#watchedListNavButtonAction" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Watched List" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />
@@ -110,7 +110,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="watchLaterButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE">
+                        <Button fx:id="watchLaterNavButton" mnemonicParsing="false" onAction="#watchLaterNavButtonAction" prefHeight="30.0" prefWidth="250.0" stylesheets="@../../../style.css" text="Watch Later" textFill="WHITE">
                            <styleClass>
                               <String fx:value="right-bar-button" />
                               <String fx:value="shadow" />

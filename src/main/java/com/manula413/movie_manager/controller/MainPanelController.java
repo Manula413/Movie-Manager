@@ -5,8 +5,10 @@ import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.util.Session;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,10 +52,17 @@ public class MainPanelController {
     @FXML
     private RadioButton watchedRadioButton;
 
+    @FXML
+    private Button addMoviesNavButton;
+
+    @FXML
+    private Button watchedListNavButton;
+
+    @FXML
+    private Button watchLaterNavButton;
 
     @FXML
     private Label usernameLabel;
-
 
     @FXML
     private Label movieNameLabel;
@@ -122,6 +131,121 @@ public class MainPanelController {
         stage.setScene(scene);
         stage.show();
     }
+
+    /*
+
+    public void addMoviesNavButtonAction(ActionEvent event) {
+        try {
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Call the method to load the watched list
+            loadAddMovie(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void watchedListNavButtonAction(ActionEvent event) {
+        try {
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Call the method to load the watched list
+            loadWatchedList(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void watchLaterNavButtonAction(ActionEvent event) {
+        try {
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Call the method to load the watched list
+            loadWatchLaterList(stage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void loadAddMovie(Stage stage) throws IOException{
+
+        // Load the watchedList.fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
+        AnchorPane watchedListPanel = loader.load();
+
+        // Set the scene for the new FXML
+        Scene scene = new Scene(watchedListPanel, 1300, 800);
+        stage.setTitle("Watched List");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void loadWatchedList(Stage stage) throws IOException {
+        // Load the watchedList.fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/watchedList.fxml"));
+        AnchorPane watchedListPanel = loader.load();
+
+        // Set the scene for the new FXML
+        Scene scene = new Scene(watchedListPanel, 1300, 800);
+        stage.setTitle("Watched List");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void loadWatchLaterList(Stage stage) throws IOException {
+        // Load the watchedList.fxml file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/watchLaterList.fxml"));
+        AnchorPane watchedListPanel = loader.load();
+
+        // Set the scene for the new FXML
+        Scene scene = new Scene(watchedListPanel, 1300, 800);
+        stage.setTitle("Watched List");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+
+     */
+
+
+    public void navigateTo(String fxmlPath, String title, ActionEvent event) {
+        try {
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Load the specified FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            AnchorPane panel = loader.load();
+
+            // Set the new scene
+            Scene scene = new Scene(panel, 1300, 800);
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addMoviesNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/mainPanel.fxml", "Add Movie", event);
+    }
+
+    public void watchedListNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/watchedList.fxml", "Watched List", event);
+    }
+
+    public void watchLaterNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/watchLaterList.fxml", "Watch Later List", event);
+    }
+
+
 
 
     @FXML
