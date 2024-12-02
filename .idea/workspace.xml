@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP: Added 2 new GUI and controller classes">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP: Configured the Nav buttons">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchedListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchedListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/model/MovieDetails.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/model/MovieDetails.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -363,7 +361,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732976416485</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="WIP: Configured the Nav buttons">
+      <option name="closed" value="true" />
+      <created>1733051565755</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1733051565755</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -395,6 +401,7 @@
     <MESSAGE value="Improve UI elements when the movie is not found" />
     <MESSAGE value="Improve UI elements when the movie is not found. &#10;Fixed Code issues" />
     <MESSAGE value="WIP: Added 2 new GUI and controller classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP: Added 2 new GUI and controller classes" />
+    <MESSAGE value="WIP: Configured the Nav buttons" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP: Configured the Nav buttons" />
   </component>
 </project>

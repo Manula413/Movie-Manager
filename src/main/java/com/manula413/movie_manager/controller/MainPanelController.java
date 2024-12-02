@@ -132,88 +132,6 @@ public class MainPanelController {
         stage.show();
     }
 
-    /*
-
-    public void addMoviesNavButtonAction(ActionEvent event) {
-        try {
-            // Get the current stage
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Call the method to load the watched list
-            loadAddMovie(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void watchedListNavButtonAction(ActionEvent event) {
-        try {
-            // Get the current stage
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Call the method to load the watched list
-            loadWatchedList(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void watchLaterNavButtonAction(ActionEvent event) {
-        try {
-            // Get the current stage
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Call the method to load the watched list
-            loadWatchLaterList(stage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public void loadAddMovie(Stage stage) throws IOException{
-
-        // Load the watchedList.fxml file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
-        AnchorPane watchedListPanel = loader.load();
-
-        // Set the scene for the new FXML
-        Scene scene = new Scene(watchedListPanel, 1300, 800);
-        stage.setTitle("Watched List");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void loadWatchedList(Stage stage) throws IOException {
-        // Load the watchedList.fxml file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/watchedList.fxml"));
-        AnchorPane watchedListPanel = loader.load();
-
-        // Set the scene for the new FXML
-        Scene scene = new Scene(watchedListPanel, 1300, 800);
-        stage.setTitle("Watched List");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void loadWatchLaterList(Stage stage) throws IOException {
-        // Load the watchedList.fxml file
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/watchLaterList.fxml"));
-        AnchorPane watchedListPanel = loader.load();
-
-        // Set the scene for the new FXML
-        Scene scene = new Scene(watchedListPanel, 1300, 800);
-        stage.setTitle("Watched List");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-
-
-     */
-
-
     public void navigateTo(String fxmlPath, String title, ActionEvent event) {
         try {
             // Get the current stage
@@ -290,13 +208,13 @@ public class MainPanelController {
                         setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
                         logger.info("Movie details displayed on UI.");
                     } else {
-                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", ""));
+                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
                         logger.info("No movie details available.");
                     }
                 });
             } catch (Exception e) {
                 logger.error("Exception caught during searchMovie: ", e);
-                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "")));
+                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null)));
             }
         }).start();
     }
@@ -354,7 +272,7 @@ public class MainPanelController {
             }
 
             System.out.println("Movie details fetched successfully.");
-            return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons);
+            return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons,null);
         } catch (IOException e) {
             System.err.println("Error during HTTP request: " + e.getMessage());
             throw e;
@@ -386,7 +304,7 @@ public class MainPanelController {
     private MovieDetails handleMovieNotFound(JsonObject json) {
         String errorMessage = json.has("Error") ? json.get("Error").getAsString() : "Unknown error";
         System.out.println("Movie not found: " + errorMessage);
-        return new MovieDetails(null, null, null, null, null, null, null, null, null);
+        return new MovieDetails(null, null, null, null, null, null, null, null, null,null);
     }
 
 

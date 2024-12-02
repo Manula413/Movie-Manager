@@ -10,10 +10,12 @@ public class MovieDetails {
     private String posterUrl;
     private String type;
     private String totalSeasons;
+    private String userComment;
+
 
 
     // Constructor
-    public MovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl, String type, String totalSeasons) {
+    public MovieDetails(String title, String year, String genre, String imdbRating, String rtRating, String plot, String posterUrl, String type, String totalSeasons,String userComment) {
         this.title = title;
         this.year = year;
         this.genre = genre;
@@ -23,6 +25,7 @@ public class MovieDetails {
         this.posterUrl = posterUrl;
         this.type = type;
         this.totalSeasons = totalSeasons;
+        this.userComment = userComment;
     }
 
     // Getter methods
@@ -60,5 +63,8 @@ public class MovieDetails {
 
     public String getType() {
         return type;
+    }
+    public String getUserComment() {
+        return userComment;
     }
 }

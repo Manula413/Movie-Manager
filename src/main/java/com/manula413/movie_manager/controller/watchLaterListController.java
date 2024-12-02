@@ -1,5 +1,6 @@
 package com.manula413.movie_manager.controller;
 
+import com.manula413.movie_manager.util.Session;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +31,9 @@ public class watchLaterListController implements Initializable {
     @FXML
     private Button watchLaterNavButton;
 
+    @FXML
+    private Label usernameLabel;
+
 
 
     @Override
@@ -43,6 +48,9 @@ public class watchLaterListController implements Initializable {
 
         // Add columns to the TableView
         watchedListTableView.getColumns().addAll(column1, column2,column3,column4,column5,column6);
+
+        String username = Session.getInstance().getUsername();
+        setUsernameLabel(username);
     }
 
     public void navigateTo(String fxmlPath, String title, ActionEvent event) {
@@ -74,6 +82,12 @@ public class watchLaterListController implements Initializable {
 
     public void watchLaterNavButtonAction(ActionEvent event) {
         navigateTo("/com/manula413/movie_manager/watchLaterList.fxml", "Watch Later List", event);
+    }
+
+    public void setUsernameLabel(String username) {
+        if (usernameLabel != null) {
+            usernameLabel.setText("Welcome, " + username + "!");
+        }
     }
 
 }
