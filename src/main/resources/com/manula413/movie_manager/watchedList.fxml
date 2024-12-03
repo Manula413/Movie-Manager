@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.watchedListController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.WatchedListController">
    <children>
       <BorderPane layoutX="-38.0" prefHeight="800.0" prefWidth="408.0" styleClass="search-box" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-38.0" AnchorPane.rightAnchor="930.0" AnchorPane.topAnchor="0.0">
          <right>
