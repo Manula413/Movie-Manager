@@ -44,6 +44,8 @@ public class WatchedListController implements Initializable {
         populateWatchedMoviesTable();
     }
 
+    //
+
     private void setupTableColumns() {
         TableColumn<MovieDetails, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(cellData -> javafx.beans.property.SimpleStringProperty(cellData.getValue().getTitle()));
