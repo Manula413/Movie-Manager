@@ -29,38 +29,95 @@ public class WatchedListController implements Initializable {
     @FXML
     private Label usernameLabel;
 
+    @FXML
+    private RadioButton tvSeriesRadioButton;
+
+    @FXML
+    private RadioButton moviesRadioButton;
+
+
+
     private final String userId = Session.getInstance().getUserId();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupTableColumns(); // Setup the table columns
+        setupTableColumns(false);// Setup initial columns
         String username = Session.getInstance().getUsername();
         setUsernameLabel(username);
-        getWatchedMoviesDetails(); // Populate the table with data
+        setupRadioButtonListeners(); // Setup listeners for radio buttons
+        getWatchedMoviesDetails("movie"); // Load initial data for movies
     }
+
+    /**
+     * Sets up listeners for radio buttons to update the table.
+     */
+    private void setupRadioButtonListeners() {
+        ToggleGroup toggleGroup = tvSeriesRadioButton.getToggleGroup();
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == moviesRadioButton) {
+                setupTableColumns(false); // Setup columns without 'Seasons'
+                getWatchedMoviesDetails("movie"); // Load movies
+            } else if (newValue == tvSeriesRadioButton) {
+                setupTableColumns(true); // Setup columns with 'Seasons'
+                getWatchedMoviesDetails("series"); // Load TV series
+            }
+        });
+    }
+
 
     /**
      * Sets up the table columns with specified headings.
      */
-    private void setupTableColumns() {
-        // Define and configure columns
+    private void setupTableColumns(boolean includeSeasons) {
+        watchedListTableView.getColumns().clear(); // Clear existing columns
+
+        // Common columns
         TableColumn<MovieDetails, String> movieNameColumn = createColumn("Movie Name", "title", 300);
         TableColumn<MovieDetails, String> yearColumn = createColumn("Year", "year", 80);
         TableColumn<MovieDetails, String> genreColumn = createColumn("Genre", "genre", 200);
         TableColumn<MovieDetails, String> imdbRatingColumn = createColumn("IMDb Rating", "imdbRating", 120);
         TableColumn<MovieDetails, String> userCommentColumn = createColumn("User Comment", "userComment", 150);
 
-        // Action column with button
+        // Set cell alignment to center for specific columns
+        setColumnCenterAlignment(yearColumn);
+        setColumnCenterAlignment(imdbRatingColumn);
+        setColumnCenterAlignment(userCommentColumn);
+
+        watchedListTableView.getColumns().addAll(movieNameColumn, yearColumn, genreColumn, imdbRatingColumn, userCommentColumn);
+
+        // Add Seasons column if needed
+        if (includeSeasons) {
+            TableColumn<MovieDetails, String> seasonsColumn = createColumn("Seasons", "totalSeasons", 100);
+            setColumnCenterAlignment(seasonsColumn);  // Center the Seasons column
+            watchedListTableView.getColumns().add(seasonsColumn);
+        }
+
+        // Action column
         TableColumn<MovieDetails, Void> actionColumn = createActionColumn("Action", 82);
-
-        // Add columns to TableView
-        watchedListTableView.getColumns().addAll(
-                movieNameColumn, yearColumn, genreColumn, imdbRatingColumn, userCommentColumn, actionColumn
-        );
-
-        // Set preferred table width
-        watchedListTableView.setPrefWidth(932);
+        setColumnCenterAlignment(actionColumn);  // Center the Action column
+        watchedListTableView.getColumns().add(actionColumn);
     }
+
+    /**
+     * Helper method to center align the content of a TableColumn.
+     */
+    private <T> void setColumnCenterAlignment(TableColumn<MovieDetails, T> column) {
+        column.setCellFactory(tc -> {
+            TableCell<MovieDetails, T> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(T item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty ? "" : item != null ? item.toString() : "");
+                }
+            };
+            // Center align the content in the cell
+            cell.setStyle("-fx-alignment: center;");
+            return cell;
+        });
+    }
+
+
 
     /**
      * Helper method to create a TableColumn with specified properties.
@@ -103,9 +160,9 @@ public class WatchedListController implements Initializable {
     /**
      * Populates the `TableView` with data from the database.
      */
-    public void getWatchedMoviesDetails() {
+    public void getWatchedMoviesDetails(String type) {
         String userMoviesQuery = "SELECT movieid, userComment FROM user_movies WHERE userid = ? AND watched_Status = 'watched'";
-        String movieDetailsQuery = "SELECT movieName, year, genre, imdb_Rating FROM movies WHERE movieid = ?";
+        String movieDetailsQuery = "SELECT movieName, year, genre, imdb_Rating, seasons FROM movies WHERE movieid = ? AND type = ?";
 
         ObservableList<MovieDetails> movieList = FXCollections.observableArrayList();
 
@@ -122,16 +179,22 @@ public class WatchedListController implements Initializable {
                 String userComment = userMoviesResult.getString("userComment");
 
                 movieDetailsStmt.setInt(1, movieId);
+                movieDetailsStmt.setString(2, type);
                 ResultSet movieDetailsResult = movieDetailsStmt.executeQuery();
 
                 if (movieDetailsResult.next()) {
                     String movieName = movieDetailsResult.getString("movieName");
+                    // Format the movie title before adding to the list
+                    movieName = formatMovieTitle(movieName);
                     String year = movieDetailsResult.getString("year");
                     String genre = movieDetailsResult.getString("genre");
                     String imdbRating = movieDetailsResult.getString("imdb_Rating");
+                    String seasons = movieDetailsResult.getString("seasons"); // For series
 
-                    // Create a MovieDetails object and add it to the list
-                    MovieDetails movie = new MovieDetails(movieName, year, genre, imdbRating, null, null, null, null, null, userComment);
+                    // Create a MovieDetails object
+                    MovieDetails movie = new MovieDetails(
+                            movieName, year, genre, imdbRating, null, null, null, null, seasons, userComment
+                    );
                     movieList.add(movie);
                 }
             }
@@ -144,6 +207,8 @@ public class WatchedListController implements Initializable {
             e.printStackTrace();
         }
     }
+
+
 
     /**
      * Displays movie details in the console (replace with your desired functionality).
@@ -161,6 +226,26 @@ public class WatchedListController implements Initializable {
             usernameLabel.setText("Welcome, " + username + "!");
         }
     }
+
+    private String formatMovieTitle(String title) {
+        if (title != null && !title.isEmpty()) {
+            String[] words = title.split(" ");
+            StringBuilder formattedTitle = new StringBuilder();
+
+            for (String word : words) {
+                // Capitalize the first letter and make the rest lowercase
+                formattedTitle.append(word.substring(0, 1).toUpperCase())
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+
+            // Remove the trailing space
+            return formattedTitle.toString().trim();
+        }
+        return title; // Return the original title if it's null or empty
+    }
+
+
 
     /**
      * Navigation logic for buttons (Add Movies, Watched List, Watch Later List).

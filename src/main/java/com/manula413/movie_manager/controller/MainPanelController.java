@@ -346,8 +346,15 @@ public class MainPanelController {
     }
 
     private void setMovieGenre(String genre) {
-        movieGenreLabel.setText(genre != null ? genre : " ");
+        if (genre != null && !genre.isEmpty()) {
+            String[] genres = genre.split(", ");
+            String displayGenre = genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
+            movieGenreLabel.setText(displayGenre);
+        } else {
+            movieGenreLabel.setText(" ");
+        }
     }
+
 
     private void setImdbRating(String imdbRating) {
         String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals(" ")) ? imdbRating : " ";
@@ -410,7 +417,7 @@ public class MainPanelController {
             // Retrieve movie details
             String title = movieDetails.getTitle();
             String year = movieDetails.getYear();
-            String genre = movieDetails.getGenre();
+            String genre = getFirstTwoGenres(movieDetails.getGenre());
             String imdbRating = movieDetails.getImdbRating();
             String rtRating = movieDetails.getRtRating();
             String type = movieDetails.getType();
@@ -520,6 +527,14 @@ public class MainPanelController {
             return resultSet.next() && resultSet.getInt(1) > 0;
         }
     }
+    private String getFirstTwoGenres(String genre) {
+        if (genre != null && !genre.isEmpty()) {
+            String[] genres = genre.split(", ");
+            return genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
+        }
+        return "Unknown"; // Fallback if genre is null or empty
+    }
+
 
 
     private String determineMovieStatus() {

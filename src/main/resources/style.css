@@ -78,30 +78,50 @@
 }
 
 
+/* TableView Background */
 .table-view {
-    -fx-background-color: #3f3f3f; /* Background color */
-    -fx-text-fill: #FFFFFF;       /* Font color for text */
+    -fx-background-color: #2b2b2b; /* Dark background for the table */
+    -fx-border-color: #3a3a3a; /* Border color */
 }
 
-.table-view .column-header-background {
-    -fx-background-color:  #3f3f3f; /* Header background */
-}
-
-.table-row-cell {
-    -fx-text-fill: #444444;        /* Font color for rows */
-}
-
-.table-row-cell:odd {
-    -fx-background-color: #e8e8e8; /* Alternating row background */
-}
-
-.table-row-cell:even {
-    -fx-background-color: #ffffff;
-}
-
+/* Column Header Style */
 .table-view .column-header {
-    -fx-background-color: #3f3f3f; /* Header row background color */
-    -fx-text-fill: #ffffff;       /* Header text color */
+    -fx-background-color: #3a3a3a; /* Dark background for header */
+    -fx-border-color: #4a4a4a; /* Border color for the header */
+    -fx-border-width: 0 0 1px 0; /* Border at the bottom of the header */
 }
+
+/* Column Header Label Style */
+.table-view .column-header .label {
+    -fx-font-size: 15px; /* Font size for header labels */
+    -fx-font-weight: bold; /* Bold font for header */
+    -fx-text-fill: #ffffff; /* White font color for header */
+}
+
+/* Normal Table Row Style */
+.table-view .table-row-cell {
+    -fx-background-color: #2b2b2b; /* Dark background for normal cells */
+    -fx-border-color: transparent; /* No border around cells */
+}
+
+/* Cell Content Style */
+.table-view .table-cell {
+    -fx-text-fill: #dcdcdc; /* Light gray font color for normal cells */
+    -fx-font-size: 15px; /* Font size for cells */
+}
+
+/* Odd Rows Style */
+.table-view .table-row-cell:odd {
+    -fx-background-color: #333333; /* Slightly lighter background for odd rows */
+}
+
+/* Selected Row Style */
+.table-view .table-row-cell:selected {
+    -fx-background-color: #4a4a4a; /* Background color for selected rows */
+    -fx-text-fill: #ffffff; /* White font color for selected rows */
+}
+
+
+
 
 
