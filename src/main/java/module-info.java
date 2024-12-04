@@ -18,5 +18,6 @@ module com.manula413.movie_manager {
 
 
     opens com.manula413.movie_manager.controller to javafx.fxml;
+    opens com.manula413.movie_manager.model to javafx.base;
     exports com.manula413.movie_manager;
 }

@@ -67,4 +67,7 @@ public class MovieDetails {
     public String getUserComment() {
         return userComment;
     }
+
+
+
 }
