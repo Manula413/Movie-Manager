@@ -73,7 +73,7 @@ public class WatchedListController implements Initializable {
         watchedListTableView.getColumns().clear(); // Clear existing columns
 
         // Common columns
-        TableColumn<MovieDetails, String> movieNameColumn = createColumn("Movie Name", "title", 300);
+        TableColumn<MovieDetails, String> movieNameColumn = createColumn("Title", "title", 300);
         TableColumn<MovieDetails, String> yearColumn = createColumn("Year", "year", 80);
         TableColumn<MovieDetails, String> genreColumn = createColumn("Genre", "genre", 200);
         TableColumn<MovieDetails, String> imdbRatingColumn = createColumn("IMDb Rating", "imdbRating", 120);

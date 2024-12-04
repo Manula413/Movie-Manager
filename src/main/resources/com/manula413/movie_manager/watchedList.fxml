@@ -189,6 +189,9 @@
                         <String fx:value="table-view" />
                         <String fx:value="table-row-cell" />
                      </styleClass>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
                   </TableView>
                </children>
             </HBox>
