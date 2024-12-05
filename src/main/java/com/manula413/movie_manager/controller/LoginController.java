@@ -113,7 +113,8 @@ public class LoginController {
     public void validateLogin() {
 
         DatabaseConnection connectNow = new DatabaseConnection();
-        String fetchUserQuery = "SELECT userId, password FROM moviedb.user WHERE userName = ?";
+        // Update query to fetch the displayName along with userId and password
+        String fetchUserQuery = "SELECT userId, userName, displayName, password FROM moviedb.user WHERE BINARY userName = ?";
 
         try (Connection connectDB = connectNow.getConnection(); PreparedStatement preparedStatement = connectDB.prepareStatement(fetchUserQuery)) {
 
@@ -126,11 +127,21 @@ public class LoginController {
 
                     if (verifyPassword(plainPassword, hashedPassword)) {
 
-                        // Store both username and userId in session
-                        String userId = queryResult.getString("userId");
-                        Session.getInstance().setUsername(usernameTextFeild.getText());
-                        Session.getInstance().setUserId(userId); // Store userId in session
+                        // Retrieve the displayName from the ResultSet
+                        String displayName = queryResult.getString("displayName");
 
+                        // Store the username, userId, and displayName in the session
+                        String userId = queryResult.getString("userId");
+                        String userName = queryResult.getString("userName");
+
+                        // Assuming you have getter and setter for displayName in your Session class
+                        Session.getInstance().setUsername(userName);
+                        Session.getInstance().setUserId(userId); // Store userId in session
+                        Session.getInstance().setDisplayName(displayName); // Store displayName in session
+
+
+
+                        // Proceed to the main panel
                         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
                         MainPanelController mainpanel = new MainPanelController();
                         mainpanel.loadMainPanelDefault(stage);
@@ -150,6 +161,8 @@ public class LoginController {
             loginMessageLabel.setText("An error occurred. Please try again.");
         }
     }
+
+
 
 
 

@@ -62,7 +62,7 @@ public class MainPanelController {
     private Button watchLaterNavButton;
 
     @FXML
-    private Label usernameLabel;
+    private Label displayNameLabel;
 
     @FXML
     private Label movieNameLabel;
@@ -122,9 +122,9 @@ public class MainPanelController {
         AnchorPane mainPanel = mainLoader.load();
 
         MainPanelController mainController = mainLoader.getController();
-        String username = Session.getInstance().getUsername();
+        String displayName = Session.getInstance().getDisplayName();
 
-        mainController.setUsernameLabel(username);
+        mainController.setDisplayNameLabel(displayName);
 
         Scene scene = new Scene(mainPanel, 1300, 800);
         stage.setTitle("Add Movie");
@@ -184,9 +184,9 @@ public class MainPanelController {
     }
 
 
-    public void setUsernameLabel(String username) {
-        if (usernameLabel != null) {
-            usernameLabel.setText("Welcome, " + username + "!");
+    public void setDisplayNameLabel(String displayName) {
+        if (displayNameLabel != null) {
+            displayNameLabel.setText("Welcome, " + displayName + "!");
         }
     }
 

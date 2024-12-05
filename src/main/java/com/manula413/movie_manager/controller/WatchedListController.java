@@ -27,7 +27,7 @@ public class WatchedListController implements Initializable {
     private TableView<MovieDetails> watchedListTableView;
 
     @FXML
-    private Label usernameLabel;
+    private Label displayNameLabel;
 
     @FXML
     private RadioButton tvSeriesRadioButton;
@@ -42,8 +42,8 @@ public class WatchedListController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns(false);// Setup initial columns
-        String username = Session.getInstance().getUsername();
-        setUsernameLabel(username);
+        String displayName = Session.getInstance().getDisplayName();
+        setDisplayNameLabel(displayName);
         setupRadioButtonListeners(); // Setup listeners for radio buttons
         getWatchedMoviesDetails("movie"); // Load initial data for movies
     }
@@ -221,9 +221,9 @@ public class WatchedListController implements Initializable {
     /**
      * Sets the username label on the UI.
      */
-    public void setUsernameLabel(String username) {
-        if (usernameLabel != null) {
-            usernameLabel.setText("Welcome, " + username + "!");
+    public void setDisplayNameLabel(String displayName) {
+        if (displayNameLabel != null) {
+            displayNameLabel.setText("Welcome, " + displayName + "!");
         }
     }
 

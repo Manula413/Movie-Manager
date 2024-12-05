@@ -139,7 +139,7 @@
                   </HBox>
                   <HBox alignment="BOTTOM_CENTER" prefHeight="138.0" prefWidth="383.0">
                      <children>
-                        <Label fx:id="usernameLabel" text="User" textFill="WHITE">
+                        <Label fx:id="displayNameLabel" text="User" textFill="WHITE">
                            <font>
                               <Font size="15.0" />
                            </font>
