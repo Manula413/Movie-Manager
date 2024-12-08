@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Minor changes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController1.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/MovieService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/MovieUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
     </list>
@@ -439,7 +443,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733385829319</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Minor changes">
+      <option name="closed" value="true" />
+      <created>1733629368497</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1733629368497</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -454,7 +466,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="First Commit" />
     <MESSAGE value="Added signUp.fxml and signupController.java" />
     <MESSAGE value="Fix issue switching scenes between login.fxml and signup.fxml" />
     <MESSAGE value="Made changes to loginController and signupController" />
@@ -479,6 +490,7 @@
     <MESSAGE value="WIP: Improved WatchedListController and made few changes to MainPanelController" />
     <MESSAGE value="WIP: Coded watchLaterListController and minor changes to other classes" />
     <MESSAGE value="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI" />
+    <MESSAGE value="Minor changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor changes" />
   </component>
 </project>
