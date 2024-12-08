@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP: Coded watchLaterListController and minor changes to other classes">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/Session.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/Session.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +101,7 @@
       <recent name="com.manula413.movie_manager" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.manula413.movie_manager.controller" />
       <recent name="com.manula413.movie_manager.Controller" />
     </key>
   </component>
@@ -437,7 +431,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733321043663</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI">
+      <option name="closed" value="true" />
+      <created>1733385829319</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1733385829319</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -476,6 +478,7 @@
     <MESSAGE value="WIP: Added getWatchedMoviesDetails method, setupTableColumns and helper methods to the WatchedListController" />
     <MESSAGE value="WIP: Improved WatchedListController and made few changes to MainPanelController" />
     <MESSAGE value="WIP: Coded watchLaterListController and minor changes to other classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP: Coded watchLaterListController and minor changes to other classes" />
+    <MESSAGE value="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI" />
   </component>
 </project>

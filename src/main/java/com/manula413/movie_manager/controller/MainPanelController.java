@@ -1,5 +1,7 @@
 package com.manula413.movie_manager.controller;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.manula413.movie_manager.database.DatabaseConnection;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.util.Session;
@@ -9,27 +11,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.io.FileInputStream;
 import java.io.IOException;
