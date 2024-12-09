@@ -152,25 +152,147 @@ public class MainPanelController {
     private final MovieService movieService = new MovieService();
 
     @FXML
-    private void initialize(){}
+    private void initialize(){
+        // Populate the ComboBox with values
+
+        userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
+        //userRatingComboBox.setValue("3"); // Optional: Set a default value
+        watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == watchLaterRadioButton) {
+                userRatingComboBox.setDisable(true); // Disable ComboBox
+                userRatingComboBox.setValue("N/A"); // Set the default value as "N/A"
+            } else {
+                userRatingComboBox.setDisable(false); // Enable ComboBox
+                userRatingComboBox.setValue(null); // Clear any default value
+            }
+        });
+    }
 
     @FXML
-    public void searchMovie() {}// Call `movieService.fetchMovieData` and update the UI
+    public void searchMovie() {
+        String movieInput = searchTextField.getText().trim();
+        logger.info("User input: {}", movieInput);
 
-    public void addMoviesNavButtonAction(ActionEvent event){}
-    public void watchedListNavButtonAction(ActionEvent event){}
-    public void watchLaterNavButtonAction(ActionEvent event){}
+        // Run fetch in a separate thread
+        new Thread(() -> {
+            try {
+                // Fetch movie details using the existing fetchMovieData method
+                MovieDetails fetchedMovieDetails = movieService.fetchMovieData(movieInput);
 
-    public void setDisplayNameLabel(String displayName){}
+                // Update UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    if (fetchedMovieDetails != null) {
+                        this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
+                        setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
+                        logger.info("Movie details displayed on UI.");
+                    } else {
+                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
+                        logger.info("No movie details available.");
+                    }
+                });
+            } catch (Exception e) {
+                logger.error("Exception caught during searchMovie: ", e);
+                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null)));
+            }
+        }).start();
+    }// Call `movieService.fetchMovieData` and update the UI
 
-    private void setMovieTitle(String title){}
-    private void setMovieYear(String year){}
-    private void setMovieGenre(String genre){}
-    private void setImdbRating(String imdbRating){}
-    private void setRtRating(String rtRating){}
-    private void setMoviePlot(String plot){}
-    private void setMoviePoster(String posterUrl){}
-    private void setTvSeriesDetails(String type, String totalSeasons){}
+    public void addMoviesNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/mainPanel.fxml", "Add Movie", event);
+    }
+
+    public void watchedListNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/watchedList.fxml", "Watched List", event);
+    }
+
+    public void watchLaterNavButtonAction(ActionEvent event) {
+        navigateTo("/com/manula413/movie_manager/watchLaterList.fxml", "Watch Later List", event);
+    }
+
+    public void setDisplayNameLabel(String displayName){
+        if (displayNameLabel != null) {
+            displayNameLabel.setText("Welcome, " + displayName + "!");
+        }
+    }
+    public void setMovieDetails(MovieDetails movieDetails) {
+        setMovieTitle(movieDetails.getTitle());
+        setMovieYear(movieDetails.getYear());
+        setMovieGenre(movieDetails.getGenre());
+        setImdbRating(movieDetails.getImdbRating());
+        setRtRating(movieDetails.getRtRating());
+        setMoviePlot(movieDetails.getPlot());
+        setMoviePoster(movieDetails.getPosterUrl());
+        setTvSeriesDetails(movieDetails.getType(), movieDetails.getTotalSeasons());
+    }
+
+    private void setMovieTitle(String title) {
+        movieNameLabel.setText(title != null ? title : MOVIE_NOT_FOUND);
+    }
+
+    private void setMovieYear(String year) {
+        movieYearLabel.setText(year != null ? year : " ");
+    }
+
+    private void setMovieGenre(String genre) {
+        if (genre != null && !genre.isEmpty()) {
+            String[] genres = genre.split(", ");
+            String displayGenre = genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
+            movieGenreLabel.setText(displayGenre);
+        } else {
+            movieGenreLabel.setText(" ");
+        }
+    }
+
+
+    private void setImdbRating(String imdbRating) {
+        String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals(" ")) ? imdbRating : " ";
+        ratingIMBDLabel.setText(imdbRatingDisplay);
+        imdbLogoImageView.setVisible(!" ".equals(imdbRatingDisplay)); // Show only if the rating is not empty
+    }
+
+
+    private void setRtRating(String rtRating) {
+        String rtRatingDisplay;
+        if (rtRating == null || rtRating.trim().isEmpty()) {
+            rtRatingDisplay = "";  // Set to empty string if rtRating is null or empty
+        } else if ("N/A".equals(rtRating)) {
+            rtRatingDisplay = "N/A"; // Keep it as "N/A" if it's exactly "N/A"
+        } else {
+            rtRatingDisplay = rtRating.replaceAll("\\D", "") + "%"; // Remove non-numeric characters and append '%'
+
+        }
+        ratingRTLabel.setText(rtRatingDisplay);
+        rtLogoImageView.setVisible(!rtRatingDisplay.trim().isEmpty());
+
+    }
+
+    private void setMoviePlot(String plot) {
+        moviePlotLabel.setText(plot != null ? plot : "No movie found matching the title and year. Please verify the details and try again.");
+    }
+
+    private void setMoviePoster(String posterUrl) {
+        URL resource = getClass().getResource("/images/image-not-found.png");
+        try {
+            if (posterUrl != null && !posterUrl.equals("N/A")) {
+                moviePosterImageView.setImage(new Image(posterUrl, true));
+            } else {
+                moviePosterImageView.setImage(new Image(resource.toExternalForm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            moviePosterImageView.setImage(new Image(resource.toExternalForm()));
+        }
+    }
+
+    private void setTvSeriesDetails(String type, String totalSeasons) {
+        if ("series".equalsIgnoreCase(type)) {
+            tvSeriesLabel.setText("TV - Series");
+            seasonsLabel.setText(totalSeasons != null && !totalSeasons.equals("N/A") ? "Seasons: " + totalSeasons : "Seasons: N/A");
+        } else {
+            tvSeriesLabel.setText(""); // Clear TV Series label if it's a movie
+            seasonsLabel.setText(""); // Clear Seasons label if it's a movie
+        }
+    }
 
 
     public class MovieDataParseException extends Exception {

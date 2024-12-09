@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Minor changes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController1.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/MovieService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/MovieUtils.java" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Refactor: Refactor code structure by separating responsibilities into services, repository, and utilities&#10;&#10;- Moved database-related methods to `MovieRepository` class under the `database` package.&#10;- Grouped movie-related services into `MovieService` class.&#10;- Added utility methods for URL validation and API key handling in `MovieUtils` class.&#10;- Added placeholder return values for unimplemented methods to avoid compile-time errors.&#10;- Improved overall code organization to enhance maintainability and scalability.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
     </list>
@@ -451,7 +447,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733629368497</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Refactor: Refactor code structure by separating responsibilities into services, repository, and utilities&#10;&#10;- Moved database-related methods to `MovieRepository` class under the `database` package.&#10;- Grouped movie-related services into `MovieService` class.&#10;- Added utility methods for URL validation and API key handling in `MovieUtils` class.&#10;- Added placeholder return values for unimplemented methods to avoid compile-time errors.&#10;- Improved overall code organization to enhance maintainability and scalability.">
+      <option name="closed" value="true" />
+      <created>1733630982551</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1733630982551</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -466,7 +470,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added signUp.fxml and signupController.java" />
     <MESSAGE value="Fix issue switching scenes between login.fxml and signup.fxml" />
     <MESSAGE value="Made changes to loginController and signupController" />
     <MESSAGE value="-Hashed Password&#10;-Fixed Issues" />
@@ -491,6 +494,7 @@
     <MESSAGE value="WIP: Coded watchLaterListController and minor changes to other classes" />
     <MESSAGE value="Fixed : UserName issue in Login&#10;Fixed : Display Name incorrectly set on UI" />
     <MESSAGE value="Minor changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor changes" />
+    <MESSAGE value="Refactor: Refactor code structure by separating responsibilities into services, repository, and utilities&#10;&#10;- Moved database-related methods to `MovieRepository` class under the `database` package.&#10;- Grouped movie-related services into `MovieService` class.&#10;- Added utility methods for URL validation and API key handling in `MovieUtils` class.&#10;- Added placeholder return values for unimplemented methods to avoid compile-time errors.&#10;- Improved overall code organization to enhance maintainability and scalability." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor: Refactor code structure by separating responsibilities into services, repository, and utilities&#10;&#10;- Moved database-related methods to `MovieRepository` class under the `database` package.&#10;- Grouped movie-related services into `MovieService` class.&#10;- Added utility methods for URL validation and API key handling in `MovieUtils` class.&#10;- Added placeholder return values for unimplemented methods to avoid compile-time errors.&#10;- Improved overall code organization to enhance maintainability and scalability." />
   </component>
 </project>
