@@ -294,7 +294,45 @@ public class MainPanelController {
         }
     }
 
+    private String[] parseMovieInput(String movieInput) {
+        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
+        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            return new String[0];  // Return null if invalid input format or empty fields
+        }
+        return parts;
+    }
+
+    private JsonObject fetchMovieJsonResponse(String url) throws IOException, MovieDataParseException {
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                String responseString = EntityUtils.toString(response.getEntity());
+                return JsonParser.parseString(responseString).getAsJsonObject();
+            } catch (ParseException e) {
+                // Throw a custom exception instead of a generic RuntimeException
+                throw new MovieDataParseException("Error parsing the movie data response.", e);
+            }
+        }
+    }
 
     public class MovieDataParseException extends Exception {
+        public MovieDataParseException(String message) {
+            super(message);
+        }
+
+        public MovieDataParseException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
+
+    private static String getAPIKey() throws IOException {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("src/main/resources/keys.properties")) {
+            properties.load(input);
+        }
+        return properties.getProperty("api.key");
+    }
+
+
+
 }
