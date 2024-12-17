@@ -1,12 +1,8 @@
 package com.manula413.movie_manager.controller;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.manula413.movie_manager.database.DatabaseConnection;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,100 +14,65 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.*;
-import java.util.Properties;
 
 @SuppressWarnings("ALL")
 public class MainPanelController {
 
 
+    public static final String MOVIE_NOT_FOUND = "Movie Not Found";
+    public static final String RATINGS_KEY = "Ratings";
+    private static final Logger logger = LoggerFactory.getLogger(MainPanelController.class);
+    private static final String ENTER_BOTH_FIELDS = "Please enter both the movie name and release year to perform a search";
+    private final MovieService movieService = new MovieService();
+    String userId = Session.getInstance().getUserId();
     @FXML
     private TextField searchTextField;
-
     @FXML
     private RadioButton watchLaterRadioButton;
-
     @FXML
     private RadioButton watchedRadioButton;
-
     @FXML
     private Button addMoviesNavButton;
-
     @FXML
     private Button watchedListNavButton;
-
     @FXML
     private Button watchLaterNavButton;
-
     @FXML
     private Label displayNameLabel;
-
     @FXML
     private Label movieNameLabel;
-
     @FXML
     private Label movieYearLabel;
-
     @FXML
     private Label movieGenreLabel;
-
     @FXML
     private Label ratingIMBDLabel;
-
     @FXML
     private Label ratingRTLabel;
-
     @FXML
     private Label moviePlotLabel;
-
     @FXML
     private Label tvSeriesLabel;
-
     @FXML
     private Label seasonsLabel;
-
     @FXML
     private Label searchErrorLabel;
-
     @FXML
     private ImageView moviePosterImageView;
-
     @FXML
     private ToggleGroup watchListRadioGroup;
-
     @FXML
     private ComboBox<String> userRatingComboBox;
-
     @FXML
     private ImageView imdbLogoImageView;
-
     @FXML
     private ImageView rtLogoImageView;
-
-    String userId = Session.getInstance().getUserId();
-    private static final Logger logger = LoggerFactory.getLogger(MainPanelController.class);
-
-
     private MovieDetails movieDetails;
-    private static final String MOVIE_NOT_FOUND = "Movie Not Found";
-    private static final String ENTER_BOTH_FIELDS = "Please enter both the movie name and release year to perform a search";
-    private static final String RATINGS_KEY = "Ratings";
-
-
 
     public void loadMainPanelDefault(Stage stage) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
@@ -147,12 +108,8 @@ public class MainPanelController {
         }
     }
 
-
-
-    private final MovieService movieService = new MovieService();
-
     @FXML
-    private void initialize(){
+    private void initialize() {
         // Populate the ComboBox with values
 
         userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
@@ -169,33 +126,58 @@ public class MainPanelController {
     }
 
     @FXML
-    public void searchMovie() {
-        String movieInput = searchTextField.getText().trim();
-        logger.info("User input: {}", movieInput);
+    public void searchMovie() { // Call `movieService.fetchMovieData` and update the UI
 
-        // Run fetch in a separate thread
-        new Thread(() -> {
-            try {
-                // Fetch movie details using the existing fetchMovieData method
-                MovieDetails fetchedMovieDetails = movieService.fetchMovieData(movieInput);
+    }
 
-                // Update UI on the JavaFX Application Thread
-                Platform.runLater(() -> {
-                    if (fetchedMovieDetails != null) {
-                        this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
-                        setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
-                        logger.info("Movie details displayed on UI.");
-                    } else {
-                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
-                        logger.info("No movie details available.");
-                    }
-                });
-            } catch (Exception e) {
-                logger.error("Exception caught during searchMovie: ", e);
-                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null)));
-            }
-        }).start();
-    }// Call `movieService.fetchMovieData` and update the UI
+    public void addMovieToDatabase() {
+        // Step 1: Retrieve movie status
+        String movieStatus = determineMovieStatus();
+
+        // Step 2: Retrieve user rating
+        String userRating = determineUserRating();
+
+        // Step 3: Pass values to the service for handling
+        String handledStatus = movieService.handleMovieStatus(movieStatus);
+        String handledRating = movieService.handleUserRating(userRating);
+
+        // Optional: Log or proceed with the next steps (e.g., saving to the database)
+        if (!"invalid".equals(handledStatus) && !"invalid".equals(handledRating)) {
+            System.out.println("Movie added with Status: " + handledStatus + " and Rating: " + handledRating);
+        } else {
+            System.out.println("Failed to add movie. Invalid data provided.");
+        }
+
+    }
+
+    private String determineMovieStatus() {
+        // Get the selected toggle from the group
+        Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
+
+        if (selectedToggle == watchLaterRadioButton) {
+            return "watchLater"; // Watch Later selected
+        } else if (selectedToggle == watchedRadioButton) {
+            return "watched"; // Watched selected
+        }
+
+        return null; // No valid selection
+    }
+
+    private String determineUserRating() {
+        // Get the selected item from the ComboBox
+        String selectedRating = userRatingComboBox.getValue();
+
+        if (selectedRating != null) {
+            return selectedRating; // Return the selected rating
+        }
+
+        return null; // No selection made
+    }
+
+
+    /*
+    Navigation Buttons
+     */
 
     public void addMoviesNavButtonAction(ActionEvent event) {
         navigateTo("/com/manula413/movie_manager/mainPanel.fxml", "Add Movie", event);
@@ -209,20 +191,16 @@ public class MainPanelController {
         navigateTo("/com/manula413/movie_manager/watchLaterList.fxml", "Watch Later List", event);
     }
 
-    public void setDisplayNameLabel(String displayName){
+
+
+    /*
+    Setting UI Elements
+     */
+
+    public void setDisplayNameLabel(String displayName) {
         if (displayNameLabel != null) {
             displayNameLabel.setText("Welcome, " + displayName + "!");
         }
-    }
-    public void setMovieDetails(MovieDetails movieDetails) {
-        setMovieTitle(movieDetails.getTitle());
-        setMovieYear(movieDetails.getYear());
-        setMovieGenre(movieDetails.getGenre());
-        setImdbRating(movieDetails.getImdbRating());
-        setRtRating(movieDetails.getRtRating());
-        setMoviePlot(movieDetails.getPlot());
-        setMoviePoster(movieDetails.getPosterUrl());
-        setTvSeriesDetails(movieDetails.getType(), movieDetails.getTotalSeasons());
     }
 
     private void setMovieTitle(String title) {
@@ -294,28 +272,12 @@ public class MainPanelController {
         }
     }
 
-    private String[] parseMovieInput(String movieInput) {
-        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
-        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-            return new String[0];  // Return null if invalid input format or empty fields
-        }
-        return parts;
-    }
 
-    private JsonObject fetchMovieJsonResponse(String url) throws IOException, MovieDataParseException {
-        try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpGet request = new HttpGet(url);
-            try (CloseableHttpResponse response = client.execute(request)) {
-                String responseString = EntityUtils.toString(response.getEntity());
-                return JsonParser.parseString(responseString).getAsJsonObject();
-            } catch (ParseException e) {
-                // Throw a custom exception instead of a generic RuntimeException
-                throw new MovieDataParseException("Error parsing the movie data response.", e);
-            }
-        }
-    }
+    /*
+    Exeption Methods
+     */
 
-    public class MovieDataParseException extends Exception {
+    public static class MovieDataParseException extends Exception {
         public MovieDataParseException(String message) {
             super(message);
         }
@@ -325,14 +287,7 @@ public class MainPanelController {
         }
     }
 
-    private static String getAPIKey() throws IOException {
-        Properties properties = new Properties();
-        try (FileInputStream input = new FileInputStream("src/main/resources/keys.properties")) {
-            properties.load(input);
-        }
-        return properties.getProperty("api.key");
-    }
-
-
 
 }
+
+

@@ -17,4 +17,5 @@ public class MovieRepository {
     public boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
         return false; // Placeholder return
     }
+
 }

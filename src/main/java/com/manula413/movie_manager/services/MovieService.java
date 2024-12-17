@@ -1,28 +1,50 @@
 package com.manula413.movie_manager.services;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.manula413.movie_manager.controller.MainPanelController;
+import com.manula413.movie_manager.controller.MainPanelController1;
 import com.manula413.movie_manager.model.MovieDetails;
+import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
+
 import javafx.application.Platform;
+import javafx.scene.control.Toggle;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
+
 public class MovieService {
+
+    // Callback for clearing or setting error messages
+    private Runnable onClearErrorCallback;
+    private java.util.function.Consumer<String> onErrorCallback;
 
     public MovieDetails fetchMovieData(String movieInput) throws Exception {
         System.out.println("Starting fetchMovieData with input: " + movieInput);
 
-        // Clear any previous error messages
-        Platform.runLater(() -> searchErrorLabel.setText(""));
+        // Clear previous errors using the callback
+        if (onClearErrorCallback != null) {
+            onClearErrorCallback.run();
+        }
 
         String apiKey = getAPIKey();
         String[] parts = parseMovieInput(movieInput);
 
-        // Validate input format: movie name and year should be provided
+        // Validate input format
         if (parts.length == 0) {
-            Platform.runLater(() -> MasearchErrorLabel.setText("Please use 'Movie Name Year'."));
+            if (onErrorCallback != null) {
+                onErrorCallback.accept("Please use 'Movie Name Year'.");
+            }
             return null;
         }
 
@@ -30,55 +52,71 @@ public class MovieService {
         String movieYear = parts[1].trim();
         System.out.println("Parsed movie name: " + movieName + ", year: " + movieYear);
 
-        // Construct the URL to query the OMDB API
         String url = "http://www.omdbapi.com/?t=" + movieName.replace(" ", "+") + "&y=" + movieYear + "&apikey=" + apiKey;
         System.out.println("Constructed URL: " + url);
 
         try {
             JsonObject json = fetchMovieJsonResponse(url);
 
-            // Handle response if the movie is not found
+            // Handle movie not found
             if (json.has("Response") && json.get("Response").getAsString().equalsIgnoreCase("False")) {
-                return handleMovieNotFound(json);
+                if (onErrorCallback != null) {
+                    onErrorCallback.accept("Movie not found. Please check the name and year.");
+                }
+                return null;
             }
 
-            // Parse the movie details from the JSON response
-            String title = json.has("Title") ? json.get("Title").getAsString() : MOVIE_NOT_FOUND;
+            // Parse movie details
+            String title = json.has("Title") ? json.get("Title").getAsString() : "N/A";
             String year = json.has("Year") ? json.get("Year").getAsString() : "N/A";
             String genre = json.has("Genre") ? json.get("Genre").getAsString() : "N/A";
             String imdbRating = json.has("imdbRating") ? json.get("imdbRating").getAsString() : "N/A";
-            String rtRating = json.has(RATINGS_KEY) && json.getAsJsonArray(RATINGS_KEY).size() > 1
-                    ? json.getAsJsonArray(RATINGS_KEY).get(1).getAsJsonObject().get("Value").getAsString()
+            String rtRating = json.has("Ratings") && json.getAsJsonArray("Ratings").size() > 1
+                    ? json.getAsJsonArray("Ratings").get(1).getAsJsonObject().get("Value").getAsString()
                     : "N/A";
             String plot = json.has("Plot") ? json.get("Plot").getAsString() : "N/A";
             String posterUrl = json.has("Poster") ? json.get("Poster").getAsString() : null;
 
             String type = json.has("Type") ? json.get("Type").getAsString() : "N/A";
-            String totalSeasons = "N/A";
-
-            // Check if it's a series and get the total number of seasons
-            if ("series".equalsIgnoreCase(type) && json.has("totalSeasons")) {
-                totalSeasons = json.get("totalSeasons").getAsString();
-            }
+            String totalSeasons = json.has("totalSeasons") ? json.get("totalSeasons").getAsString() : "N/A";
 
             System.out.println("Movie details fetched successfully.");
-            return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons,null);
+            return new MovieDetails(title, year, genre, imdbRating, rtRating, plot, posterUrl, type, totalSeasons, null);
+
         } catch (IOException e) {
             System.err.println("Error during HTTP request: " + e.getMessage());
+            if (onErrorCallback != null) {
+                onErrorCallback.accept("Network error occurred. Please try again later.");
+            }
             throw e;
         }
     }
 
     private String[] parseMovieInput(String movieInput) {
-        return new String[0]; // Placeholder return
+        String[] parts = movieInput.split("\\s(?=\\d{4}$)");
+        if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            return new String[0];  // Return null if invalid input format or empty fields
+        }
+        return parts;
     }
 
     private JsonObject fetchMovieJsonResponse(String url) throws IOException, MainPanelController.MovieDataParseException {
-        return new JsonObject(); // Placeholder return
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            HttpGet request = new HttpGet(url);
+            try (CloseableHttpResponse response = client.execute(request)) {
+                String responseString = EntityUtils.toString(response.getEntity());
+                return JsonParser.parseString(responseString).getAsJsonObject();
+            } catch (ParseException e) {
+                // Throw a custom exception instead of a generic RuntimeException
+                throw new MainPanelController.MovieDataParseException("Error parsing the movie data response.", e);
+            }
+        }
     }
 
     private MovieDetails handleMovieNotFound(JsonObject json) {
-        return null; // Placeholder return
+        String errorMessage = json.has("Error") ? json.get("Error").getAsString() : "Unknown error";
+        System.out.println("Movie not found: " + errorMessage);
+        return new MovieDetails(null, null, null, null, null, null, null, null, null,null);
     }
 
     public void addMovieToDatabase() {
@@ -95,14 +133,42 @@ public class MovieService {
     }
 
     private String getFirstTwoGenres(String genre) {
-        return ""; // Placeholder return
+        if (genre != null && !genre.isEmpty()) {
+            String[] genres = genre.split(", ");
+            return genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
+        }
+        return "Unknown"; // Fallback if genre is null or empty
     }
 
-    private String determineMovieStatus() {
-        return ""; // Placeholder return
+    public String handleMovieStatus(String status) {
+        if ("watchLater".equals(status)) {
+            return "watchLater";
+        } else if ("watched".equals(status)) {
+            return "watched";
+        } else {
+            System.out.println("Invalid movie status provided.");
+            return "invalid";
+        }
     }
 
-    private String determineUserRating() {
-        return ""; // Placeholder return
+    public String handleUserRating(String rating) {
+        if (rating != null && !rating.isEmpty()) {
+            System.out.println("User rating selected: " + rating);
+            return rating;
+        } else {
+            System.out.println("Invalid user rating provided.");
+            return "invalid";
+        }
+    }
+
+
+    public void setOnClearErrorCallback(Runnable callback) {
+        this.onClearErrorCallback = callback;
+    }
+
+    public void setOnErrorCallback(java.util.function.Consumer<String> callback) {
+        this.onErrorCallback = callback;
     }
 }
+
+

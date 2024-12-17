@@ -143,7 +143,7 @@ public class LoginController {
 
                         // Proceed to the main panel
                         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
-                        MainPanelController mainpanel = new MainPanelController();
+                        MainPanelController1 mainpanel = new MainPanelController1();
                         mainpanel.loadMainPanelDefault(stage);
 
                     } else {

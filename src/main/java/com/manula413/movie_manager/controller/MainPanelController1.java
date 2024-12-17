@@ -303,7 +303,7 @@ public class MainPanelController1 {
     }
 
 
-    public class MovieDataParseException extends Exception {
+    public static class MovieDataParseException extends Exception {
         public MovieDataParseException(String message) {
             super(message);
         }
@@ -313,7 +313,7 @@ public class MainPanelController1 {
         }
     }
 
-    private static String getAPIKey() throws IOException {
+    public static String getAPIKey() throws IOException {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("src/main/resources/keys.properties")) {
             properties.load(input);
