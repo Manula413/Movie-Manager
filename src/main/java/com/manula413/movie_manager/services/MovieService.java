@@ -19,17 +19,24 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 
 import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
 
 public class MovieService {
 
-    // Callback for clearing or setting error messages
-    private Runnable onClearErrorCallback;
-    private java.util.function.Consumer<String> onErrorCallback;
 
-    public MovieDetails fetchMovieData(String movieInput) throws Exception {
+    private static MainPanelController mainPanelController = new MainPanelController();
+    // Callback for clearing or setting error messages
+    private static Runnable onClearErrorCallback;
+    private static Consumer<String> onErrorCallback;
+
+    public MovieService(MainPanelController mainPanelController) {
+        this.mainPanelController = mainPanelController;
+    }
+
+    public static MovieDetails fetchMovieData(String movieInput) throws Exception {
         System.out.println("Starting fetchMovieData with input: " + movieInput);
 
         // Clear previous errors using the callback
@@ -91,8 +98,18 @@ public class MovieService {
             throw e;
         }
     }
+    public static void setMovieDetails(MovieDetails movieDetails) {
+        mainPanelController.setMovieTitle(movieDetails.getTitle());
+        mainPanelController.setMovieYear(movieDetails.getYear());
+        mainPanelController.setMovieGenre(movieDetails.getGenre());
+        mainPanelController.setImdbRating(movieDetails.getImdbRating());
+        mainPanelController.setRtRating(movieDetails.getRtRating());
+        mainPanelController.setMoviePlot(movieDetails.getPlot());
+        mainPanelController.setMoviePoster(movieDetails.getPosterUrl());
+        mainPanelController.setTvSeriesDetails(movieDetails.getType(), movieDetails.getTotalSeasons());
+    }
 
-    private String[] parseMovieInput(String movieInput) {
+    private static String[] parseMovieInput(String movieInput) {
         String[] parts = movieInput.split("\\s(?=\\d{4}$)");
         if (parts.length != 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             return new String[0];  // Return null if invalid input format or empty fields
@@ -100,7 +117,7 @@ public class MovieService {
         return parts;
     }
 
-    private JsonObject fetchMovieJsonResponse(String url) throws IOException, MainPanelController.MovieDataParseException {
+    private static JsonObject fetchMovieJsonResponse(String url) throws IOException, MainPanelController.MovieDataParseException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet request = new HttpGet(url);
             try (CloseableHttpResponse response = client.execute(request)) {
@@ -166,7 +183,7 @@ public class MovieService {
         this.onClearErrorCallback = callback;
     }
 
-    public void setOnErrorCallback(java.util.function.Consumer<String> callback) {
+    public void setOnErrorCallback(Consumer<String> callback) {
         this.onErrorCallback = callback;
     }
 }

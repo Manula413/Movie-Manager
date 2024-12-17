@@ -3,6 +3,7 @@ package com.manula413.movie_manager.controller;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.manula413.movie_manager.services.MovieService.setMovieDetails;
+
 @SuppressWarnings("ALL")
 public class MainPanelController {
 
@@ -28,7 +31,8 @@ public class MainPanelController {
     public static final String RATINGS_KEY = "Ratings";
     private static final Logger logger = LoggerFactory.getLogger(MainPanelController.class);
     private static final String ENTER_BOTH_FIELDS = "Please enter both the movie name and release year to perform a search";
-    private final MovieService movieService = new MovieService();
+    private final MovieService movieService;
+
     String userId = Session.getInstance().getUserId();
     @FXML
     private TextField searchTextField;
@@ -73,6 +77,12 @@ public class MainPanelController {
     @FXML
     private ImageView rtLogoImageView;
     private MovieDetails movieDetails;
+
+    public MainPanelController() {
+        // Pass the current controller instance to MovieService
+        this.movieService = new MovieService(this);
+    }
+
 
     public void loadMainPanelDefault(Stage stage) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
@@ -126,8 +136,32 @@ public class MainPanelController {
     }
 
     @FXML
-    public void searchMovie() { // Call `movieService.fetchMovieData` and update the UI
+    public void searchMovie() {
+        String movieInput = searchTextField.getText().trim();
+        logger.info("User input: {}", movieInput);
 
+        // Run fetch in a separate thread
+        new Thread(() -> {
+            try {
+                // Fetch movie details using the existing fetchMovieData method
+                MovieDetails fetchedMovieDetails = MovieService.fetchMovieData(movieInput);
+
+                // Update UI on the JavaFX Application Thread
+                Platform.runLater(() -> {
+                    if (fetchedMovieDetails != null) {
+                        this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
+                        setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
+                        logger.info("Movie details displayed on UI.");
+                    } else {
+                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
+                        logger.info("No movie details available.");
+                    }
+                });
+            } catch (Exception e) {
+                logger.error("Exception caught during searchMovie: ", e);
+                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null)));
+            }
+        }).start();
     }
 
     public void addMovieToDatabase() {
@@ -203,15 +237,16 @@ public class MainPanelController {
         }
     }
 
-    private void setMovieTitle(String title) {
-        movieNameLabel.setText(title != null ? title : MOVIE_NOT_FOUND);
+    public void setMovieTitle(String title) {
+        movieNameLabel.setText(title != null ? title : "MOVIE_NOT_FOUND");
     }
 
-    private void setMovieYear(String year) {
+
+    public void setMovieYear(String year) {
         movieYearLabel.setText(year != null ? year : " ");
     }
 
-    private void setMovieGenre(String genre) {
+    public void setMovieGenre(String genre) {
         if (genre != null && !genre.isEmpty()) {
             String[] genres = genre.split(", ");
             String displayGenre = genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
@@ -222,14 +257,14 @@ public class MainPanelController {
     }
 
 
-    private void setImdbRating(String imdbRating) {
+    public void setImdbRating(String imdbRating) {
         String imdbRatingDisplay = (imdbRating != null && !imdbRating.equals(" ")) ? imdbRating : " ";
         ratingIMBDLabel.setText(imdbRatingDisplay);
         imdbLogoImageView.setVisible(!" ".equals(imdbRatingDisplay)); // Show only if the rating is not empty
     }
 
 
-    private void setRtRating(String rtRating) {
+    public void setRtRating(String rtRating) {
         String rtRatingDisplay;
         if (rtRating == null || rtRating.trim().isEmpty()) {
             rtRatingDisplay = "";  // Set to empty string if rtRating is null or empty
@@ -244,11 +279,11 @@ public class MainPanelController {
 
     }
 
-    private void setMoviePlot(String plot) {
+    public void setMoviePlot(String plot) {
         moviePlotLabel.setText(plot != null ? plot : "No movie found matching the title and year. Please verify the details and try again.");
     }
 
-    private void setMoviePoster(String posterUrl) {
+    public void setMoviePoster(String posterUrl) {
         URL resource = getClass().getResource("/images/image-not-found.png");
         try {
             if (posterUrl != null && !posterUrl.equals("N/A")) {
@@ -262,7 +297,7 @@ public class MainPanelController {
         }
     }
 
-    private void setTvSeriesDetails(String type, String totalSeasons) {
+    public void setTvSeriesDetails(String type, String totalSeasons) {
         if ("series".equalsIgnoreCase(type)) {
             tvSeriesLabel.setText("TV - Series");
             seasonsLabel.setText(totalSeasons != null && !totalSeasons.equals("N/A") ? "Seasons: " + totalSeasons : "Seasons: N/A");
