@@ -1,12 +1,23 @@
 package com.manula413.movie_manager.database;
+import com.manula413.movie_manager.controller.MainPanelController;
 import com.manula413.movie_manager.model.MovieDetails;
+import com.manula413.movie_manager.services.MovieService;
+import com.manula413.movie_manager.util.Session;
 
 import java.sql.*;
 
+import static com.manula413.movie_manager.controller.MainPanelController.determineMovieStatus;
+import static com.manula413.movie_manager.controller.MainPanelController.determineUserRating;
+
 public class MovieRepository {
+    private static MovieDetails movieDetails;
+    static String userId = Session.getInstance().getUserId();
+
+    public MovieRepository(MainPanelController mainPanelController) {
+    }
 
 
-    public void addMovieToDatabase() {
+    public static void addMovieToDatabase() {
         System.out.println("Worked till here 1");
 
         // Check if movieDetails is not null
@@ -14,7 +25,7 @@ public class MovieRepository {
             // Retrieve movie details
             String title = movieDetails.getTitle();
             String year = movieDetails.getYear();
-            String genre = getFirstTwoGenres(movieDetails.getGenre());
+            String genre = MovieService.getFirstTwoGenres(movieDetails.getGenre());
             String imdbRating = movieDetails.getImdbRating();
             String rtRating = movieDetails.getRtRating();
             String type = movieDetails.getType();
@@ -79,8 +90,8 @@ public class MovieRepository {
     }
 
 
-    private int getOrInsertMovie(Connection connectDB, String movieName, String movieYear, String genre,
-                                 String type, String imdbRating, String rtRating, String seasons) throws SQLException {
+    private static int getOrInsertMovie(Connection connectDB, String movieName, String movieYear, String genre,
+                                        String type, String imdbRating, String rtRating, String seasons) throws SQLException {
         String checkMovieQuery = "SELECT movieid FROM movies WHERE movieName = ? AND year = ? AND genre = ?";
         String insertMovieQuery = "INSERT INTO movies (movieName, year, genre, type, seasons, imdb_Rating, rt_Rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -116,7 +127,7 @@ public class MovieRepository {
         return -1; // Indicate failure
     }
 
-    private boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
+    private static boolean addUserMovie(Connection connectDB, int userId, int movieId, String userComment, String status) throws SQLException {
         String insertUserMovieQuery = "INSERT INTO user_movies (userid, movieid, userComment, watched_Status) VALUES (?, ?, ?, ?)";
         try (PreparedStatement insertUserMovieStmt = connectDB.prepareStatement(insertUserMovieQuery)) {
             insertUserMovieStmt.setInt(1, userId);
@@ -127,7 +138,7 @@ public class MovieRepository {
         }
     }
 
-    private boolean isMovieInUserList(Connection connectDB, int userId, int movieId) throws SQLException {
+    private static boolean isMovieInUserList(Connection connectDB, int userId, int movieId) throws SQLException {
         String checkUserMovieQuery = "SELECT COUNT(*) FROM user_movies WHERE userid = ? AND movieid = ?";
         try (PreparedStatement checkUserMovieStmt = connectDB.prepareStatement(checkUserMovieQuery)) {
             checkUserMovieStmt.setInt(1, userId);
@@ -136,6 +147,8 @@ public class MovieRepository {
             return resultSet.next() && resultSet.getInt(1) > 0;
         }
     }
+
+
 
 
 

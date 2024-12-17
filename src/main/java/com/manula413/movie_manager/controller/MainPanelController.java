@@ -1,5 +1,6 @@
 package com.manula413.movie_manager.controller;
 
+import com.manula413.movie_manager.database.MovieRepository;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
@@ -36,46 +37,67 @@ public class MainPanelController {
     String userId = Session.getInstance().getUserId();
     @FXML
     private TextField searchTextField;
+
     @FXML
-    private RadioButton watchLaterRadioButton;
+    private  RadioButton watchLaterRadioButton;
+
     @FXML
-    private RadioButton watchedRadioButton;
+    private  RadioButton watchedRadioButton;
+
     @FXML
     private Button addMoviesNavButton;
+
     @FXML
     private Button watchedListNavButton;
+
     @FXML
     private Button watchLaterNavButton;
+
     @FXML
     private Label displayNameLabel;
+
     @FXML
     private Label movieNameLabel;
+
     @FXML
     private Label movieYearLabel;
+
     @FXML
     private Label movieGenreLabel;
+
     @FXML
     private Label ratingIMBDLabel;
+
     @FXML
     private Label ratingRTLabel;
+
     @FXML
     private Label moviePlotLabel;
+
     @FXML
     private Label tvSeriesLabel;
+
     @FXML
     private Label seasonsLabel;
+
     @FXML
     private Label searchErrorLabel;
+
     @FXML
     private ImageView moviePosterImageView;
+
     @FXML
-    private ToggleGroup watchListRadioGroup;
+    private  ToggleGroup watchListRadioGroup;
+
     @FXML
-    private ComboBox<String> userRatingComboBox;
+    private  ComboBox<String> userRatingComboBox;
+
     @FXML
     private ImageView imdbLogoImageView;
+
     @FXML
     private ImageView rtLogoImageView;
+
     private MovieDetails movieDetails;
 
     public MainPanelController() {
@@ -118,27 +140,33 @@ public class MainPanelController {
         }
     }
 
+
     @FXML
     private void initialize() {
         // Populate the ComboBox with values
-
         userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
-        //userRatingComboBox.setValue("3"); // Optional: Set a default value
+        userRatingComboBox.setValue("Great"); // Optional: Set a default value (or leave as null if no default)
+
+        // Listen for changes in the selected radio button
         watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == watchLaterRadioButton) {
-                userRatingComboBox.setDisable(true); // Disable ComboBox
-                userRatingComboBox.setValue("N/A"); // Set the default value as "N/A"
+                // Disable ComboBox and set a default value when Watch Later is selected
+                userRatingComboBox.setDisable(true);
+                userRatingComboBox.setValue("N/A");  // Ensure the value matches the ComboBox options
             } else {
-                userRatingComboBox.setDisable(false); // Enable ComboBox
-                userRatingComboBox.setValue(null); // Clear any default value
+                // Enable ComboBox when other radio button is selected
+                userRatingComboBox.setDisable(false);
+                userRatingComboBox.setValue(null); // Optionally clear the value when enabling
             }
         });
     }
+
 
     @FXML
     public void searchMovie() {
         String movieInput = searchTextField.getText().trim();
         logger.info("User input: {}", movieInput);
+        System.out.println("User input: " + movieInput); // Added Sysout
 
         // Run fetch in a separate thread
         new Thread(() -> {
@@ -150,41 +178,34 @@ public class MainPanelController {
                 Platform.runLater(() -> {
                     if (fetchedMovieDetails != null) {
                         this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
+                        System.out.println("Fetched Movie Details: " + fetchedMovieDetails); //
+                        // Added Sysout
                         setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
                         logger.info("Movie details displayed on UI.");
                     } else {
                         setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
                         logger.info("No movie details available.");
+                        System.out.println("No movie details found, setting default values."); // Added Sysout
                     }
                 });
             } catch (Exception e) {
                 logger.error("Exception caught during searchMovie: ", e);
-                Platform.runLater(() -> setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null)));
+                Platform.runLater(() -> {
+                    setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
+                    System.out.println("Exception occurred, setting default MovieDetails."); // Added Sysout
+                });
             }
         }).start();
     }
 
+
     public void addMovieToDatabase() {
-        // Step 1: Retrieve movie status
-        String movieStatus = determineMovieStatus();
 
-        // Step 2: Retrieve user rating
-        String userRating = determineUserRating();
-
-        // Step 3: Pass values to the service for handling
-        String handledStatus = movieService.handleMovieStatus(movieStatus);
-        String handledRating = movieService.handleUserRating(userRating);
-
-        // Optional: Log or proceed with the next steps (e.g., saving to the database)
-        if (!"invalid".equals(handledStatus) && !"invalid".equals(handledRating)) {
-            System.out.println("Movie added with Status: " + handledStatus + " and Rating: " + handledRating);
-        } else {
-            System.out.println("Failed to add movie. Invalid data provided.");
-        }
+        MovieRepository.addMovieToDatabase();
 
     }
 
-    private String determineMovieStatus() {
+    public String determineMovieStatus() {
         // Get the selected toggle from the group
         Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
 
@@ -197,7 +218,7 @@ public class MainPanelController {
         return null; // No valid selection
     }
 
-    private String determineUserRating() {
+    public String determineUserRating() {
         // Get the selected item from the ComboBox
         String selectedRating = userRatingComboBox.getValue();
 
@@ -207,7 +228,6 @@ public class MainPanelController {
 
         return null; // No selection made
     }
-
 
     /*
     Navigation Buttons

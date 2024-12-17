@@ -3,7 +3,6 @@ package com.manula413.movie_manager.services;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.manula413.movie_manager.controller.MainPanelController;
-import com.manula413.movie_manager.controller.MainPanelController1;
 import com.manula413.movie_manager.model.MovieDetails;
 import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
 
@@ -20,9 +19,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Consumer;
-
-
-import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
 
 public class MovieService {
 
@@ -149,7 +145,7 @@ public class MovieService {
         return false; // Placeholder return
     }
 
-    private String getFirstTwoGenres(String genre) {
+    public static String getFirstTwoGenres(String genre) {
         if (genre != null && !genre.isEmpty()) {
             String[] genres = genre.split(", ");
             return genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
@@ -157,7 +153,7 @@ public class MovieService {
         return "Unknown"; // Fallback if genre is null or empty
     }
 
-    public String handleMovieStatus(String status) {
+    public static String handleMovieStatus(String status) {
         if ("watchLater".equals(status)) {
             return "watchLater";
         } else if ("watched".equals(status)) {
