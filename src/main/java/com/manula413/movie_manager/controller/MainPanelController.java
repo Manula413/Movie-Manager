@@ -33,6 +33,8 @@ public class MainPanelController {
     private static final Logger logger = LoggerFactory.getLogger(MainPanelController.class);
     private static final String ENTER_BOTH_FIELDS = "Please enter both the movie name and release year to perform a search";
     private final MovieService movieService;
+    private final MovieRepository movieRepository;
+
 
     String userId = Session.getInstance().getUserId();
     @FXML
@@ -103,6 +105,9 @@ public class MainPanelController {
     public MainPanelController() {
         // Pass the current controller instance to MovieService
         this.movieService = new MovieService(this);
+        this.movieRepository = new MovieRepository();
+
+
     }
 
 
@@ -166,34 +171,27 @@ public class MainPanelController {
     public void searchMovie() {
         String movieInput = searchTextField.getText().trim();
         logger.info("User input: {}", movieInput);
-        System.out.println("User input: " + movieInput); // Added Sysout
+        System.out.println("User input: " + movieInput);
 
-        // Run fetch in a separate thread
         new Thread(() -> {
             try {
-                // Fetch movie details using the existing fetchMovieData method
+                // Fetch movie details
                 MovieDetails fetchedMovieDetails = MovieService.fetchMovieData(movieInput);
 
-                // Update UI on the JavaFX Application Thread
                 Platform.runLater(() -> {
                     if (fetchedMovieDetails != null) {
-                        this.movieDetails = fetchedMovieDetails;  // Assign the fetched data to the class field
-                        System.out.println("Fetched Movie Details: " + fetchedMovieDetails); //
-                        // Added Sysout
-                        setMovieDetails(fetchedMovieDetails);  // Pass the MovieDetails object
-                        logger.info("Movie details displayed on UI.");
+                        System.out.println("Fetched Movie Details: " + fetchedMovieDetails.getTitle());
+                        setMovieDetails(fetchedMovieDetails);  // Ensure this sets the details
+
+                        // Debugging to check if the movieRepository instance is correct
+                        System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
+                        movieService.getMovieRepository().setMovieDetails(fetchedMovieDetails);
                     } else {
-                        setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
-                        logger.info("No movie details available.");
-                        System.out.println("No movie details found, setting default values."); // Added Sysout
+                        System.out.println("No movie details found.");
                     }
                 });
             } catch (Exception e) {
                 logger.error("Exception caught during searchMovie: ", e);
-                Platform.runLater(() -> {
-                    setMovieDetails(new MovieDetails(MOVIE_NOT_FOUND, "", "", "", "", ENTER_BOTH_FIELDS, null, "", "",null));
-                    System.out.println("Exception occurred, setting default MovieDetails."); // Added Sysout
-                });
             }
         }).start();
     }
@@ -201,32 +199,44 @@ public class MainPanelController {
 
     public void addMovieToDatabase() {
 
-        MovieRepository.addMovieToDatabase();
+        // Determine movie status and user rating
+        String movieStatus = determineMovieStatus();
+        String userRating = determineUserRating();
+
+        // Validate movie status
+        if (movieStatus == null) {
+            System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
+            return;
+        }
+
+        // Call the service to save data
+        movieService.saveMovieData(movieStatus, userRating);
+        System.out.println(movieStatus);
+        System.out.println(userRating);
+
+
+        System.out.println("called addMovieToDatabase()");
+        System.out.println("Checking movie details before saving:");
+        System.out.println("MovieRepository instance (addMovieToDatabase): " + movieService.getMovieRepository());
+
+        // The rest of your method
+        movieRepository.addMovieToDatabase();
 
     }
 
     public String determineMovieStatus() {
-        // Get the selected toggle from the group
         Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
-
         if (selectedToggle == watchLaterRadioButton) {
-            return "watchLater"; // Watch Later selected
+            return "watchLater";
         } else if (selectedToggle == watchedRadioButton) {
-            return "watched"; // Watched selected
+            return "watched";
         }
-
-        return null; // No valid selection
+        return null;
     }
 
     public String determineUserRating() {
-        // Get the selected item from the ComboBox
         String selectedRating = userRatingComboBox.getValue();
-
-        if (selectedRating != null) {
-            return selectedRating; // Return the selected rating
-        }
-
-        return null; // No selection made
+        return (selectedRating != null) ? selectedRating : null;
     }
 
     /*

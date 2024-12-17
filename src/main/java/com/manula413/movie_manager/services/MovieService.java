@@ -3,6 +3,7 @@ package com.manula413.movie_manager.services;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.manula413.movie_manager.controller.MainPanelController;
+import com.manula413.movie_manager.database.MovieRepository;
 import com.manula413.movie_manager.model.MovieDetails;
 import static com.manula413.movie_manager.util.MovieUtils.getAPIKey;
 
@@ -27,9 +28,11 @@ public class MovieService {
     // Callback for clearing or setting error messages
     private static Runnable onClearErrorCallback;
     private static Consumer<String> onErrorCallback;
+    private final MovieRepository movieRepository;
 
     public MovieService(MainPanelController mainPanelController) {
         this.mainPanelController = mainPanelController;
+        this.movieRepository = new MovieRepository();
     }
 
     public static MovieDetails fetchMovieData(String movieInput) throws Exception {
@@ -172,6 +175,21 @@ public class MovieService {
             System.out.println("Invalid user rating provided.");
             return "invalid";
         }
+    }
+
+    public void saveMovieData(String movieStatus, String userRating) {
+        // Validation logic
+        if (movieStatus == null || userRating == null) {
+            System.out.println("Invalid data. Movie status and rating are required.");
+            return;
+        }
+
+        // Use the repository instance to save the movie data
+        movieRepository.saveMovie(movieStatus, userRating);
+    }
+
+    public MovieRepository getMovieRepository() {
+        return movieRepository;
     }
 
 

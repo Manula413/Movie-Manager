@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="*Added few methods to MovieRepository (contain errors)">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP: Minor fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -507,7 +505,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734409811556</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="WIP: Minor fixes">
+      <option name="closed" value="true" />
+      <created>1734416415414</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1734416415414</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -522,7 +528,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Minor Changes" />
     <MESSAGE value="WIP - Coding Insert movies to Database. Contain errors" />
     <MESSAGE value="WIP - Minor Changes. addMovieToDatabase return movieDetails Null" />
     <MESSAGE value="WIP - Fixed Minor issues" />
@@ -547,6 +552,7 @@
     <MESSAGE value="WIP: Refactoring code" />
     <MESSAGE value="Fixed Movie Search Function" />
     <MESSAGE value="*Added few methods to MovieRepository (contain errors)" />
-    <option name="LAST_COMMIT_MESSAGE" value="*Added few methods to MovieRepository (contain errors)" />
+    <MESSAGE value="WIP: Minor fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP: Minor fixes" />
   </component>
 </project>

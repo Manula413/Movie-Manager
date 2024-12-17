@@ -6,22 +6,33 @@ import com.manula413.movie_manager.util.Session;
 
 import java.sql.*;
 
-import static com.manula413.movie_manager.controller.MainPanelController.determineMovieStatus;
-import static com.manula413.movie_manager.controller.MainPanelController.determineUserRating;
 
 public class MovieRepository {
-    private static MovieDetails movieDetails;
+    private  MovieDetails movieDetails;
     static String userId = Session.getInstance().getUserId();
+    private  String movieStatus;
+    private  String userRating;
 
-    public MovieRepository(MainPanelController mainPanelController) {
+
+    public MovieRepository() {
     }
 
+    public void setMovieDetails(MovieDetails movieDetails) {
+        this.movieDetails = movieDetails;
+        System.out.println("Movie details have been set: " + movieDetails.getTitle());
+    }
 
-    public static void addMovieToDatabase() {
+    public MovieDetails getMovieDetails() {
+        return this.movieDetails;  // Correct method to return movieDetails
+    }
+
+    public void addMovieToDatabase() {
         System.out.println("Worked till here 1");
 
         // Check if movieDetails is not null
         if (movieDetails != null) {
+            System.out.println("Movie details are not null. Proceeding with database operations.");
+
             // Retrieve movie details
             String title = movieDetails.getTitle();
             String year = movieDetails.getYear();
@@ -32,7 +43,7 @@ public class MovieRepository {
             String totalSeasons = movieDetails.getTotalSeasons();
 
             // Debugging output
-            System.out.println("Worked till here, movie title: " + title);
+            System.out.println("Movie title: " + title);
 
             // Database connection setup
             DatabaseConnection connectNow = new DatabaseConnection();
@@ -43,44 +54,16 @@ public class MovieRepository {
                 // Step 1: Check if the movie exists in the database or add it if missing
                 int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
 
-                // If movieId is -1, it means insertion or retrieval failed
                 if (movieId == -1) {
                     System.out.println("Failed to retrieve or insert movie: " + title);
                     return;
                 }
 
-                // Step 2: Check if the user already has this movie in their list
-                if (isMovieInUserList(connectDB, Integer.parseInt(userId), movieId)) {
-                    System.out.println("User " + userId + " already has the movie " + title + " in their list.");
-                    return;
-                }
-
-
-                // Step 3: Determine movie status from radio buttons and insert into user_movies
-                String status = determineMovieStatus();
-                System.out.println(status);
-                if (status == null) {
-                    System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
-                    return;
-                }
-
-                // Default comment (can be customized or taken from a user input field)
-                String userRating = determineUserRating();
-
-                // Step 4: Insert the user movie entry into the database
-                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, userRating, status);
-                if (inserted) {
-                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
-                } else {
-                    System.out.println("Failed to add movie " + title + " for user " + userId);
-                }
-
+                // Continue with the database insertions...
             } catch (SQLException e) {
-                // Handle SQL exception properly
                 System.out.println("Database error occurred: " + e.getMessage());
-                e.printStackTrace(); // Print stack trace for debugging
+                e.printStackTrace();
             } catch (Exception e) {
-                // Catch any other exceptions
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 e.printStackTrace();
             }
@@ -146,6 +129,12 @@ public class MovieRepository {
             ResultSet resultSet = checkUserMovieStmt.executeQuery();
             return resultSet.next() && resultSet.getInt(1) > 0;
         }
+    }
+
+    public void saveMovie(String movieStatus, String userRating) {
+        this.movieStatus = movieStatus;
+        this.userRating = userRating;
+
     }
 
 
