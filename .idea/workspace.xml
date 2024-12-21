@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="WIP: Added debugging code (contain errors)">
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Fixed issue: movieDetails being null in repository">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" afterDir="false" />
@@ -521,7 +521,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734441809614</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Fixed issue: movieDetails being null in repository">
+      <option name="closed" value="true" />
+      <created>1734776233840</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1734776233840</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -536,7 +544,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP - Minor Changes. addMovieToDatabase return movieDetails Null" />
     <MESSAGE value="WIP - Fixed Minor issues" />
     <MESSAGE value="WIP - Added user Rating to Database" />
     <MESSAGE value="WIP - Fixed minor issues when movie is not found." />
@@ -561,6 +568,7 @@
     <MESSAGE value="*Added few methods to MovieRepository (contain errors)" />
     <MESSAGE value="WIP: Minor fixes" />
     <MESSAGE value="WIP: Added debugging code (contain errors)" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP: Added debugging code (contain errors)" />
+    <MESSAGE value="Fixed issue: movieDetails being null in repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed issue: movieDetails being null in repository" />
   </component>
 </project>

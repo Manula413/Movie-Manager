@@ -14,17 +14,26 @@ public class MovieRepository {
     private  String userRating;
 
 
+    // Save movie status and rating
+    public void saveMovie(String movieStatus, String userRating) {
+        this.movieStatus = movieStatus;   // Set the instance variable
+        this.userRating = userRating;     // Set the instance variable
+
+        System.out.println("This is from repository class: " + movieStatus);
+    }
 
     public MovieRepository() {
     }
 
+    // Set movie details
     public static void setMovieDetails(MovieDetails movieDetails) {
-        MovieRepository.movieDetails = movieDetails; // Use the class name to reference the static variable
+        MovieRepository.movieDetails = movieDetails;
         System.out.println("Movie details have been set: " + movieDetails.getTitle());
     }
 
+    // Get movie details
     public MovieDetails getMovieDetails() {
-        return this.movieDetails;  // Correct method to return movieDetails
+        return this.movieDetails;
     }
 
     public void addMovieToDatabase() {
@@ -32,19 +41,17 @@ public class MovieRepository {
 
         // Check if movieDetails is not null
         if (movieDetails != null) {
-            System.out.println("Movie details are not null. Proceeding with database operations.");
-
             // Retrieve movie details
             String title = movieDetails.getTitle();
             String year = movieDetails.getYear();
-            String genre = MovieService.getFirstTwoGenres(movieDetails.getGenre());
+            String genre = getFirstTwoGenres(movieDetails.getGenre());
             String imdbRating = movieDetails.getImdbRating();
             String rtRating = movieDetails.getRtRating();
             String type = movieDetails.getType();
             String totalSeasons = movieDetails.getTotalSeasons();
 
             // Debugging output
-            System.out.println("Movie title: " + title);
+            System.out.println("Worked till here, movie title: " + title);
 
             // Database connection setup
             DatabaseConnection connectNow = new DatabaseConnection();
@@ -55,16 +62,48 @@ public class MovieRepository {
                 // Step 1: Check if the movie exists in the database or add it if missing
                 int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
 
+                // If movieId is -1, it means insertion or retrieval failed
                 if (movieId == -1) {
                     System.out.println("Failed to retrieve or insert movie: " + title);
                     return;
                 }
 
-                // Continue with the database insertions...
+                // Step 2: Check if the user already has this movie in their list
+                if (isMovieInUserList(connectDB, Integer.parseInt(userId), movieId)) {
+                    System.out.println("User " + userId + " already has the movie " + title + " in their list.");
+                    return;
+                }
+
+                // Step 3: Use the instance variable movieStatus (set in saveMovie)
+                String status = this.movieStatus;  // Use instance variable
+                String rating = this.userRating;   // Use instance variable
+
+                // Debugging output
+                System.out.println("Movie Status: " + status);
+                System.out.println("User Rating: " + rating);
+
+                if (status == null) {
+                    System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
+                    return;
+                }
+
+                // Default comment (can be customized or taken from a user input field)
+                String uRating = this.userRating;  // Use instance variable
+
+                // Step 4: Insert the user movie entry into the database
+                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, uRating, status);
+                if (inserted) {
+                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
+                } else {
+                    System.out.println("Failed to add movie " + title + " for user " + userId);
+                }
+
             } catch (SQLException e) {
+                // Handle SQL exception properly
                 System.out.println("Database error occurred: " + e.getMessage());
-                e.printStackTrace();
+                e.printStackTrace(); // Print stack trace for debugging
             } catch (Exception e) {
+                // Catch any other exceptions
                 System.out.println("An unexpected error occurred: " + e.getMessage());
                 e.printStackTrace();
             }
@@ -132,12 +171,15 @@ public class MovieRepository {
         }
     }
 
-    public void saveMovie(String movieStatus, String userRating) {
-        this.movieStatus = movieStatus;
-        this.userRating = userRating;
 
+
+    private String getFirstTwoGenres(String genre) {
+        if (genre != null && !genre.isEmpty()) {
+            String[] genres = genre.split(", ");
+            return genres.length > 1 ? genres[0] + ", " + genres[1] : genres[0];
+        }
+        return "Unknown"; // Fallback if genre is null or empty
     }
-
 
 
 

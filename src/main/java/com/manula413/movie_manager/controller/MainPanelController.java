@@ -151,16 +151,21 @@ public class MainPanelController {
     private void initialize() {
         // Populate the ComboBox with values
         userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
-        userRatingComboBox.setValue("Great"); // Optional: Set a default value (or leave as null if no default)
+        userRatingComboBox.setValue("Great"); // Set a default value for the ComboBox (optional)
+
+        // Set default radio button selection if none is selected
+        if (watchListRadioGroup.getSelectedToggle() == null) {
+            watchListRadioGroup.selectToggle(watchedRadioButton);  // Default to 'Watched' if no radio button is selected
+        }
 
         // Listen for changes in the selected radio button
         watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == watchLaterRadioButton) {
-                // Disable ComboBox and set a default value when Watch Later is selected
+                // Disable ComboBox and set a default value when 'Watch Later' is selected
                 userRatingComboBox.setDisable(true);
                 userRatingComboBox.setValue("N/A");  // Ensure the value matches the ComboBox options
             } else {
-                // Enable ComboBox when other radio button is selected
+                // Enable ComboBox when the 'Watched' radio button is selected
                 userRatingComboBox.setDisable(false);
                 userRatingComboBox.setValue(null); // Optionally clear the value when enabling
             }
@@ -186,9 +191,9 @@ public class MainPanelController {
                         setMovieData(fetchedMovieDetails);
 
                         // Debugging to check if the movieRepository instance is correct
-                        System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
+                        //System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
 
-                        System.out.println("Fetched Movie Details: " + fetchedMovieDetails);
+                       // System.out.println("Fetched Movie Details: " + fetchedMovieDetails);
 
                     } else {
                         System.out.println("No movie details found.");
@@ -212,32 +217,28 @@ public class MainPanelController {
             System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
             return;
         }
-
         // Call the service to save data
         movieService.saveMovieData(movieStatus, userRating);
-        System.out.println(movieStatus);
-        System.out.println(userRating);
 
-
-        System.out.println("called addMovieToDatabase()");
-        System.out.println("Checking movie details before saving:");
-        System.out.println("MovieRepository instance (addMovieToDatabase): " + movieService.getMovieRepository());
-
-        // The rest of your method
-        System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
         movieRepository.addMovieToDatabase();
 
     }
 
-    public String determineMovieStatus() {
+    private String determineMovieStatus() {
+        // Get the selected toggle from the group
+
         Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
+       // System.out.println("Selected Toggle: " + selectedToggle);
+
         if (selectedToggle == watchLaterRadioButton) {
-            return "watchLater";
+            return "watchLater"; // Watch Later selected
         } else if (selectedToggle == watchedRadioButton) {
-            return "watched";
+            return "watched"; // Watched selected
         }
-        return null;
+
+        return null; // No valid selection
     }
+
 
     public String determineUserRating() {
         String selectedRating = userRatingComboBox.getValue();

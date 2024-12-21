@@ -189,6 +189,7 @@ public class MovieService {
             System.out.println("Invalid data. Movie status and rating are required.");
             return;
         }
+        System.out.println("This is from services class" + movieStatus);
 
         // Use the repository instance to save the movie data
         movieRepository.saveMovie(movieStatus, userRating);
