@@ -8,17 +8,18 @@ import java.sql.*;
 
 
 public class MovieRepository {
-    private  MovieDetails movieDetails;
+    private static MovieDetails movieDetails;
     static String userId = Session.getInstance().getUserId();
     private  String movieStatus;
     private  String userRating;
 
 
+
     public MovieRepository() {
     }
 
-    public void setMovieDetails(MovieDetails movieDetails) {
-        this.movieDetails = movieDetails;
+    public static void setMovieDetails(MovieDetails movieDetails) {
+        MovieRepository.movieDetails = movieDetails; // Use the class name to reference the static variable
         System.out.println("Movie details have been set: " + movieDetails.getTitle());
     }
 

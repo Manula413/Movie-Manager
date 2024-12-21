@@ -22,7 +22,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 
-import static com.manula413.movie_manager.services.MovieService.setMovieDetails;
+ import static com.manula413.movie_manager.services.MovieService.setMovieData;
+ import static com.manula413.movie_manager.database.MovieRepository.setMovieDetails;
 
 @SuppressWarnings("ALL")
 public class MainPanelController {
@@ -181,11 +182,14 @@ public class MainPanelController {
                 Platform.runLater(() -> {
                     if (fetchedMovieDetails != null) {
                         System.out.println("Fetched Movie Details: " + fetchedMovieDetails.getTitle());
-                        setMovieDetails(fetchedMovieDetails);  // Ensure this sets the details
+                        setMovieDetails(fetchedMovieDetails); // Ensure this sets the details
+                        setMovieData(fetchedMovieDetails);
 
                         // Debugging to check if the movieRepository instance is correct
                         System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
-                        movieService.getMovieRepository().setMovieDetails(fetchedMovieDetails);
+
+                        System.out.println("Fetched Movie Details: " + fetchedMovieDetails);
+
                     } else {
                         System.out.println("No movie details found.");
                     }
@@ -220,6 +224,7 @@ public class MainPanelController {
         System.out.println("MovieRepository instance (addMovieToDatabase): " + movieService.getMovieRepository());
 
         // The rest of your method
+        System.out.println("MovieRepository instance: " + movieService.getMovieRepository());
         movieRepository.addMovieToDatabase();
 
     }

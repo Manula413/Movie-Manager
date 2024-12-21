@@ -97,7 +97,9 @@ public class MovieService {
             throw e;
         }
     }
-    public static void setMovieDetails(MovieDetails movieDetails) {
+
+
+    public static void setMovieData(MovieDetails movieDetails) {
         mainPanelController.setMovieTitle(movieDetails.getTitle());
         mainPanelController.setMovieYear(movieDetails.getYear());
         mainPanelController.setMovieGenre(movieDetails.getGenre());
@@ -107,6 +109,10 @@ public class MovieService {
         mainPanelController.setMoviePoster(movieDetails.getPosterUrl());
         mainPanelController.setTvSeriesDetails(movieDetails.getType(), movieDetails.getTotalSeasons());
     }
+
+
+
+
 
     private static String[] parseMovieInput(String movieInput) {
         String[] parts = movieInput.split("\\s(?=\\d{4}$)");
