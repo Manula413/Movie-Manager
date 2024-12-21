@@ -39,6 +39,9 @@ public class MovieRepository {
     public void addMovieToDatabase() {
         System.out.println("Worked till here 1");
 
+        String status = this.movieStatus;  // Use instance variable
+        String rating = this.userRating;   // Use instance variable
+
         // Check if movieDetails is not null
         if (movieDetails != null) {
             // Retrieve movie details
@@ -73,10 +76,6 @@ public class MovieRepository {
                     System.out.println("User " + userId + " already has the movie " + title + " in their list.");
                     return;
                 }
-
-                // Step 3: Use the instance variable movieStatus (set in saveMovie)
-                String status = this.movieStatus;  // Use instance variable
-                String rating = this.userRating;   // Use instance variable
 
                 // Debugging output
                 System.out.println("Movie Status: " + status);

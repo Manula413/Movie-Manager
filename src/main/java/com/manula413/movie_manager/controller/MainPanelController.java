@@ -218,7 +218,8 @@ public class MainPanelController {
             return;
         }
         // Call the service to save data
-        movieService.saveMovieData(movieStatus, userRating);
+        //movieService.saveMovieData(movieStatus, userRating);
+        movieRepository.saveMovie(movieStatus, userRating);
 
         movieRepository.addMovieToDatabase();
 
