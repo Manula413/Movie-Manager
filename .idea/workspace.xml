@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Fixed: addMovieToDatabase">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/style2.css" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Added new css file">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController1.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/WatchListRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/WatchListServices.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -544,7 +546,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734780878031</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Added new css file">
+      <option name="closed" value="true" />
+      <created>1734844936140</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1734844936140</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -559,7 +569,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP - Added user Rating to Database" />
     <MESSAGE value="WIP - Fixed minor issues when movie is not found." />
     <MESSAGE value="Improve UI elements when the movie is not found" />
     <MESSAGE value="Improve UI elements when the movie is not found. &#10;Fixed Code issues" />
@@ -584,6 +593,7 @@
     <MESSAGE value="Fixed issue: movieDetails being null in repository" />
     <MESSAGE value="Minor changes" />
     <MESSAGE value="Fixed: addMovieToDatabase" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed: addMovieToDatabase" />
+    <MESSAGE value="Added new css file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new css file" />
   </component>
 </project>
