@@ -1,0 +1,112 @@
+/* General Styles */
+.root {
+    -fx-font-family: 'Cambria';
+    -fx-background-color: #121212;
+    -fx-text-fill: white;
+}
+
+/* Search Box */
+.search-box {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #444;
+    -fx-border-width: 1px;
+}
+
+/* Right Bar */
+.right-bar {
+    -fx-background-color: #232323;
+    -fx-padding: 20px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #333;
+    -fx-border-color: #555;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: white;
+    -fx-padding: 10px 20px;
+}
+
+.button:hover {
+    -fx-background-color: #444;
+}
+
+.right-bar-button {
+    -fx-background-color: #444;
+    -fx-border-color: #666;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.right-bar-button:hover {
+    -fx-background-color: #555;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #555;
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+}
+
+.text-field:focused {
+    -fx-border-color: #777;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: white;
+}
+
+/* TableView */
+.table-view {
+    -fx-background-color: #1a1a1a;
+    -fx-border-color: #333;
+    -fx-table-cell-border-color: #444;
+    -fx-control-inner-background: #1a1a1a;
+    -fx-control-inner-background-alt: #232323;
+    -fx-text-fill: white;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #2a2a2a;
+}
+
+/* Radio Buttons */
+.radio-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.radio-button-bg {
+    -fx-background-color: #1f1f1f;
+    -fx-border-color: #555;
+}
+
+.radio-button-bg:focused {
+    -fx-border-color: #777;
+}
+
+/* Line */
+.line {
+    -fx-stroke: #444;
+}
+
+/* Shadow */
+.shadow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 3, 3);
+}
+
+/* Specific Customizations */
+.search-button {
+    -fx-background-color: #444;
+    -fx-border-color: #666;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.search-button:hover {
+    -fx-background-color: #555;
+}
