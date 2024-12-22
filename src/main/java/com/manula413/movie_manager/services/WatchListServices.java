@@ -12,8 +12,28 @@ public class WatchListServices {
     public ObservableList<MovieDetails> getWatchedMoviesDetails(String type) {
         return repository.fetchWatchedMovies(type);
     }
+    public ObservableList<MovieDetails> getWatchLaterMoviesDetails(String type) {
+        return repository.fetchWatchLaterMovies(type);
+    }
 
     public void showMovieDetails(MovieDetails movie) {
         System.out.println("Showing details for movie: " + movie.getTitle());
+    }
+
+    public static String capitalizeWords(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        String[] words = input.split(" ");
+        StringBuilder capitalized = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                capitalized.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase())
+                        .append(" ");
+            }
+        }
+        return capitalized.toString().trim();
     }
 }
