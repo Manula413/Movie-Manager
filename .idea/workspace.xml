@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Refactored WatchedListController">
-      <change afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Refactored WatchlaterListController&#10;Added TODO.md">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/WatchListRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/WatchListRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/WatchListServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/services/WatchListServices.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/database/MovieRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/signUp.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/signUp.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -568,7 +561,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734876234493</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="Refactored WatchlaterListController&#10;Added TODO.md">
+      <option name="closed" value="true" />
+      <created>1734877910217</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1734877910217</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -583,7 +584,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Improve UI elements when the movie is not found" />
     <MESSAGE value="Improve UI elements when the movie is not found. &#10;Fixed Code issues" />
     <MESSAGE value="WIP: Added 2 new GUI and controller classes" />
     <MESSAGE value="WIP: Configured the Nav buttons" />
@@ -608,6 +608,7 @@
     <MESSAGE value="Fixed: addMovieToDatabase" />
     <MESSAGE value="Added new css file" />
     <MESSAGE value="Refactored WatchedListController" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored WatchedListController" />
+    <MESSAGE value="Refactored WatchlaterListController&#10;Added TODO.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored WatchlaterListController&#10;Added TODO.md" />
   </component>
 </project>

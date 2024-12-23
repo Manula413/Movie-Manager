@@ -36,81 +36,58 @@ public class MovieRepository {
         return this.movieDetails;
     }
 
-    public void addMovieToDatabase() {
-        System.out.println("Worked till here 1");
+    public String addMovieToDatabase() {
+        StringBuilder feedback = new StringBuilder();
 
-        String status = this.movieStatus;  // Use instance variable
-        String rating = this.userRating;   // Use instance variable
+        if (movieDetails == null) {
+            return "Movie details are missing. Please provide valid movie information.";
+        }
 
-        // Check if movieDetails is not null
-        if (movieDetails != null) {
-            // Retrieve movie details
-            String title = movieDetails.getTitle();
-            String year = movieDetails.getYear();
-            String genre = getFirstTwoGenres(movieDetails.getGenre());
-            String imdbRating = movieDetails.getImdbRating();
-            String rtRating = movieDetails.getRtRating();
-            String type = movieDetails.getType();
-            String totalSeasons = movieDetails.getTotalSeasons();
+        String status = this.movieStatus;
+        String rating = this.userRating;
 
-            // Debugging output
-            System.out.println("Worked till here, movie title: " + title);
+        // Retrieve movie details
+        String title = movieDetails.getTitle();
+        String year = movieDetails.getYear();
+        String genre = getFirstTwoGenres(movieDetails.getGenre());
+        String imdbRating = movieDetails.getImdbRating();
+        String rtRating = movieDetails.getRtRating();
+        String type = movieDetails.getType();
+        String totalSeasons = movieDetails.getTotalSeasons();
 
-            // Database connection setup
-            DatabaseConnection connectNow = new DatabaseConnection();
-            try (Connection connectDB = connectNow.getConnection()) {
-                // Normalize movie name by trimming and converting to lowercase
-                title = title.trim().toLowerCase();
+        try (Connection connectDB = new DatabaseConnection().getConnection()) {
+            // Normalize movie name
+            title = title.trim().toLowerCase();
 
-                // Step 1: Check if the movie exists in the database or add it if missing
-                int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
-
-                // If movieId is -1, it means insertion or retrieval failed
-                if (movieId == -1) {
-                    System.out.println("Failed to retrieve or insert movie: " + title);
-                    return;
-                }
-
-                // Step 2: Check if the user already has this movie in their list
-                if (isMovieInUserList(connectDB, Integer.parseInt(userId), movieId)) {
-                    System.out.println("User " + userId + " already has the movie " + title + " in their list.");
-                    return;
-                }
-
-                // Debugging output
-                System.out.println("Movie Status: " + status);
-                System.out.println("User Rating: " + rating);
-
-                if (status == null) {
-                    System.out.println("Invalid status selection. Please select either 'watched' or 'watch later'.");
-                    return;
-                }
-
-                // Default comment (can be customized or taken from a user input field)
-                String uRating = this.userRating;  // Use instance variable
-
-                // Step 4: Insert the user movie entry into the database
-                boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, uRating, status);
-                if (inserted) {
-                    System.out.println("User " + userId + " successfully added movie " + title + " with status " + status);
-                } else {
-                    System.out.println("Failed to add movie " + title + " for user " + userId);
-                }
-
-            } catch (SQLException e) {
-                // Handle SQL exception properly
-                System.out.println("Database error occurred: " + e.getMessage());
-                e.printStackTrace(); // Print stack trace for debugging
-            } catch (Exception e) {
-                // Catch any other exceptions
-                System.out.println("An unexpected error occurred: " + e.getMessage());
-                e.printStackTrace();
+            // Step 1: Check or insert movie
+            int movieId = getOrInsertMovie(connectDB, title, year, genre, type, imdbRating, rtRating, totalSeasons);
+            if (movieId == -1) {
+                return "An error occurred while processing the movie. Please try again later.";
             }
-        } else {
-            System.out.println("Movie details are null. Cannot add to database.");
+
+            // Step 2: Check if the movie already exists in the user's list
+            if (isMovieInUserList(connectDB, Integer.parseInt(userId), movieId)) {
+                return "This movie is already in your list.";
+            }
+
+            // Step 3: Validate status
+            if (status == null || (!status.equalsIgnoreCase("watched") && !status.equalsIgnoreCase("watchLater"))) {
+                return "Invalid status selected. Please choose either 'watched' or 'watch later'.";
+            }
+
+            // Step 4: Add the movie to the user's list
+            boolean inserted = addUserMovie(connectDB, Integer.parseInt(userId), movieId, rating, status);
+            if (inserted) {
+                return "Movie successfully added to your list!";
+            } else {
+                return "Failed to add the movie to your list. Please try again.";
+            }
+        } catch (SQLException e) {
+            return "A database error occurred. Please contact support.";
+        } catch (Exception e) {
+            return "An unexpected error occurred. Please try again.";
         }
     }
-
 
     private static int getOrInsertMovie(Connection connectDB, String movieName, String movieYear, String genre,
                                         String type, String imdbRating, String rtRating, String seasons) throws SQLException {

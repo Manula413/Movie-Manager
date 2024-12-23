@@ -4,6 +4,8 @@ import com.manula413.movie_manager.database.MovieRepository;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -79,6 +81,9 @@ public class MainPanelController {
 
     @FXML
     private Label tvSeriesLabel;
+
+    @FXML
+    private Label userFeedbackLabel;
 
     @FXML
     private Label seasonsLabel;
@@ -221,7 +226,8 @@ public class MainPanelController {
         //movieService.saveMovieData(movieStatus, userRating);
         movieRepository.saveMovie(movieStatus, userRating);
 
-        movieRepository.addMovieToDatabase();
+        String feedback = movieRepository.addMovieToDatabase(); // Capture feedback message
+        displayFeedback(feedback); // Update the label with feedback
 
     }
 
@@ -229,7 +235,7 @@ public class MainPanelController {
         // Get the selected toggle from the group
 
         Toggle selectedToggle = watchListRadioGroup.getSelectedToggle();
-       // System.out.println("Selected Toggle: " + selectedToggle);
+        System.out.println("Selected Toggle: " + selectedToggle);
 
         if (selectedToggle == watchLaterRadioButton) {
             return "watchLater"; // Watch Later selected
@@ -245,6 +251,32 @@ public class MainPanelController {
         String selectedRating = userRatingComboBox.getValue();
         return (selectedRating != null) ? selectedRating : null;
     }
+
+    public void displayFeedback(String feedback) {
+        // Adjust text color based on the feedback message type
+        if (feedback.toLowerCase().contains("successfully added")) {
+            userFeedbackLabel.setStyle("-fx-text-fill: lightgreen;"); // Light green for success
+        } else if (feedback.toLowerCase().contains("already in your list")) {
+            userFeedbackLabel.setStyle("-fx-text-fill: orange;"); // Orange for warnings
+        } else if (feedback.toLowerCase().contains("invalid status") || feedback.toLowerCase().contains("failed to add")) {
+            userFeedbackLabel.setStyle("-fx-text-fill: yellow;"); // Yellow for user input issues
+        } else if (feedback.toLowerCase().contains("database error") || feedback.toLowerCase().contains("unexpected error")) {
+            userFeedbackLabel.setStyle("-fx-text-fill: red;"); // Red for errors
+        } else {
+            userFeedbackLabel.setStyle("-fx-text-fill: white;"); // Default color for neutral messages
+        }
+
+        userFeedbackLabel.setText(feedback); // Set the feedback text
+        userFeedbackLabel.setVisible(true); // Make the label visible
+
+        // Hide the label after 3 seconds
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> userFeedbackLabel.setVisible(false));
+        pause.play();
+    }
+
+
+
 
     /*
     Navigation Buttons
