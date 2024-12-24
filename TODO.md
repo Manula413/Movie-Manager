@@ -7,9 +7,12 @@
 
 ## Add Movie Page
 - [ ] UI improvements
+- [ ] Realtime search display 
+- [x] Add User Feedback Message
 
 ## Watched List & Watch Later List
 - [ ] UI Improvements 
+- [ ] Implement Filters - User rating, Imdb Rating, Genre
 - [ ] Implement Update Feature
 - [ ] Implement Delete Feature
 - [ ] Implement Action Column 
@@ -22,8 +25,16 @@
 - [ ] Implement Insert / Change  API key Feature
 - [ ] Decide Other settings to implement
 
+## Movie Suggestions page
+- [ ] Design layout to display movies in card format
+- [ ] Suggest movies based on recent watch list
+- [ ] Find movies with Genre and ratings
+-
+
 ## Other
+- [ ] Convert into SQLite
 - [ ] Create the Exe file
+- [ ] Create a Movie Suggestion system
 
 
 ## Bugs

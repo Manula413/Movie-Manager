@@ -144,7 +144,9 @@ public class LoginController {
                         // Proceed to the main panel
                         Stage stage = (Stage) loginMessageLabel.getScene().getWindow();
                         MainPanelController mainpanel = new MainPanelController();
-                        mainpanel.loadMainPanelDefault(stage);
+                      //  mainpanel.loadMainPanelDefault(stage);
+                        mainpanel.loadMainPanelWithSidebar(stage);
+
 
                     } else {
                         loginMessageLabel.setText("Invalid Username or Password!");

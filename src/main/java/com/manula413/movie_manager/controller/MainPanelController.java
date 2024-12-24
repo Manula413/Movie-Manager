@@ -1,10 +1,13 @@
 package com.manula413.movie_manager.controller;
 
+import com.manula413.movie_manager.controller.SidebarController;
 import com.manula413.movie_manager.database.MovieRepository;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
 import javafx.animation.PauseTransition;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -57,6 +60,9 @@ public class MainPanelController {
 
     @FXML
     private Button watchLaterNavButton;
+
+    @FXML
+    private Button hideMenuButton;
 
     @FXML
     private Label displayNameLabel;
@@ -116,7 +122,6 @@ public class MainPanelController {
 
     }
 
-
     public void loadMainPanelDefault(Stage stage) throws IOException {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
@@ -131,6 +136,38 @@ public class MainPanelController {
         stage.setScene(scene);
         stage.show();
     }
+
+
+    public void loadMainPanelWithSidebar(Stage stage) throws IOException {
+        // Load the main panel
+        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
+        AnchorPane mainPanel = mainLoader.load();
+
+        // Load the sidebar
+        FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
+        VBox sidebar = sidebarLoader.load(); // Ensure this matches the root element in sidebar.fxml
+
+        // Combine them in a BorderPane or other suitable layout
+        BorderPane rootLayout = new BorderPane();
+        rootLayout.setCenter(mainPanel); // Main area
+        rootLayout.setLeft(sidebar);     // Sidebar
+
+        // Initialize controllers
+        MainPanelController mainController = mainLoader.getController();
+        SidebarController sidebarController = sidebarLoader.getController();
+
+        // Pass data to controllers if needed
+        String displayName = Session.getInstance().getDisplayName();
+        mainController.setDisplayNameLabel(displayName);
+
+        // Create and show the scene
+        Scene scene = new Scene(rootLayout);
+        stage.setTitle("Main Application");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
 
     public void navigateTo(String fxmlPath, String title, ActionEvent event) {
         try {
