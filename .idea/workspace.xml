@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Added UserFeedback for Main panel">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/SidebarController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/sidebar.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sidebar.css" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Added sidebar.fxml&#10;Added SidebarController.java&#10;Added sidebar.css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/sidebar.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/sidebar.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,33 +63,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainPanelController.executor": "Run",
-    "Application.MovieManagerApplication.executor": "Run",
-    "Application.MovieScrapper.executor": "Run",
-    "Application.TestApp.executor": "Run",
-    "Application.Unnamed.executor": "Run",
-    "Application.test.executor": "Run",
-    "Maven.Movie_Manager [clean].executor": "Run",
-    "Maven.Movie_Manager [compile].executor": "Run",
-    "Maven.Movie_Manager [install].executor": "Run",
-    "Maven.Movie_Manager [test].executor": "Run",
-    "Maven.Movie_Manager [validate].executor": "Run",
-    "Maven.Movie_Manager [verify].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/manul/Documents/Projects/Movie_Manager/src/main/resources/com/manula413/movie_manager",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.44942528",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainPanelController.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MovieManagerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MovieScrapper.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestApp.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Application.test.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [compile].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [validate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Movie_Manager [verify].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/manul/Documents/Projects/Movie_Manager/src/main/resources/com/manula413/movie_manager&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.44942528&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\manul\Documents\Projects\Movie_Manager\src\main\resources\com\manula413\movie_manager" />
@@ -189,14 +185,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732398352838</updated>
-    </task>
-    <task id="LOCAL-00001" summary="First Commit">
-      <option name="closed" value="true" />
-      <created>1732408723973</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1732408723973</updated>
     </task>
     <task id="LOCAL-00002" summary="Added signUp.fxml and signupController.java">
       <option name="closed" value="true" />
@@ -582,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734945080853</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Added sidebar.fxml&#10;Added SidebarController.java&#10;Added sidebar.css">
+      <option name="closed" value="true" />
+      <created>1735048327335</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1735048327335</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -597,7 +593,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP: Added 2 new GUI and controller classes" />
     <MESSAGE value="WIP: Configured the Nav buttons" />
     <MESSAGE value="WIP: Coding watchedListController" />
     <MESSAGE value="WIP: Added setupTableColumns and getWatchedListFromDB methods. Code contain Errors" />
@@ -622,6 +617,7 @@
     <MESSAGE value="Refactored WatchedListController" />
     <MESSAGE value="Refactored WatchlaterListController&#10;Added TODO.md" />
     <MESSAGE value="Added UserFeedback for Main panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added UserFeedback for Main panel" />
+    <MESSAGE value="Added sidebar.fxml&#10;Added SidebarController.java&#10;Added sidebar.css" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added sidebar.fxml&#10;Added SidebarController.java&#10;Added sidebar.css" />
   </component>
 </project>

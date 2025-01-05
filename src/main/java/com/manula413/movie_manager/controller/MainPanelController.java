@@ -6,8 +6,8 @@ import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.MovieService;
 import com.manula413.movie_manager.util.Session;
 import javafx.animation.PauseTransition;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.animation.TranslateTransition;
+import javafx.scene.layout.*;
 import javafx.util.Duration;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,10 +19,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -142,29 +147,49 @@ public class MainPanelController {
         // Load the main panel
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
+        mainPanel.setPrefSize(1300, 800); // Fixed size for the main panel
 
         // Load the sidebar
         FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
-        VBox sidebar = sidebarLoader.load(); // Ensure this matches the root element in sidebar.fxml
+        VBox sidebar = sidebarLoader.load();
+        sidebar.setPrefWidth(100); // Fixed width
+        sidebar.setMaxWidth(100); // Prevent resizing
+        sidebar.setMinWidth(100); // Prevent shrinking
+        sidebar.setTranslateX(-100); // Initially hide the sidebar
 
-        // Combine them in a BorderPane or other suitable layout
-        BorderPane rootLayout = new BorderPane();
-        rootLayout.setCenter(mainPanel); // Main area
-        rootLayout.setLeft(sidebar);     // Sidebar
+        // Wrap sidebar in a Pane to constrain its size in StackPane
+        Pane sidebarContainer = new Pane(sidebar);
+        sidebarContainer.setPrefSize(100, 800); // Match sidebar size
 
-        // Initialize controllers
-        MainPanelController mainController = mainLoader.getController();
-        SidebarController sidebarController = sidebarLoader.getController();
+        // Add a toggle button to the main panel
+        Button toggleSidebarButton = new Button("☰");
+        toggleSidebarButton.setOnAction(event -> toggleSidebar(sidebar));
+        mainPanel.getChildren().add(toggleSidebarButton);
+        AnchorPane.setTopAnchor(toggleSidebarButton, 10.0);
+        AnchorPane.setLeftAnchor(toggleSidebarButton, 10.0);
 
-        // Pass data to controllers if needed
-        String displayName = Session.getInstance().getDisplayName();
-        mainController.setDisplayNameLabel(displayName);
+        // Create a StackPane to overlay the sidebar on top of the main panel
+        StackPane rootLayout = new StackPane();
+        rootLayout.getChildren().addAll(mainPanel, sidebarContainer);
+
+        // Align the sidebar to the left
+        StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
 
         // Create and show the scene
-        Scene scene = new Scene(rootLayout);
+        Scene scene = new Scene(rootLayout, 1300, 800); // Match the main panel size
         stage.setTitle("Main Application");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // Toggle sidebar visibility with animation
+    private void toggleSidebar(VBox sidebar) {
+        double currentTranslateX = sidebar.getTranslateX();
+        double targetTranslateX = (currentTranslateX == 0) ? -100 : 0; // Adjust for sidebar width (100px)
+
+        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebar);
+        transition.setToX(targetTranslateX);
+        transition.play();
     }
 
 

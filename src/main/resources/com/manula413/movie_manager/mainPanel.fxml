@@ -25,7 +25,6 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="94.0" prefWidth="363.0">
                      <children>
-                        <Button fx:id="hideMenuButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" text="Button" />
                         <Label alignment="CENTER" prefHeight="36.0" prefWidth="291.0" styleClass="shadow" stylesheets="@../../../style.css" text="Movie Database" textFill="WHITE">
                            <font>
                               <Font name="Cambria Bold" size="40.0" />
