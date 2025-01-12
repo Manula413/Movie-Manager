@@ -152,14 +152,14 @@ public class MainPanelController {
         // Load the sidebar
         FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
         VBox sidebar = sidebarLoader.load();
-        sidebar.setPrefWidth(100); // Fixed width
-        sidebar.setMaxWidth(100); // Prevent resizing
-        sidebar.setMinWidth(100); // Prevent shrinking
-        sidebar.setTranslateX(-100); // Initially hide the sidebar
+        sidebar.setPrefWidth(200); // Fixed width
+        sidebar.setMaxWidth(200); // Prevent resizing
+        sidebar.setMinWidth(200); // Prevent shrinking
+        sidebar.setTranslateX(-200); // Initially hide the sidebar
 
         // Wrap sidebar in a Pane to constrain its size in StackPane
         Pane sidebarContainer = new Pane(sidebar);
-        sidebarContainer.setPrefSize(100, 800); // Match sidebar size
+        sidebarContainer.setPrefSize(200, 800); // Match sidebar size
 
         // Add a toggle button to the main panel
         Button toggleSidebarButton = new Button("☰");
@@ -185,7 +185,7 @@ public class MainPanelController {
     // Toggle sidebar visibility with animation
     private void toggleSidebar(VBox sidebar) {
         double currentTranslateX = sidebar.getTranslateX();
-        double targetTranslateX = (currentTranslateX == 0) ? -100 : 0; // Adjust for sidebar width (100px)
+        double targetTranslateX = (currentTranslateX == 0) ? -200 : 0; // Adjust for sidebar width (100px)
 
         TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebar);
         transition.setToX(targetTranslateX);
