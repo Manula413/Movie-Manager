@@ -147,48 +147,54 @@ public class MainPanelController {
         // Load the main panel
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
-        mainPanel.setPrefSize(1300, 800); // Fixed size for the main panel
+        mainPanel.setPrefSize(1300, 800);
 
         // Load the sidebar
         FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
         VBox sidebar = sidebarLoader.load();
-        sidebar.setPrefWidth(200); // Fixed width
-        sidebar.setMaxWidth(200); // Prevent resizing
-        sidebar.setMinWidth(200); // Prevent shrinking
-        sidebar.setTranslateX(-200); // Initially hide the sidebar
+        sidebar.setPrefWidth(200);
 
-        // Wrap sidebar in a Pane to constrain its size in StackPane
+        // Wrap sidebar in a Pane
         Pane sidebarContainer = new Pane(sidebar);
-        sidebarContainer.setPrefSize(200, 800); // Match sidebar size
+        sidebarContainer.setPrefSize(300, 800);
+        sidebarContainer.setTranslateX(-300);  // Hidden by default
+        sidebarContainer.setMouseTransparent(true); // Prevents blocking UI when hidden
 
-        // Add a toggle button to the main panel
+        // Toggle Button
         Button toggleSidebarButton = new Button("☰");
-        toggleSidebarButton.setOnAction(event -> toggleSidebar(sidebar));
-        mainPanel.getChildren().add(toggleSidebarButton);
+        toggleSidebarButton.setStyle("-fx-font-size: 18px;");
+        toggleSidebarButton.setOnAction(event -> toggleSidebar(sidebarContainer));
+
+        // Place the button on the main panel
         AnchorPane.setTopAnchor(toggleSidebarButton, 10.0);
         AnchorPane.setLeftAnchor(toggleSidebarButton, 10.0);
+        mainPanel.getChildren().add(toggleSidebarButton);
 
-        // Create a StackPane to overlay the sidebar on top of the main panel
+        // StackPane to layer components
         StackPane rootLayout = new StackPane();
         rootLayout.getChildren().addAll(mainPanel, sidebarContainer);
 
-        // Align the sidebar to the left
+        // Align sidebar to the left
         StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
 
-        // Create and show the scene
-        Scene scene = new Scene(rootLayout, 1300, 800); // Match the main panel size
+        // Scene setup
+        Scene scene = new Scene(rootLayout, 1300, 800);
         stage.setTitle("Main Application");
         stage.setScene(scene);
         stage.show();
     }
 
-    // Toggle sidebar visibility with animation
-    private void toggleSidebar(VBox sidebar) {
-        double currentTranslateX = sidebar.getTranslateX();
-        double targetTranslateX = (currentTranslateX == 0) ? -200 : 0; // Adjust for sidebar width (100px)
+    // Sidebar Toggle with Mouse Event Handling
+    private void toggleSidebar(Pane sidebarContainer) {
+        double currentX = sidebarContainer.getTranslateX();
+        double targetX = (currentX == 0) ? -200 : 0;
 
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebar);
-        transition.setToX(targetTranslateX);
+        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebarContainer);
+        transition.setToX(targetX);
+        transition.setOnFinished(event -> {
+            // Disable mouse clicks when hidden
+            sidebarContainer.setMouseTransparent(targetX == -200);
+        });
         transition.play();
     }
 

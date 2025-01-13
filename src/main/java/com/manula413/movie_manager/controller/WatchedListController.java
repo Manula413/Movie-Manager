@@ -3,17 +3,23 @@ package com.manula413.movie_manager.controller;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.WatchListServices;
 import com.manula413.movie_manager.util.Session;
+import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -43,6 +49,7 @@ public class WatchedListController implements Initializable {
         setupRadioButtonListeners();
         updateTable("movie");
     }
+
 
     private void setupRadioButtonListeners() {
         ToggleGroup toggleGroup = tvSeriesRadioButton.getToggleGroup();
@@ -139,16 +146,78 @@ public class WatchedListController implements Initializable {
 
     public void navigateTo(String fxmlPath, String title, ActionEvent event) {
         try {
+            // Get the current stage
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Load the target FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane panel = loader.load();
-            Scene scene = new Scene(panel, 1300, 800);
+
+            // Load the sidebar
+            FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
+            VBox sidebar = sidebarLoader.load();
+
+            // Wrap the sidebar in a Pane for animation
+            Pane sidebarContainer = new Pane(sidebar);
+            sidebarContainer.setPrefWidth(300);
+            sidebarContainer.setPrefHeight(800);
+            sidebarContainer.setTranslateX(-300); // Hidden by default
+            sidebarContainer.setMouseTransparent(true); // Prevents blocking clicks when hidden
+
+            // Toggle Button
+            Button toggleSidebarButton = new Button("☰");
+            toggleSidebarButton.setStyle("-fx-font-size: 18px;");
+            toggleSidebarButton.setOnAction(e -> toggleSidebar(sidebarContainer));
+
+            // Position the toggle button
+            AnchorPane.setTopAnchor(toggleSidebarButton, 10.0);
+            AnchorPane.setLeftAnchor(toggleSidebarButton, 10.0);
+            panel.getChildren().add(toggleSidebarButton);
+
+            // StackPane to layer components
+            StackPane rootLayout = new StackPane();
+            rootLayout.getChildren().addAll(panel, sidebarContainer);
+            StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
+
+            // Handle outside click to hide sidebar
+            handleOutsideClickToHideSidebar(rootLayout, sidebarContainer);
+
+            // Create the scene and set the stage
+            Scene scene = new Scene(rootLayout, 1300, 800);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Sidebar Toggle with Mouse Event Handling
+    private void toggleSidebar(Pane sidebarContainer) {
+        double currentX = sidebarContainer.getTranslateX();
+        double targetX = (currentX == 0) ? -200 : 0;
+
+        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebarContainer);
+        transition.setToX(targetX);
+        transition.setOnFinished(event -> {
+            // Disable mouse clicks when hidden
+            sidebarContainer.setMouseTransparent(targetX == -200);
+        });
+        transition.play();
+    }
+
+    private void handleOutsideClickToHideSidebar(StackPane rootLayout, Pane sidebarContainer) {
+        rootLayout.setOnMouseClicked(event -> {
+            // Check if the click is outside the sidebar
+            if (!sidebarContainer.contains(event.getSceneX(), event.getSceneY())) {
+                // Hide the sidebar by translating it to the left (out of view)
+                TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebarContainer);
+                transition.setToX(-200); // Moves the sidebar out of view
+                transition.setOnFinished(e -> sidebarContainer.setMouseTransparent(true)); // Disable interaction when hidden
+                transition.play();
+            }
+        });
     }
 
     public void addMoviesNavButtonAction(ActionEvent event) {
