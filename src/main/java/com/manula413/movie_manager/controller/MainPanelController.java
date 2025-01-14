@@ -70,6 +70,9 @@ public class MainPanelController {
     private Button hideMenuButton;
 
     @FXML
+    private Button btnSidebar;
+
+    @FXML
     private Label displayNameLabel;
 
     @FXML
@@ -141,40 +144,35 @@ public class MainPanelController {
         stage.setScene(scene);
         stage.show();
     }
-
+    public Button getBtnSidebar() {
+        return btnSidebar;
+    }
 
     public void loadMainPanelWithSidebar(Stage stage) throws IOException {
-        // Load the main panel
+        // After loading the main panel
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
-        mainPanel.setPrefSize(1300, 800);
+
+        // Access the controller to get btnSidebar
+        MainPanelController mainController = mainLoader.getController();
+        Button btnSidebar = mainController.getBtnSidebar();  // Assume getBtnSidebar() is created
 
         // Load the sidebar
         FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
         VBox sidebar = sidebarLoader.load();
-        sidebar.setPrefWidth(200);
 
-        // Wrap sidebar in a Pane
+        // Sidebar container
         Pane sidebarContainer = new Pane(sidebar);
         sidebarContainer.setPrefSize(300, 800);
-        sidebarContainer.setTranslateX(-300);  // Hidden by default
-        sidebarContainer.setMouseTransparent(true); // Prevents blocking UI when hidden
+        sidebarContainer.setTranslateX(-300);
+        sidebarContainer.setMouseTransparent(true);
 
-        // Toggle Button
-        Button toggleSidebarButton = new Button("☰");
-        toggleSidebarButton.setStyle("-fx-font-size: 18px;");
-        toggleSidebarButton.setOnAction(event -> toggleSidebar(sidebarContainer));
+        // Bind toggle action to existing button
+        btnSidebar.setOnAction(event -> toggleSidebar(sidebarContainer));
 
-        // Place the button on the main panel
-        AnchorPane.setTopAnchor(toggleSidebarButton, 10.0);
-        AnchorPane.setLeftAnchor(toggleSidebarButton, 10.0);
-        mainPanel.getChildren().add(toggleSidebarButton);
-
-        // StackPane to layer components
+        // StackPane setup
         StackPane rootLayout = new StackPane();
         rootLayout.getChildren().addAll(mainPanel, sidebarContainer);
-
-        // Align sidebar to the left
         StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
 
         // Scene setup
@@ -182,6 +180,7 @@ public class MainPanelController {
         stage.setTitle("Main Application");
         stage.setScene(scene);
         stage.show();
+
     }
 
     // Sidebar Toggle with Mouse Event Handling
@@ -218,7 +217,6 @@ public class MainPanelController {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     private void initialize() {

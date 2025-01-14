@@ -39,6 +39,9 @@ public class WatchedListController implements Initializable {
     @FXML
     private RadioButton moviesRadioButton;
 
+    @FXML
+    private Button btnSidebar;
+
     private final WatchListServices watchListServices = new WatchListServices();
 
     @Override
@@ -48,6 +51,10 @@ public class WatchedListController implements Initializable {
         setDisplayNameLabel(displayName);
         setupRadioButtonListeners();
         updateTable("movie");
+    }
+
+    public Button getBtnSidebar() {
+        return btnSidebar;
     }
 
 
@@ -153,36 +160,35 @@ public class WatchedListController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane panel = loader.load();
 
+            // Access controller to get btnSidebar
+            Object controller = loader.getController();
+            Button btnSidebar = null;
+
+            if (controller instanceof MainPanelController) {
+                btnSidebar = ((MainPanelController) controller).getBtnSidebar();
+            }
+
             // Load the sidebar
             FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
             VBox sidebar = sidebarLoader.load();
 
-            // Wrap the sidebar in a Pane for animation
+            // Sidebar container
             Pane sidebarContainer = new Pane(sidebar);
-            sidebarContainer.setPrefWidth(300);
-            sidebarContainer.setPrefHeight(800);
-            sidebarContainer.setTranslateX(-300); // Hidden by default
-            sidebarContainer.setMouseTransparent(true); // Prevents blocking clicks when hidden
+            sidebarContainer.setPrefSize(300, 800);
+            sidebarContainer.setTranslateX(-300);
+            sidebarContainer.setMouseTransparent(true);
 
-            // Toggle Button
-            Button toggleSidebarButton = new Button("☰");
-            toggleSidebarButton.setStyle("-fx-font-size: 18px;");
-            toggleSidebarButton.setOnAction(e -> toggleSidebar(sidebarContainer));
+            // Bind toggle action to existing button
+            if (btnSidebar != null) {
+                btnSidebar.setOnAction(e -> toggleSidebar(sidebarContainer));
+            }
 
-            // Position the toggle button
-            AnchorPane.setTopAnchor(toggleSidebarButton, 10.0);
-            AnchorPane.setLeftAnchor(toggleSidebarButton, 10.0);
-            panel.getChildren().add(toggleSidebarButton);
-
-            // StackPane to layer components
+            // StackPane setup
             StackPane rootLayout = new StackPane();
             rootLayout.getChildren().addAll(panel, sidebarContainer);
             StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
 
-            // Handle outside click to hide sidebar
-            handleOutsideClickToHideSidebar(rootLayout, sidebarContainer);
-
-            // Create the scene and set the stage
+            // Scene setup
             Scene scene = new Scene(rootLayout, 1300, 800);
             stage.setTitle(title);
             stage.setScene(scene);
@@ -231,4 +237,6 @@ public class WatchedListController implements Initializable {
     public void watchLaterNavButtonAction(ActionEvent event) {
         navigateTo("/com/manula413/movie_manager/watchLaterList.fxml", "Watch Later List", event);
     }
+
+
 }

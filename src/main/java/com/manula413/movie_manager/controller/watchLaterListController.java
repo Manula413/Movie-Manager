@@ -36,6 +36,9 @@ public class watchLaterListController implements Initializable {
     @FXML
     private RadioButton moviesRadioButton;
 
+    @FXML
+    private Button btnSidebar;
+
     private final WatchListServices watchListServices = new WatchListServices();
 
     @Override
@@ -58,6 +61,10 @@ public class watchLaterListController implements Initializable {
                 updateTable("series");
             }
         });
+    }
+
+    public Button getBtnSidebar() {
+        return btnSidebar;
     }
 
     private void setupTableColumns(boolean includeSeasons) {
