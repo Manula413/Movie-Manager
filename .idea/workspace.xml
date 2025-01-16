@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Added Hide sidebar option">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/SidebarUtil.java" afterDir="false" />
+    <list default="true" id="57ca9bd9-68fc-4b09-82ae-ab7f8a897fb2" name="Changes" comment="Added sidebar util class">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/NavigationHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/MainPanelController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/SidebarController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/SidebarController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/WatchedListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/controller/watchLaterListController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/mainPanel.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/SidebarUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/manula413/movie_manager/util/SidebarUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/sidebar.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/sidebar.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchLaterList.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/manula413/movie_manager/watchedList.fxml" afterDir="false" />
     </list>
@@ -190,14 +190,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732398352838</updated>
-    </task>
-    <task id="LOCAL-00005" summary="-Hashed Password&#10;-Fixed Issues">
-      <option name="closed" value="true" />
-      <created>1732507793135</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1732507793135</updated>
     </task>
     <task id="LOCAL-00006" summary="-Hashed Password&#10;-Fixed Issues">
       <option name="closed" value="true" />
@@ -583,7 +575,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736732669407</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="Added sidebar util class">
+      <option name="closed" value="true" />
+      <created>1736844860831</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1736844860832</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -598,7 +598,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="WIP: Added setupTableColumns and getWatchedListFromDB methods. Code contain Errors" />
     <MESSAGE value="WIP: Removed setupTableColumns and getWatchedListFromDB methods." />
     <MESSAGE value="WIP: Added getWatchedMoviesDetails method, setupTableColumns and helper methods to the WatchedListController" />
     <MESSAGE value="WIP: Improved WatchedListController and made few changes to MainPanelController" />
@@ -623,6 +622,7 @@
     <MESSAGE value="Added sidebar.fxml&#10;Added SidebarController.java&#10;Added sidebar.css" />
     <MESSAGE value="Updated Sidebar behaviour" />
     <MESSAGE value="Added Hide sidebar option" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Hide sidebar option" />
+    <MESSAGE value="Added sidebar util class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added sidebar util class" />
   </component>
 </project>

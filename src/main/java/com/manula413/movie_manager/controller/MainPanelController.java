@@ -120,127 +120,96 @@ public class MainPanelController {
     @FXML
     private ImageView rtLogoImageView;
 
+    private Pane sidebarContainer;
+
     private MovieDetails movieDetails;
 
     public MainPanelController() {
-        // Pass the current controller instance to MovieService
         this.movieService = new MovieService(this);
         this.movieRepository = new MovieRepository();
-
-
     }
 
-    public void loadMainPanelDefault(Stage stage) throws IOException {
-        FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
-        AnchorPane mainPanel = mainLoader.load();
-
-        MainPanelController mainController = mainLoader.getController();
-        String displayName = Session.getInstance().getDisplayName();
-
-        mainController.setDisplayNameLabel(displayName);
-
-        Scene scene = new Scene(mainPanel, 1300, 800);
-        stage.setTitle("Add Movie");
-        stage.setScene(scene);
-        stage.show();
-    }
-    public Button getBtnSidebar() {
-        return btnSidebar;
+    public void setSidebarContainer(Pane sidebarContainer) {
+        this.sidebarContainer = sidebarContainer;
+        attachSidebarBehavior();  // Ensure sidebar toggle is attached
     }
 
     public void loadMainPanelWithSidebar(Stage stage) throws IOException {
-        // After loading the main panel
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/mainPanel.fxml"));
         AnchorPane mainPanel = mainLoader.load();
-
-        // Access the controller to get btnSidebar
         MainPanelController mainController = mainLoader.getController();
-        Button btnSidebar = mainController.getBtnSidebar();  // Assume getBtnSidebar() is created
 
-        // Load the sidebar
         FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
         VBox sidebar = sidebarLoader.load();
 
-        // Sidebar container
         Pane sidebarContainer = new Pane(sidebar);
         sidebarContainer.setPrefSize(300, 800);
         sidebarContainer.setTranslateX(-300);
         sidebarContainer.setMouseTransparent(true);
 
-        // Bind toggle action to existing button
-        btnSidebar.setOnAction(event -> toggleSidebar(sidebarContainer));
+        mainController.setSidebarContainer(sidebarContainer);
 
-        // StackPane setup
         StackPane rootLayout = new StackPane();
         rootLayout.getChildren().addAll(mainPanel, sidebarContainer);
         StackPane.setAlignment(sidebarContainer, Pos.CENTER_LEFT);
 
-        // Scene setup
         Scene scene = new Scene(rootLayout, 1300, 800);
         stage.setTitle("Main Application");
         stage.setScene(scene);
         stage.show();
-
-    }
-
-    // Sidebar Toggle with Mouse Event Handling
-    private void toggleSidebar(Pane sidebarContainer) {
-        double currentX = sidebarContainer.getTranslateX();
-        double targetX = (currentX == 0) ? -200 : 0;
-
-        TranslateTransition transition = new TranslateTransition(Duration.millis(300), sidebarContainer);
-        transition.setToX(targetX);
-        transition.setOnFinished(event -> {
-            // Disable mouse clicks when hidden
-            sidebarContainer.setMouseTransparent(targetX == -200);
-        });
-        transition.play();
-    }
-
-
-
-    public void navigateTo(String fxmlPath, String title, ActionEvent event) {
-        try {
-            // Get the current stage
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Load the specified FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            AnchorPane panel = loader.load();
-
-            // Set the new scene
-            Scene scene = new Scene(panel, 1300, 800);
-            stage.setTitle(title);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
     private void initialize() {
-        // Populate the ComboBox with values
         userRatingComboBox.setItems(FXCollections.observableArrayList("Great", "Good", "Okay", "Mediocre", "Poor"));
-        userRatingComboBox.setValue("Great"); // Set a default value for the ComboBox (optional)
+        userRatingComboBox.setValue("Great");
 
-        // Set default radio button selection if none is selected
         if (watchListRadioGroup.getSelectedToggle() == null) {
-            watchListRadioGroup.selectToggle(watchedRadioButton);  // Default to 'Watched' if no radio button is selected
+            watchListRadioGroup.selectToggle(watchedRadioButton);
         }
 
-        // Listen for changes in the selected radio button
         watchListRadioGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == watchLaterRadioButton) {
-                // Disable ComboBox and set a default value when 'Watch Later' is selected
                 userRatingComboBox.setDisable(true);
-                userRatingComboBox.setValue("N/A");  // Ensure the value matches the ComboBox options
+                userRatingComboBox.setValue("N/A");
             } else {
-                // Enable ComboBox when the 'Watched' radio button is selected
                 userRatingComboBox.setDisable(false);
-                userRatingComboBox.setValue(null); // Optionally clear the value when enabling
+                userRatingComboBox.setValue(null);
             }
         });
+    }
+    private void attachSidebarBehavior() {
+        if (btnSidebar != null && sidebarContainer != null) {
+            btnSidebar.setOnAction(event -> toggleSidebar());
+        }
+    }
+
+    private void toggleSidebar() {
+        double targetX = (sidebarContainer.getTranslateX() == 0) ? -300 : 0;
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(300), sidebarContainer);
+        slide.setToX(targetX);
+        slide.play();
+
+        sidebarContainer.setMouseTransparent(targetX != 0);
+    }
+
+
+
+    public static class SidebarHelper {
+        public static void attachSidebarBehavior(Button btnSidebar, Pane sidebarContainer) {
+            btnSidebar.setOnAction(event -> toggleSidebar(sidebarContainer));
+        }
+
+        private static void toggleSidebar(Pane sidebarContainer) {
+            double targetX = (sidebarContainer.getTranslateX() == 0) ? -300 : 0;
+
+            TranslateTransition slide = new TranslateTransition(Duration.millis(300), sidebarContainer);
+            slide.setToX(targetX);
+            slide.play();
+
+            sidebarContainer.setMouseTransparent(targetX != 0);
+        }
     }
 
 
@@ -341,6 +310,28 @@ public class MainPanelController {
         pause.play();
     }
 
+
+
+
+
+    public void navigateTo(String fxmlPath, String title, ActionEvent event) {
+        try {
+            // Get the current stage
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Load the specified FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            AnchorPane panel = loader.load();
+
+            // Set the new scene
+            Scene scene = new Scene(panel, 1300, 800);
+            stage.setTitle(title);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

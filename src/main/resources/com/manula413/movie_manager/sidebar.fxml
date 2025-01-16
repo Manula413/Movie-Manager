@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="sidebarContainer" alignment="CENTER" maxHeight="800" maxWidth="300.0" minHeight="800" minWidth="300.0" prefHeight="800" prefWidth="200" spacing="10" style="-fx-padding: 10;" styleClass="right-bar" stylesheets="@../../../sidebar.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.SidebarController">
+<VBox fx:id="sidebarContainer" alignment="CENTER" maxHeight="800" maxWidth="300.0" minHeight="800" minWidth="300.0" prefHeight="800" prefWidth="200" spacing="10" style="-fx-padding: 10;" styleClass="right-bar" stylesheets="@../../../sidebar.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.manula413.movie_manager.controller.SidebarController">
    <children>
       <Button fx:id="addMoviesNavButton" mnemonicParsing="false" onAction="#addMoviesNavButtonAction" prefHeight="41.0" stylesheets="@../../../style.css" text="Add Movies" textFill="WHITE">
          <styleClass>
@@ -58,7 +58,7 @@
       </Button>
 
       <!-- New Hide Sidebar Button -->
-      <Button fx:id="hideSidebarButton" mnemonicParsing="false" onAction="#hideSidebarButtonAction" prefHeight="41.0" stylesheets="@../../../style.css" text="Hide Sidebar" textFill="WHITE">
+      <Button fx:id="hideSidebarButton" mnemonicParsing="false" prefHeight="41.0" stylesheets="@../../../style.css" text="Hide Sidebar" textFill="WHITE">
          <styleClass>
             <String fx:value="right-bar-button" />
             <String fx:value="shadow" />
