@@ -58,7 +58,26 @@ public class WatchedListController implements Initializable {
         setupRadioButtonListeners();
         updateTable("movie");
         setupSidebarToggle();
+
+        // Initialize the sidebar container here
+        VBox sidebar = loadSidebar();  // Load sidebar
+        Pane sidebarContainer = new Pane(sidebar); // Create container for the sidebar
+        sidebarContainer.setPrefSize(300, 800);
+        sidebarContainer.setTranslateX(-300); // Hidden by default
+        sidebarContainer.setMouseTransparent(true);
+
+        // Set the sidebar container to the controller
         setSidebarContainer(sidebarContainer);
+    }
+
+    private VBox loadSidebar() {
+        try {
+            FXMLLoader sidebarLoader = new FXMLLoader(getClass().getResource("/com/manula413/movie_manager/sidebar.fxml"));
+            return sidebarLoader.load(); // Load the sidebar and return it as VBox
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new VBox(); // Return an empty VBox in case of error
+        }
     }
 
     public void setSidebarContainer(Pane sidebarContainer) {
