@@ -4,7 +4,7 @@ import com.manula413.movie_manager.database.DatabaseConnection;
 import com.manula413.movie_manager.model.MovieDetails;
 import com.manula413.movie_manager.services.WatchListServices;
 import com.manula413.movie_manager.util.Session;
-import javafx.collections.FXCollections;
+import javafx.animation.TranslateTransition;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,11 +15,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
 import java.util.ResourceBundle;
 
 public class watchLaterListController implements Initializable {
@@ -35,6 +36,8 @@ public class watchLaterListController implements Initializable {
 
     @FXML
     private RadioButton moviesRadioButton;
+
+    private Pane sidebarContainer;
 
     @FXML
     private Button btnSidebar;
@@ -66,6 +69,34 @@ public class watchLaterListController implements Initializable {
     public Button getBtnSidebar() {
         return btnSidebar;
     }
+
+    private void toggleSidebar() {
+        double targetX = (sidebarContainer.getTranslateX() == 0) ? -300 : 0;
+
+        TranslateTransition slide = new TranslateTransition(Duration.millis(300), sidebarContainer);
+        slide.setToX(targetX);
+        slide.play();
+
+        sidebarContainer.setMouseTransparent(targetX != 0);
+    }
+
+
+    public static class SidebarHelper {
+        public static void attachSidebarBehavior(Button btnSidebar, Pane sidebarContainer) {
+            btnSidebar.setOnAction(event -> toggleSidebar(sidebarContainer));
+        }
+
+        private static void toggleSidebar(Pane sidebarContainer) {
+            double targetX = (sidebarContainer.getTranslateX() == 0) ? -300 : 0;
+
+            TranslateTransition slide = new TranslateTransition(Duration.millis(300), sidebarContainer);
+            slide.setToX(targetX);
+            slide.play();
+
+            sidebarContainer.setMouseTransparent(targetX != 0);
+        }
+    }
+
 
     private void setupTableColumns(boolean includeSeasons) {
         watchLaterListTableView.getColumns().clear();
