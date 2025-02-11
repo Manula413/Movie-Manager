@@ -37,7 +37,9 @@ public class watchLaterListController implements Initializable {
     @FXML
     private RadioButton moviesRadioButton;
 
+    @FXML
     private Pane sidebarContainer;
+
 
     @FXML
     private Button btnSidebar;
@@ -51,6 +53,13 @@ public class watchLaterListController implements Initializable {
         setDisplayNameLabel(displayName);
         setupRadioButtonListeners();
         updateTable("movie");
+
+        SidebarHelper.attachSidebarBehavior(btnSidebar, sidebarContainer);
+    }
+
+    public void setSidebarContainer(Pane sidebarContainer) {
+        this.sidebarContainer = sidebarContainer;
+        attachSidebarBehavior();  // Ensure sidebar toggle is attached
     }
 
     private void setupRadioButtonListeners() {
@@ -78,6 +87,11 @@ public class watchLaterListController implements Initializable {
         slide.play();
 
         sidebarContainer.setMouseTransparent(targetX != 0);
+    }
+    private void attachSidebarBehavior() {
+        if (btnSidebar != null && sidebarContainer != null) {
+            btnSidebar.setOnAction(event -> toggleSidebar());
+        }
     }
 
 
